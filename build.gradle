@@ -1,0 +1,151 @@
+buildscript {
+    ext.kotlin_version = '1.0.3'
+    ext.corda_version = '0.4-SNAPSHOT'
+    ext.quasar_version = '0.7.6'
+    ext.strata_version = '1.0.0'
+
+    repositories {
+        mavenCentral()
+        jcenter()
+    }
+
+    dependencies {
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'kotlin'
+apply plugin: 'idea'
+
+repositories {
+    mavenLocal()
+    mavenCentral()
+    jcenter()
+    maven {
+        url 'http://oss.sonatype.org/content/repositories/snapshots'
+    }
+    maven {
+        url 'https://dl.bintray.com/kotlin/exposed'
+    }
+}
+
+//noinspection GroovyAssignabilityCheck
+configurations {
+    quasar
+}
+
+dependencies {
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    testCompile group: 'junit', name: 'junit', version: '4.11'
+
+    // Corda integration dependencies
+    compile "com.r3corda:core:$corda_version"
+    compile "com.r3corda:contracts:$corda_version"
+    compile "com.r3corda:node:$corda_version"
+    compile "com.r3corda:corda:$corda_version"
+
+    // TODO: Would like to specify dependent cordsapps like this
+    //cordapp "vega"
+
+    quasar "co.paralleluniverse:quasar-core:${quasar_version}:jdk8@jar"
+
+    // Cordapp dependencies
+    compile "com.opengamma.strata:strata-basics:${strata_version}"
+    compile "com.opengamma.strata:strata-product:${strata_version}"
+    compile "com.opengamma.strata:strata-data:${strata_version}"
+    compile "com.opengamma.strata:strata-calc:${strata_version}"
+    compile "com.opengamma.strata:strata-pricer:${strata_version}"
+    compile "com.opengamma.strata:strata-report:${strata_version}"
+    compile "com.opengamma.strata:strata-market:${strata_version}"
+    compile "com.opengamma.strata:strata-collect:${strata_version}"
+    compile "com.opengamma.strata:strata-loader:${strata_version}"
+    compile "com.opengamma.strata:strata-math:${strata_version}"
+}
+
+tasks.withType(Test) {
+    jvmArgs "-javaagent:${configurations.quasar.singleFile}"
+    jvmArgs "-Dco.paralleluniverse.fibers.verifyInstrumentation"
+}
+
+tasks.withType(JavaExec) {
+    jvmArgs "-javaagent:${configurations.quasar.singleFile}"
+    jvmArgs "-Dco.paralleluniverse.fibers.verifyInstrumentation"
+}
+
+//noinspection GroovyAssignabilityCheck
+task quasarScan(dependsOn: ['classes']) << {
+    ant.taskdef(name:'scanSuspendables', classname:'co.paralleluniverse.fibers.instrument.SuspendablesScanner',
+            classpath: "${sourceSets.main.output.classesDir}:${sourceSets.main.output.resourcesDir}:${configurations.runtime.asPath}")
+    delete "$sourceSets.main.output.resourcesDir/META-INF/suspendables", "$sourceSets.main.output.resourcesDir/META-INF/suspendable-supers"
+    ant.scanSuspendables(
+            auto:false,
+            suspendablesFile: "$sourceSets.main.output.resourcesDir/META-INF/suspendables",
+            supersFile: "$sourceSets.main.output.resourcesDir/META-INF/suspendable-supers") {
+        fileset(dir: sourceSets.main.output.classesDir)
+    }
+}
+
+jar.dependsOn quasarScan
+
+// TODO: Create cloudformation style template that this generates nodes from
+task deployNodes(dependsOn: 'build') << {
+    def cordaJar = configurations.runtime.filter { it.toString().contains("corda-${corda_version}.jar")}.getSingleFile()
+    def appDeps = configurations.runtime.filter { it != cordaJar } // TODO: Filter out all other deps in the corda jar
+    copy {
+        from cordaJar
+        from 'config/dev/nameservernode.conf'
+        into "${buildDir}/nodes/nameserver"
+        rename 'nameservernode.conf', 'node.conf'
+    }
+
+    copy {
+        from appDeps
+        from jar
+        into "${buildDir}/nodes/nameserver/plugins"
+    }
+
+    copy {
+        from cordaJar
+        from 'config/dev/generalnodea.conf'
+        into "${buildDir}/nodes/nodea"
+        rename 'generalnodea.conf', 'node.conf'
+    }
+
+    copy {
+        from appDeps
+        from jar
+        into "${buildDir}/nodes/nodea/plugins"
+    }
+
+    copy {
+        from cordaJar
+        from 'config/dev/generalnodeb.conf'
+        into "${buildDir}/nodes/nodeb"
+        rename 'generalnodeb.conf', 'node.conf'
+    }
+
+    copy {
+        from appDeps
+        from jar
+        into "${buildDir}/nodes/nodeb/plugins"
+    }
+
+    delete("${buildDir}/nodes/runnodes")
+    def jarName = cordaJar.getName()
+    copy {
+        from "buildSrc/scripts/runnodes"
+        filter { String line -> line.replace("JAR_NAME", jarName) }
+        filter(org.apache.tools.ant.filters.FixCrLfFilter.class, eol: org.apache.tools.ant.filters.FixCrLfFilter.CrLf.newInstance("lf"))
+        into "${buildDir}/nodes"
+    }
+}
+
+installTemplateNodes.dependsOn(installWeb)
+
+idea {
+    module {
+        downloadJavadoc = true // defaults to false
+        downloadSources = true
+    }
+}
