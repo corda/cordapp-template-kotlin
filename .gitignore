@@ -21,6 +21,7 @@ tags
 **/build/jacoco/***
 **/build/test-results/**
 **/build/[0-9]*/**
+**/build/nodes
 
 # gradle's buildSrc build/
 /buildSrc/build/
