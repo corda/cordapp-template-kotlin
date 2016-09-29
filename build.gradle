@@ -51,16 +51,7 @@ dependencies {
     quasar "co.paralleluniverse:quasar-core:${quasar_version}:jdk8@jar"
 
     // Cordapp dependencies
-    compile "com.opengamma.strata:strata-basics:${strata_version}"
-    compile "com.opengamma.strata:strata-product:${strata_version}"
-    compile "com.opengamma.strata:strata-data:${strata_version}"
-    compile "com.opengamma.strata:strata-calc:${strata_version}"
-    compile "com.opengamma.strata:strata-pricer:${strata_version}"
-    compile "com.opengamma.strata:strata-report:${strata_version}"
-    compile "com.opengamma.strata:strata-market:${strata_version}"
-    compile "com.opengamma.strata:strata-collect:${strata_version}"
-    compile "com.opengamma.strata:strata-loader:${strata_version}"
-    compile "com.opengamma.strata:strata-math:${strata_version}"
+    // Specify your cordapp dependencies below
 }
 
 tasks.withType(Test) {
@@ -140,8 +131,6 @@ task deployNodes(dependsOn: 'build') << {
         into "${buildDir}/nodes"
     }
 }
-
-installTemplateNodes.dependsOn(installWeb)
 
 idea {
     module {
