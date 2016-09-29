@@ -34,14 +34,7 @@ lib/dokka.jar
 *.iml
 
 ## Directory-based project format:
-.idea/*.xml
-.idea/.name
-.idea/copyright
-.idea/inspectionProfiles
-.idea/libraries
-.idea/shelf
-
-!.idea/modules.xml
+.idea
 
 # if you remove the above rule, at least ignore the following:
 
