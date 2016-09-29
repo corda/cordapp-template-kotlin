@@ -5,9 +5,9 @@
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/buildSrc.iml" filepath="$PROJECT_DIR$/.idea/modules/buildSrc.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/buildSrc_main.iml" filepath="$PROJECT_DIR$/.idea/modules/buildSrc_main.iml" group="buildSrc" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/buildSrc_test.iml" filepath="$PROJECT_DIR$/.idea/modules/buildSrc_test.iml" group="buildSrc" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/test.iml" filepath="$PROJECT_DIR$/.idea/modules/test.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/test_main.iml" filepath="$PROJECT_DIR$/.idea/modules/test_main.iml" group="test" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/test_test.iml" filepath="$PROJECT_DIR$/.idea/modules/test_test.iml" group="test" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/template-cordapp.iml" filepath="$PROJECT_DIR$/.idea/modules/template-cordapp.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/template-cordapp_main.iml" filepath="$PROJECT_DIR$/.idea/modules/template-cordapp_main.iml" group="template-cordapp" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/modules/template-cordapp_test.iml" filepath="$PROJECT_DIR$/.idea/modules/template-cordapp_test.iml" group="template-cordapp" />
     </modules>
   </component>
 </project>

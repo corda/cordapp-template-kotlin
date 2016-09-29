@@ -58,14 +58,10 @@ object ExampleProtocol {
 
     class Receiver(private val offer: OfferMessage) : ProtocolLogic<SignedTransaction>()  {
         override val topic: String get() = TOPIC
-        private val log: Logger = LoggerFactory.getLogger("IRSTradeProtocol.Receiver")
         lateinit var ownParty: Party
 
         @Suspendable
         override fun call(): SignedTransaction {
-            log.info("IRSTradeProtocol receiver started")
-            log.info("Handshake finished, awaiting IRS trade offer")
-
             ownParty = serviceHub.storageService.myLegalIdentity
             val seller = TwoPartyDealProtocol.Instigator(offer.replyToParty, offer.notary,
                     offer.dealBeingOffered, serviceHub.storageService.myLegalIdentityKey)

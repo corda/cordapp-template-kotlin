@@ -1,11 +1,15 @@
 package com.example.api
 
+import com.example.contract.ExampleState
+import com.example.deal.ExampleDeal
+import com.example.protocol.ExampleProtocol
 import com.r3corda.core.node.ServiceHub
+import com.r3corda.core.node.services.linearHeadsOfType
+import com.r3corda.core.transactions.SignedTransaction
 import java.time.LocalDateTime
-import javax.ws.rs.GET
-import javax.ws.rs.Path
-import javax.ws.rs.Produces
+import javax.ws.rs.*
 import javax.ws.rs.core.MediaType
+import javax.ws.rs.core.Response
 
 // API is accessible from /api/example. All paths specified below are relative to it.
 @Path("example")
@@ -18,7 +22,31 @@ class ExampleApi(val services: ServiceHub) {
     @GET
     @Path("current-date")
     @Produces(MediaType.APPLICATION_JSON)
-    fun getBusinessDate(): Any {
-        return LocalDateTime.now(services.clock).toLocalDate()
+    fun getCurrentDate(): Any {
+        return mapOf("date" to LocalDateTime.now(services.clock).toLocalDate())
+    }
+
+    /**
+     * Displays all current example deals in the ledger
+     */
+    @GET
+    @Path("deals")
+    @Produces(MediaType.APPLICATION_JSON)
+    fun getDeals(): Any {
+        val states = services.vaultService.linearHeadsOfType<ExampleState>()
+        return states
+    }
+
+    /**
+     * This initiates a protocol to agree a deal with the other party. Once the protocol finishes it will
+     * have written this deal to the ledger.
+     */
+    @PUT
+    @Path("{party}/create-deal")
+    fun createDeal(swap: ExampleDeal, @PathParam("party") partyName: String): Response {
+        val otherParty = services.identityService.partyFromName(partyName)
+        // The line below blocks and waits for the future to resolve.
+        services.invokeProtocolAsync<SignedTransaction>(ExampleProtocol.Requester::class.java, swap, otherParty).get()
+        return Response.status(Response.Status.CREATED).build()
     }
 }
