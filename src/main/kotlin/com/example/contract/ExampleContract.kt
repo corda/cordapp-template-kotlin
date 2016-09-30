@@ -48,13 +48,15 @@ open class ExampleContract() : Contract {
                                 commands: List<AuthenticatedObject<Commands>>,
                                 groupingKey: UniqueIdentifier?): Set<Commands> {
                 val command = tx.commands.requireSingleCommand<Commands.Agree>()
-
-                require(inputs.size == 0)
-                require(outputs.size == 1)
-                require(outputs[0].buyer != outputs[0].seller)
-                require(outputs[0].parties.map { it.owningKey }.containsAll(outputs[0].participants))
-                require(outputs[0].parties.containsAll(listOf(outputs[0].buyer, outputs[0].seller)))
-                require(outputs[0].swap.data != "") // This is where to validate your agreement
+                requireThat {
+                    "no inputs are consumes on agree" by (inputs.size == 0)
+                    "one output state is created" by (outputs.size == 1)
+                    val out = outputs.single()
+                    "the buyer is not the seller" by (out.buyer != out.seller)
+                    "the participants and parties are the same" by (out.parties.map { it.owningKey }.containsAll(out.participants))
+                    "the buyer and seller are the parties" by (out.parties.containsAll(listOf(out.buyer, out.seller)))
+                    "my model data exists" by (out.swap.data != "") // This is where to validate your agreement
+                }
 
                 return setOf(command.value)
             }

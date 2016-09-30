@@ -25,6 +25,5 @@ data class ExampleState(val swap: ExampleDeal, val buyer: Party, val seller: Par
         return TransactionType.General.Builder(notary).withItems(state, Command(ExampleContract.Commands.Agree(), parties.map { it.owningKey }))
     }
 
-    override val participants: List<PublicKey>
-        get() = parties.map { it.owningKey }
+    override val participants: List<PublicKey> = parties.map { it.owningKey }
 }

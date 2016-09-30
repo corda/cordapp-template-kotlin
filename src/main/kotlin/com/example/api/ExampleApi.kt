@@ -45,8 +45,12 @@ class ExampleApi(val services: ServiceHub) {
     @Path("{party}/create-deal")
     fun createDeal(swap: ExampleDeal, @PathParam("party") partyName: String): Response {
         val otherParty = services.identityService.partyFromName(partyName)
-        // The line below blocks and waits for the future to resolve.
-        services.invokeProtocolAsync<SignedTransaction>(ExampleProtocol.Requester::class.java, swap, otherParty).get()
-        return Response.status(Response.Status.CREATED).build()
+        if(otherParty != null) {
+            // The line below blocks and waits for the future to resolve.
+            services.invokeProtocolAsync<SignedTransaction>(ExampleProtocol.Requester::class.java, swap, otherParty).get()
+            return Response.status(Response.Status.CREATED).build()
+        } else {
+            return Response.status(Response.Status.BAD_REQUEST).build()
+        }
     }
 }

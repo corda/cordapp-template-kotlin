@@ -2,7 +2,6 @@ buildscript {
     ext.kotlin_version = '1.0.3'
     ext.corda_version = '0.4-SNAPSHOT'
     ext.quasar_version = '0.7.6'
-    ext.strata_version = '1.0.0'
 
     repositories {
         mavenCentral()
