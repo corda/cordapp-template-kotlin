@@ -54,7 +54,8 @@ dependencies {
     // Specify your cordapp's dependencies below
 }
 
-task deployNodes(type: Cordform) {
+task deployNodes(type: Cordform, dependsOn: 'build') {
+    directory "./build/testnodes"
     node {
         name "Notary"
     }
