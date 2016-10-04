@@ -3,7 +3,6 @@ import org.gradle.api.Plugin
 import org.gradle.api.Project
 import org.gradle.api.tasks.TaskAction
 
-import java.nio.file.Files
 import java.nio.file.Paths
 import java.nio.file.Path
 
@@ -20,13 +19,14 @@ class Node {
     }
 
     void build(File baseDir) {
-        def cordaJAR = verifyAndGetCordaJar()
         File nodeDir = new File(baseDir, mName)
-        createDirectories(nodeDir)
-        copyCordaJAR(nodeDir, cordaJAR)
+        installCordaJAR(nodeDir)
+        installPlugins(nodeDir)
+        installDependencies(nodeDir)
     }
 
-    private void copyCordaJAR(File nodeDir, File cordaJar) {
+    private void installCordaJAR(File nodeDir) {
+        def cordaJar = verifyAndGetCordaJar()
         project.copy {
             from cordaJar
             into nodeDir
@@ -34,20 +34,36 @@ class Node {
         }
     }
 
+    private void installPlugins(File nodeDir) {
+        def cordaJar = verifyAndGetCordaJar()
+        def pluginsDir = getAndCreateDirectory(nodeDir, "plugins")
+        def appDeps = project.configurations.runtime.filter { it != cordaJar } // TODO: Filter out all other deps in the corda jar
+        project.copy {
+            from appDeps
+            into pluginsDir
+        }
+    }
+
+    private void installDependencies(File nodeDir) {
+        // TODO:
+    }
+
     private File verifyAndGetCordaJar() {
         def maybeCordaJAR = project.configurations.runtime.filter { it.toString().contains("corda-${project.corda_version}.jar")}
         if(maybeCordaJAR.size() == 0) {
             throw new RuntimeException("No Corda Capsule JAR found. Have you deployed the Corda project to Maven?")
         } else {
-            def cordaJAR = maybeCordaJAR.getSingleFile()
-            assert(cordaJAR.isFile())
-            return cordaJAR
+            def cordaJar = maybeCordaJAR.getSingleFile()
+            assert(cordaJar.isFile())
+            return cordaJar
         }
     }
 
-    private static void createDirectories(File nodeDir) {
-        new File(nodeDir, "plugins").mkdirs()
-        new File(nodeDir, "dependencies").mkdirs()
+    private static File getAndCreateDirectory(File baseDir, String subDirName) {
+        File dir = new File(baseDir, subDirName)
+        assert(!dir.exists() || dir.isDirectory())
+        dir.mkdirs()
+        return dir
     }
 }
 
