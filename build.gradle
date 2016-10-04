@@ -56,8 +56,30 @@ dependencies {
 
 task deployNodes(type: Cordform, dependsOn: 'build') {
     directory "./build/testnodes"
+    networkMap "NodeA"
     node {
         name "Notary"
+        dirName "notary"
+        nearestCity "London"
+        notary true
+        advertisedServices = []
+        artemisPort 31337
+    }
+    node {
+        name "NodeA"
+        dirName "notary"
+        nearestCity "London"
+        advertisedServices = []
+        artemisPort 31338
+        webPort 31339
+    }
+    node {
+        name "NodeB"
+        dirName "notary"
+        nearestCity "New York"
+        advertisedServices = []
+        artemisPort 31340
+        webPort 31341
     }
 }
 

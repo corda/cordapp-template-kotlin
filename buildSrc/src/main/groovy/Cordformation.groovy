@@ -7,11 +7,49 @@ import java.nio.file.Paths
 import java.nio.file.Path
 
 class Node {
-    private String mName
+    private String name
+    private String dirName
+    private String nearestCity
+    private Boolean isNotary = false
+    private Boolean isHttps = false
+    private List<String> advertisedServices = []
+    private Integer artemisPort
+    private Integer webPort
+    public String networkMapAddress
+
+    private File nodeDir
     private def project
 
     void name(String name) {
-        mName = name
+        this.name = name
+    }
+
+    void dirName(String dirName) {
+        this.dirName = dirName
+    }
+
+    void nearestCity(String nearestCity) {
+        this.nearestCity = nearestCity
+    }
+
+    void notary(Boolean isNotary) {
+        this.isNotary = isNotary
+    }
+
+    void https(Boolean isHttps) {
+        this.isHttps = isHttps
+    }
+
+    void advertisedServices(List<String> advertisedServices) {
+        this.advertisedServices = advertisedServices
+    }
+
+    void artemisPort(Integer artemisPort) {
+        this.artemisPort = artemisPort
+    }
+
+    void webPort(Integer webPort) {
+        this.webPort = webPort
     }
 
     Node(def project) {
@@ -19,13 +57,14 @@ class Node {
     }
 
     void build(File baseDir) {
-        File nodeDir = new File(baseDir, mName)
-        installCordaJAR(nodeDir)
-        installPlugins(nodeDir)
-        installDependencies(nodeDir)
+        nodeDir = new File(baseDir, dirName)
+        installCordaJAR()
+        installPlugins()
+        installDependencies()
+        installConfig()
     }
 
-    private void installCordaJAR(File nodeDir) {
+    private void installCordaJAR() {
         def cordaJar = verifyAndGetCordaJar()
         project.copy {
             from cordaJar
@@ -34,7 +73,7 @@ class Node {
         }
     }
 
-    private void installPlugins(File nodeDir) {
+    private void installPlugins() {
         def cordaJar = verifyAndGetCordaJar()
         def pluginsDir = getAndCreateDirectory(nodeDir, "plugins")
         def appDeps = project.configurations.runtime.filter { it != cordaJar } // TODO: Filter out all other deps in the corda jar
@@ -44,8 +83,25 @@ class Node {
         }
     }
 
-    private void installDependencies(File nodeDir) {
+    private void installDependencies() {
         // TODO:
+    }
+
+    private void installConfig() {
+        project.copy {
+            from ('./config/dev/nodetemplate.conf') {
+                filter { it
+                    .replaceAll('@@name@@', name)
+                    .replaceAll('@@dirName@@', dirName)
+                    .replaceAll('@@nearestCity@@', nearestCity)
+                    .replaceAll('@@isNotary@@', isNotary.toString())
+                    .replaceAll('@@isHttps@@', isHttps.toString())
+                    .replaceAll('@@advertisedServices@@', isHttps.toString())
+                }
+            }
+            into nodeDir
+            rename 'nodetemplate.conf', 'node.conf'
+        }
     }
 
     private File verifyAndGetCordaJar() {
@@ -70,9 +126,14 @@ class Node {
 class Cordform extends DefaultTask {
     private Path directory = Paths.get("./build/nodes")
     private List<Node> nodes = new ArrayList<Node>()
+    private String networkMapNodeName
 
     public String directory(String directory) {
         this.directory = Paths.get(directory)
+    }
+
+    public String networkMap(String nodeName) {
+        networkMapNodeName = nodeName
     }
 
     public void node(Closure configureClosure) {
