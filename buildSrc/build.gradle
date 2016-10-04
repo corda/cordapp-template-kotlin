@@ -1,0 +1,9 @@
+apply plugin: 'maven'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+}

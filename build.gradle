@@ -2,20 +2,25 @@ buildscript {
     ext.kotlin_version = '1.0.3'
     ext.corda_version = '0.4-SNAPSHOT'
     ext.quasar_version = '0.7.6'
+    ext.jersey_version = '2.23.1'
 
     repositories {
+        mavenLocal()
         mavenCentral()
         jcenter()
     }
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath "com.r3corda:quasar:$corda_version"
     }
 }
 
 apply plugin: 'java'
 apply plugin: 'kotlin'
 apply plugin: 'idea'
+apply plugin: 'com.r3corda.quasar'
+apply plugin: Cordformation
 
 repositories {
     mavenLocal()
@@ -29,11 +34,6 @@ repositories {
     }
 }
 
-//noinspection GroovyAssignabilityCheck
-configurations {
-    quasar
-}
-
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
     testCompile group: 'junit', name: 'junit', version: '4.11'
@@ -44,43 +44,22 @@ dependencies {
     compile "com.r3corda:node:$corda_version"
     compile "com.r3corda:corda:$corda_version"
 
+    // Javax is required for webapis
+    compile "org.glassfish.jersey.core:jersey-server:${jersey_version}"
+
     // TODO: Would like to specify dependent cordsapps like this
     //cordapp "vega"
 
-    quasar "co.paralleluniverse:quasar-core:${quasar_version}:jdk8@jar"
-
     // Cordapp dependencies
-    // Specify your cordapp dependencies below
+    // Specify your cordapp's dependencies below
 }
 
-tasks.withType(Test) {
-    jvmArgs "-javaagent:${configurations.quasar.singleFile}"
-    jvmArgs "-Dco.paralleluniverse.fibers.verifyInstrumentation"
+task deployNodes(type: Cordform) {
+    test "hellal"
 }
-
-tasks.withType(JavaExec) {
-    jvmArgs "-javaagent:${configurations.quasar.singleFile}"
-    jvmArgs "-Dco.paralleluniverse.fibers.verifyInstrumentation"
-}
-
-//noinspection GroovyAssignabilityCheck
-task quasarScan(dependsOn: ['classes']) << {
-    ant.taskdef(name:'scanSuspendables', classname:'co.paralleluniverse.fibers.instrument.SuspendablesScanner',
-            classpath: "${sourceSets.main.output.classesDir}:${sourceSets.main.output.resourcesDir}:${configurations.runtime.asPath}")
-    delete "$sourceSets.main.output.resourcesDir/META-INF/suspendables", "$sourceSets.main.output.resourcesDir/META-INF/suspendable-supers"
-    ant.scanSuspendables(
-            auto:false,
-            suspendablesFile: "$sourceSets.main.output.resourcesDir/META-INF/suspendables",
-            supersFile: "$sourceSets.main.output.resourcesDir/META-INF/suspendable-supers") {
-        fileset(dir: sourceSets.main.output.classesDir)
-    }
-}
-
-// TODO: Add quasar plugin
-jar.dependsOn quasarScan
 
 // TODO: Create cloudformation style template that this generates nodes from
-task deployNodes(dependsOn: 'build') << {
+task deployNodesOld(dependsOn: 'build') << {
     def cordaJar = configurations.runtime.filter { it.toString().contains("corda-${corda_version}.jar")}.getSingleFile()
     def appDeps = configurations.runtime.filter { it != cordaJar } // TODO: Filter out all other deps in the corda jar
     copy {
@@ -138,3 +117,5 @@ idea {
         downloadSources = true
     }
 }
+
+quasarScan.dependsOn('classes')

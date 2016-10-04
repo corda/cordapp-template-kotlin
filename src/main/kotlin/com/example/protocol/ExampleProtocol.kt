@@ -5,6 +5,7 @@ import com.example.contract.ExampleContract
 import com.example.contract.ExampleState
 import com.example.deal.ExampleDeal
 import com.r3corda.core.crypto.Party
+import com.r3corda.core.node.ServiceHub
 import com.r3corda.core.protocols.ProtocolLogic
 import com.r3corda.core.random63BitValue
 import com.r3corda.core.transactions.SignedTransaction
@@ -12,11 +13,9 @@ import com.r3corda.node.services.api.AbstractNodeService
 import com.r3corda.node.services.api.ServiceHubInternal
 import com.r3corda.protocols.HandshakeMessage
 import com.r3corda.protocols.TwoPartyDealProtocol
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 
 /**
- * This example shows a protocol agreeing to an abritrary deal and writing it to the ledger. This protocol is a simple
+ * This example shows a protocol agreeing to an arbitrary deal and writing it to the ledger. This protocol is a simple
  * automatic agreement protocol.
  */
 object ExampleProtocol {
