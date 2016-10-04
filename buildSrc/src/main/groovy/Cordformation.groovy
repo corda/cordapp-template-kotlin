@@ -1,20 +1,30 @@
 import org.gradle.api.DefaultTask
 import org.gradle.api.Plugin
 import org.gradle.api.Project
-import org.gradle.api.tasks.Input
 import org.gradle.api.tasks.TaskAction
 
-class TestHandler {
+class Node {
+    private String mName
 
+    void name(String name) {
+        mName = name
+    }
 }
 
 class Cordform extends DefaultTask {
-    @Input
-    def test = new TestHandler()
+    List<Node> nodes = new ArrayList<Node>()
+
+    //public String prop(String test) {
+    //    // Do Stuff
+    //}
+    
+    public void node(Closure configureClosure) {
+        project.configure(new Node(), configureClosure);
+    }
 
     @TaskAction
-    def greet() {
-        println test
+    def build() {
+        // Build nodes here
     }
 }
 

@@ -55,7 +55,9 @@ dependencies {
 }
 
 task deployNodes(type: Cordform) {
-    test "hellal"
+    node {
+        name "Notary"
+    }
 }
 
 // TODO: Create cloudformation style template that this generates nodes from
