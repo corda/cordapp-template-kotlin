@@ -1,70 +1,41 @@
 package com.example.protocol
 
 import co.paralleluniverse.fibers.Suspendable
-import com.example.contract.ExampleContract
 import com.example.contract.ExampleState
 import com.example.deal.ExampleDeal
 import com.r3corda.core.crypto.Party
-import com.r3corda.core.node.ServiceHub
 import com.r3corda.core.protocols.ProtocolLogic
-import com.r3corda.core.random63BitValue
-import com.r3corda.core.transactions.SignedTransaction
-import com.r3corda.node.services.api.AbstractNodeService
 import com.r3corda.node.services.api.ServiceHubInternal
-import com.r3corda.protocols.HandshakeMessage
-import com.r3corda.protocols.TwoPartyDealProtocol
 
 /**
- * This example shows a protocol agreeing to an arbitrary deal and writing it to the ledger. This protocol is a simple
- * automatic agreement protocol.
+ * This example shows a protocol sending and receiving data.
  */
 object ExampleProtocol {
-    // The topic must be unique
-    val TOPIC = "exampleprotocol.topic"
-
-    data class OfferMessage(override val replyToParty: Party,
-                            val notary: Party,
-                            val dealBeingOffered: ExampleState,
-                            override val sendSessionID: Long = random63BitValue(),
-                            override val receiveSessionID: Long = random63BitValue()) : HandshakeMessage
+    data class OfferMessage(val notary: Party, val dealBeingOffered: ExampleState)
 
     /**
      * Initiates the agreement between the two parties
      */
-    class Requester(val swap: ExampleDeal, val otherParty: Party) : ProtocolLogic<SignedTransaction>() {
-        override val topic: String get() = TOPIC
-
+    class Requester(val swap: ExampleDeal, val otherParty: Party): ProtocolLogic<ExampleState>() {
         @Suspendable
-        override fun call(): SignedTransaction {
-            require(serviceHub.networkMapCache.notaryNodes.isNotEmpty()) { "No notary nodes registered" }
-            val notary = serviceHub.networkMapCache.notaryNodes.first().identity
-            val myIdentity = serviceHub.storageService.myLegalIdentity
-            val state = ExampleState(swap, myIdentity, otherParty, ExampleContract())
-
-            send(otherParty, OfferMessage(myIdentity, notary, state))
-
-            val stx = subProtocol(TwoPartyDealProtocol.Acceptor(otherParty, notary, state), inheritParentSessions = true)
-
-            return stx;
+        override fun call(): ExampleState {
+            send(otherParty, swap)
+            return receive<ExampleState>(otherParty).unwrap { it }
         }
     }
 
-    class Service(services: ServiceHubInternal): AbstractNodeService(services) {
+    class Service(services: ServiceHubInternal) {
         init {
-            addProtocolHandler(TOPIC, "$TOPIC.Receiver") { offer: OfferMessage -> Receiver(offer) }
+            services.registerProtocolInitiator(Requester::class, ::Receiver)
         }
     }
 
-    class Receiver(private val offer: OfferMessage) : ProtocolLogic<SignedTransaction>()  {
-        override val topic: String get() = TOPIC
-        lateinit var ownParty: Party
-
+    class Receiver(val otherParty: Party): ProtocolLogic<ExampleState>() {
         @Suspendable
-        override fun call(): SignedTransaction {
-            ownParty = serviceHub.storageService.myLegalIdentity
-            val seller = TwoPartyDealProtocol.Instigator(offer.replyToParty, offer.notary,
-                    offer.dealBeingOffered, serviceHub.storageService.myLegalIdentityKey)
-            return subProtocol(seller, inheritParentSessions = true)
+        override fun call(): ExampleState {
+            val offer = receive<ExampleState>(otherParty).unwrap { it }
+            send(otherParty, offer)
+            return offer
         }
     }
 }
