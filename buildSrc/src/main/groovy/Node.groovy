@@ -96,9 +96,9 @@ class Node {
                         .replaceAll('@@nearestCity@@', nearestCity)
                         .replaceAll('@@isNotary@@', isNotary.toString())
                         .replaceAll('@@isHttps@@', isHttps.toString())
-                        .replaceAll('@@advertisedServices@@', isHttps.toString())
-                        .replaceAll('@@networkMapAddress', networkMapAddress)
-                        .replaceAll('@@artemisPort', artemisPort.toString())
+                        .replaceAll('@@advertisedServices@@', advertisedServices.join(","))
+                        .replaceAll('@@networkMapAddress@@', networkMapAddress)
+                        .replaceAll('@@artemisPort@@', artemisPort.toString())
                         .replaceAll('@@webPort@@', webPort.toString())
                 }
             }
