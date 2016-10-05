@@ -98,8 +98,8 @@ class Node {
                         .replaceAll('@@isHttps@@', isHttps.toString())
                         .replaceAll('@@advertisedServices@@', isHttps.toString())
                         .replaceAll('@@networkMapAddress', networkMapAddress)
-                        .replaceAll('@@artemisPort', artemisPort)
-                        .replaceAll('@@webPort@@', webPort)
+                        .replaceAll('@@artemisPort', artemisPort.toString())
+                        .replaceAll('@@webPort@@', webPort.toString())
                 }
             }
             into nodeDir
