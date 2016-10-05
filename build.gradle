@@ -63,14 +63,15 @@ task deployNodes(type: Cordform, dependsOn: 'build') {
         nearestCity "London"
         notary true
         advertisedServices = []
-        artemisPort 31337
+        artemisPort 12345
+        webPort 12346
     }
     node {
         name "NodeA"
         dirName "notary"
         nearestCity "London"
         advertisedServices = []
-        artemisPort 31338
+        artemisPort 31337
         webPort 31339
     }
     node {
@@ -78,54 +79,13 @@ task deployNodes(type: Cordform, dependsOn: 'build') {
         dirName "notary"
         nearestCity "New York"
         advertisedServices = []
-        artemisPort 31340
-        webPort 31341
+        artemisPort 31338
+        webPort 31340
     }
 }
 
-// TODO: Create cloudformation style template that this generates nodes from
+// TODO: Move to new DeployNodes
 task deployNodesOld(dependsOn: 'build') << {
-    def cordaJar = configurations.runtime.filter { it.toString().contains("corda-${corda_version}.jar")}.getSingleFile()
-    def appDeps = configurations.runtime.filter { it != cordaJar } // TODO: Filter out all other deps in the corda jar
-    copy {
-        from cordaJar
-        from 'config/dev/nameservernode.conf'
-        into "${buildDir}/nodes/nameserver"
-        rename 'nameservernode.conf', 'node.conf'
-    }
-
-    copy {
-        from appDeps
-        from jar
-        into "${buildDir}/nodes/nameserver/plugins"
-    }
-
-    copy {
-        from cordaJar
-        from 'config/dev/generalnodea.conf'
-        into "${buildDir}/nodes/nodea"
-        rename 'generalnodea.conf', 'node.conf'
-    }
-
-    copy {
-        from appDeps
-        from jar
-        into "${buildDir}/nodes/nodea/plugins"
-    }
-
-    copy {
-        from cordaJar
-        from 'config/dev/generalnodeb.conf'
-        into "${buildDir}/nodes/nodeb"
-        rename 'generalnodeb.conf', 'node.conf'
-    }
-
-    copy {
-        from appDeps
-        from jar
-        into "${buildDir}/nodes/nodeb/plugins"
-    }
-
     delete("${buildDir}/nodes/runnodes")
     def jarName = cordaJar.getName()
     copy {
