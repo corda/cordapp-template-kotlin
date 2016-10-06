@@ -14,6 +14,7 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "com.r3corda.plugins:quasar-utils:$corda_version"
         classpath "com.r3corda.plugins:publish-utils:$corda_version"
+        classpath "com.r3corda.plugins:cordformation:$corda_version"
     }
 }
 
@@ -22,7 +23,7 @@ apply plugin: 'kotlin'
 apply plugin: 'idea'
 apply plugin: 'com.r3corda.plugins.quasar-utils'
 apply plugin: 'com.r3corda.plugins.publish-utils'
-apply plugin: Cordformation
+apply plugin: 'com.r3corda.plugins.cordformation'
 apply plugin: 'maven-publish'
 
 repositories {
@@ -54,7 +55,7 @@ dependencies {
     // Specify your cordapp's dependencies below, including dependent cordapps
 }
 
-task deployNodes(type: Cordform, dependsOn: ['build']) {
+task deployNodes(type: com.r3corda.plugins.Cordform, dependsOn: ['build']) {
     directory "./build/nodes"
     networkMap "Notary"
     node {
