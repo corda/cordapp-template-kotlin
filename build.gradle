@@ -21,6 +21,7 @@ apply plugin: 'kotlin'
 apply plugin: 'idea'
 apply plugin: 'com.r3corda.quasarutils'
 apply plugin: Cordformation
+apply plugin: 'maven-publish'
 
 repositories {
     mavenLocal()
@@ -55,7 +56,7 @@ dependencies {
 }
 
 task deployNodes(type: Cordform, dependsOn: ['build']) {
-    directory "./build/testnodes"
+    directory "./build/nodes"
     networkMap "NodeA"
     node {
         name "Notary"
@@ -92,3 +93,16 @@ idea {
 }
 
 quasarScan.dependsOn('classes')
+
+// TODO: Implement/ get plugin from the main corda codebase
+publishing {
+    publications {
+        contracts(MavenPublication) {
+            //from components.java
+            //artifactId 'contracts'
+//
+            //artifact sourceJar
+            //artifact javadocJar
+        }
+    }
+}

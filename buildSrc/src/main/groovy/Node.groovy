@@ -57,6 +57,7 @@ class Node {
     void build(File baseDir) {
         nodeDir = new File(baseDir, dirName)
         installCordaJAR()
+        installBuiltPlugin()
         installPlugins()
         installDependencies()
         installConfig()
@@ -72,6 +73,14 @@ class Node {
             from cordaJar
             into nodeDir
             rename cordaJar.name, JAR_NAME
+        }
+    }
+
+    private void installBuiltPlugin() {
+        def pluginsDir = getAndCreateDirectory(nodeDir, "plugins")
+        project.copy {
+            from project.jar
+            into pluginsDir
         }
     }
 
