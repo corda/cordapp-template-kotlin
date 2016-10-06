@@ -48,12 +48,9 @@ dependencies {
     // Javax is required for webapis
     compile "org.glassfish.jersey.core:jersey-server:${jersey_version}"
 
-    // TODO: Would like to specify dependent cordsapps like this
-    compile "com.r3corda:vega:$corda_version"
-    //cordapp "vega"
-
     // Cordapp dependencies
-    // Specify your cordapp's dependencies below
+    // Specify your cordapp's dependencies below, including dependent cordapps
+    compile "com.r3corda:vega:$corda_version"
 }
 
 task deployNodes(type: Cordform, dependsOn: ['build']) {
@@ -76,7 +73,7 @@ task deployNodes(type: Cordform, dependsOn: ['build']) {
         advertisedServices = []
         artemisPort 31337
         webPort 31339
-        cordapps = []
+        cordapps = ['vega']
     }
     node {
         name "NodeB"
@@ -85,7 +82,7 @@ task deployNodes(type: Cordform, dependsOn: ['build']) {
         advertisedServices = []
         artemisPort 31338
         webPort 31340
-        cordapps = []
+        cordapps = ['vega']
     }
 }
 
