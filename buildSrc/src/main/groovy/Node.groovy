@@ -1,3 +1,6 @@
+import org.gradle.api.file.FileCollection
+import org.gradle.api.internal.file.AbstractFileCollection
+
 class Node {
     static final String JAR_NAME = 'corda.jar'
 
@@ -10,6 +13,7 @@ class Node {
     private Integer artemisPort
     private Integer webPort
     private String networkMapAddress = ""
+    protected List<String> cordapps = []
 
     private File nodeDir
     private def project
@@ -50,6 +54,10 @@ class Node {
         this.networkMapAddress = networkMapAddress
     }
 
+    void cordapps(List<String> cordapps) {
+        this.cordapps = cordapps
+    }
+
     Node(def project) {
         this.project = project
     }
@@ -58,7 +66,7 @@ class Node {
         nodeDir = new File(baseDir, dirName)
         installCordaJAR()
         installBuiltPlugin()
-        installPlugins()
+        installCordapps()
         installDependencies()
         installConfig()
     }
@@ -84,18 +92,24 @@ class Node {
         }
     }
 
-    private void installPlugins() {
-        def cordaJar = verifyAndGetCordaJar()
+    private void installCordapps() {
         def pluginsDir = getAndCreateDirectory(nodeDir, "plugins")
-        def appDeps = project.configurations.runtime.filter { it != cordaJar } // TODO: Filter out all other deps in the corda jar
+        def cordapps = getCordappList()
         project.copy {
-            from appDeps
+            from cordapps
             into pluginsDir
         }
     }
 
     private void installDependencies() {
-        // TODO:
+        def cordaJar = verifyAndGetCordaJar()
+        def cordappList = getCordappList()
+        def depsDir = getAndCreateDirectory(nodeDir, "dependencies")
+        def appDeps = project.configurations.runtime.filter { it != cordaJar && !cordappList.contains(it) }
+        project.copy {
+            from appDeps
+            into depsDir
+        }
     }
 
     private void installConfig() {
@@ -126,6 +140,14 @@ class Node {
             def cordaJar = maybeCordaJAR.getSingleFile()
             assert(cordaJar.isFile())
             return cordaJar
+        }
+    }
+
+    private AbstractFileCollection getCordappList() {
+        def cordaJar = verifyAndGetCordaJar()
+        return project.configurations.runtime.filter {
+            def jarName = it.name.split('-').first()
+            return (it != cordaJar) && cordapps.contains(jarName)
         }
     }
 

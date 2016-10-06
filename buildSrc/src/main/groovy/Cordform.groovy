@@ -43,15 +43,13 @@ class Cordform extends DefaultTask {
 
     @TaskAction
     def build() {
+        installRunScript()
+        Node networkMapNode = getNodeByName(networkMapNodeName)
         nodes.each {
-            installRunScript()
-            Node networkMapNode = getNodeByName(networkMapNodeName)
-            nodes.each {
-                if(it != networkMapNode) {
-                    it.networkMapAddress(networkMapNode.getArtemisAddress())
-                }
-                it.build(directory.toFile())
+            if(it != networkMapNode) {
+                it.networkMapAddress(networkMapNode.getArtemisAddress())
             }
+            it.build(directory.toFile())
         }
     }
 }
