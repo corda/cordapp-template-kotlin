@@ -4,14 +4,18 @@
 set -euo pipefail
 trap 'kill $(jobs -p)' SIGINT SIGTERM EXIT
 export CAPSULE_CACHE_DIR=cache
-pushd nameserver
-( java -jar JAR_NAME )& 
-popd
-pushd nodea
-( java -jar JAR_NAME )& 
-popd
-pushd nodeb
-( java -jar JAR_NAME )& 
-popd
+
+function runNode {
+    pushd $1
+    ( java -jar JAR_NAME )&
+    popd
+}
+
+for dir in `ls`; do
+    if [ -d $dir ]; then
+        runNode $dir
+    fi
+done
+
 read -p 'Any key to exit'
 kill $(jobs -p)
