@@ -114,7 +114,7 @@ class Node {
 
     private void installConfig() {
         project.copy {
-            from ('./config/dev/nodetemplate.conf') {
+            from ('./buildSrc/templates/nodetemplate.conf') {
                 filter { it
                         .replaceAll('@@name@@', name)
                         .replaceAll('@@dirName@@', dirName)
