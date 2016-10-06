@@ -12,14 +12,16 @@ buildscript {
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "com.r3corda:quasarutils:$corda_version"
+        classpath "com.r3corda.plugins:quasar-utils:$corda_version"
+        classpath "com.r3corda.plugins:publish-utils:$corda_version"
     }
 }
 
 apply plugin: 'java'
 apply plugin: 'kotlin'
 apply plugin: 'idea'
-apply plugin: 'com.r3corda.quasarutils'
+apply plugin: 'com.r3corda.plugins.quasar-utils'
+apply plugin: 'com.r3corda.plugins.publish-utils'
 apply plugin: Cordformation
 apply plugin: 'maven-publish'
 
@@ -94,15 +96,14 @@ idea {
 
 quasarScan.dependsOn('classes')
 
-// TODO: Implement/ get plugin from the main corda codebase
 publishing {
     publications {
         contracts(MavenPublication) {
-            //from components.java
-            //artifactId 'contracts'
-//
-            //artifact sourceJar
-            //artifact javadocJar
+            from components.java
+            artifactId 'template-cordapp'
+
+            artifact sourceJar
+            artifact javadocJar
         }
     }
 }
