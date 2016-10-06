@@ -54,7 +54,7 @@ dependencies {
     // Specify your cordapp's dependencies below
 }
 
-task deployNodes(type: Cordform, dependsOn: 'build') {
+task deployNodes(type: Cordform, dependsOn: ['build']) {
     directory "./build/testnodes"
     networkMap "NodeA"
     node {
@@ -81,18 +81,6 @@ task deployNodes(type: Cordform, dependsOn: 'build') {
         advertisedServices = []
         artemisPort 31338
         webPort 31340
-    }
-}
-
-// TODO: Move to new DeployNodes
-task deployNodesOld(dependsOn: 'build') << {
-    delete("${buildDir}/nodes/runnodes")
-    def jarName = cordaJar.getName()
-    copy {
-        from "buildSrc/scripts/runnodes"
-        filter { String line -> line.replace("JAR_NAME", jarName) }
-        filter(org.apache.tools.ant.filters.FixCrLfFilter.class, eol: org.apache.tools.ant.filters.FixCrLfFilter.CrLf.newInstance("lf"))
-        into "${buildDir}/nodes"
     }
 }
 

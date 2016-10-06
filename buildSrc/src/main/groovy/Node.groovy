@@ -1,4 +1,6 @@
 class Node {
+    static final String JAR_NAME = 'corda.jar'
+
     public String name
     private String dirName
     private String nearestCity
@@ -69,7 +71,7 @@ class Node {
         project.copy {
             from cordaJar
             into nodeDir
-            rename cordaJar.name, 'corda.jar'
+            rename cordaJar.name, JAR_NAME
         }
     }
 

@@ -31,9 +31,20 @@ class Cordform extends DefaultTask {
         return null
     }
 
+    protected void installRunScript() {
+        project.delete("${directory}/runnodes")
+        project.copy {
+            from "buildSrc/scripts/runnodes"
+            filter { String line -> line.replace("JAR_NAME", Node.JAR_NAME) }
+            filter(org.apache.tools.ant.filters.FixCrLfFilter.class, eol: org.apache.tools.ant.filters.FixCrLfFilter.CrLf.newInstance("lf"))
+            into "${directory}/"
+        }
+    }
+
     @TaskAction
     def build() {
         nodes.each {
+            installRunScript()
             Node networkMapNode = getNodeByName(networkMapNodeName)
             nodes.each {
                 if(it != networkMapNode) {
