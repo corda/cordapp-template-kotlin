@@ -50,7 +50,6 @@ dependencies {
 
     // Cordapp dependencies
     // Specify your cordapp's dependencies below, including dependent cordapps
-    compile "com.r3corda:vega:$corda_version"
 }
 
 task deployNodes(type: Cordform, dependsOn: ['build']) {
@@ -64,7 +63,7 @@ task deployNodes(type: Cordform, dependsOn: ['build']) {
         advertisedServices = []
         artemisPort 12345
         webPort 12346
-        cordapps = ['vega']
+        cordapps = []
     }
     node {
         name "NodeA"
@@ -73,7 +72,7 @@ task deployNodes(type: Cordform, dependsOn: ['build']) {
         advertisedServices = []
         artemisPort 31337
         webPort 31339
-        cordapps = ['vega']
+        cordapps = []
     }
     node {
         name "NodeB"
@@ -82,7 +81,7 @@ task deployNodes(type: Cordform, dependsOn: ['build']) {
         advertisedServices = []
         artemisPort 31338
         webPort 31340
-        cordapps = ['vega']
+        cordapps = []
     }
 }
 
