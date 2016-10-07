@@ -96,7 +96,7 @@ quasarScan.dependsOn('classes')
 
 publishing {
     publications {
-        contracts(MavenPublication) {
+        jarAndSources(MavenPublication) {
             from components.java
             artifactId 'template-cordapp'
 
