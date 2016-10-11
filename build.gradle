@@ -59,8 +59,7 @@ task deployNodes(type: com.r3corda.plugins.Cordform, dependsOn: ['build']) {
         name "Notary"
         dirName "notary"
         nearestCity "London"
-        notary true
-        advertisedServices = []
+        advertisedServices = ["corda.notary.validating"]
         artemisPort 12345
         webPort 12346
         cordapps = []
