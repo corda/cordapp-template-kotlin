@@ -10,7 +10,7 @@ import com.r3corda.core.node.services.ServiceInfo
  */
 fun main(args: Array<String>) {
     driver(dsl = {
-        startNode("Notary", setOf(ServiceInfo(SimpleNotaryService.Type)))
+        startNode("Notary", setOf(ServiceInfo(SimpleNotaryService.type)))
         startNode("Bank A")
         startNode("Bank B")
         waitForAllNodesToFinish()
