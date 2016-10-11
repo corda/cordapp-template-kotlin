@@ -1,6 +1,7 @@
 package com.example.protocol
 
 import co.paralleluniverse.fibers.Suspendable
+import com.example.contract.ExampleContract
 import com.example.contract.ExampleState
 import com.example.deal.ExampleDeal
 import com.r3corda.core.crypto.Party
@@ -19,7 +20,8 @@ object ExampleProtocol {
     class Requester(val swap: ExampleDeal, val otherParty: Party): ProtocolLogic<ExampleState>() {
         @Suspendable
         override fun call(): ExampleState {
-            send(otherParty, swap)
+            val state = ExampleState(swap, serviceHub.myInfo.legalIdentity, otherParty, ExampleContract())
+            send(otherParty, state)
             return receive<ExampleState>(otherParty).unwrap { it }
         }
     }
