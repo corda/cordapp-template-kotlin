@@ -54,10 +54,10 @@ dependencies {
 
 task deployNodes(type: com.r3corda.plugins.Cordform, dependsOn: ['build']) {
     directory "./build/nodes"
-    networkMap "Notary"
+    networkMap "Controller"
     node {
-        name "Notary"
-        dirName "notary"
+        name "Controller"
+        dirName "controller"
         nearestCity "London"
         advertisedServices = ["corda.notary.validating"]
         artemisPort 12345
