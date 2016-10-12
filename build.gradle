@@ -44,6 +44,7 @@ dependencies {
     compile "com.r3corda:contracts:$corda_version"
     compile "com.r3corda:node:$corda_version"
     compile "com.r3corda:corda:$corda_version"
+    compile "com.r3corda:test-utils:$corda_version"
 
     // Javax is required for webapis
     compile "org.glassfish.jersey.core:jersey-server:${jersey_version}"
