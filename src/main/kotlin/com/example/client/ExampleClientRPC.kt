@@ -2,8 +2,9 @@ package com.example.client
 
 import com.google.common.net.HostAndPort
 import com.r3corda.client.CordaRPCClient
-import com.r3corda.node.services.messaging.CordaRPCOps
 import com.r3corda.core.transactions.SignedTransaction
+import com.r3corda.core.utilities.loggerFor
+import com.r3corda.node.services.messaging.CordaRPCOps
 import org.graphstream.graph.Edge
 import org.graphstream.graph.Node
 import org.graphstream.graph.implementations.SingleGraph
@@ -18,15 +19,20 @@ import java.util.concurrent.CompletableFuture
  *  Please follow instructions in the following tutorial to execute this example:
  *  https://docs.corda.r3cev.com/tutorial-clientrpc-api.html for further details.
  **/
+
+class ExampleClientRPC {
+}
+
+private val log = loggerFor<ExampleClientRPC>()
+
 enum class PrintOrVisualise {
     Print,
     Visualise
 }
 
 fun main(args: Array<String>) {
-    if (args.size < 2) {
-        throw IllegalArgumentException("Usage: ExampleClientRPC <node address> [Print|Visualise]")
-    }
+
+    require(args.size == 2) { "Usage: ExampleClientRPC <node address> [Print|Visualise]" }
 
     val nodeAddress = HostAndPort.fromString(args[0])
     val printOrVisualise = PrintOrVisualise.valueOf(args[1])
@@ -42,9 +48,9 @@ fun main(args: Array<String>) {
     when (printOrVisualise) {
         PrintOrVisualise.Print -> {
             futureTransactions.startWith(transactions).subscribe { transaction ->
-                println("NODE ${transaction.id}")
+                log.info("NODE ${transaction.id}")
                 transaction.tx.inputs.forEach { input ->
-                    println("EDGE ${input.txhash} ${transaction.id}")
+                    log.info("EDGE ${input.txhash} ${transaction.id}")
                 }
             }
             CompletableFuture<Unit>().get()
