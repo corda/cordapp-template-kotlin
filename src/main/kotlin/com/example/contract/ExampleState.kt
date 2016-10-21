@@ -11,9 +11,12 @@ import java.security.PublicKey
 import java.util.*
 
 
-data class ExampleState(val swap: ExampleDeal, val buyer: Party, val seller: Party, override val contract: ExampleContract): DealState {
-    override val ref: String = swap.swapRef
-    override val linearId: UniqueIdentifier = UniqueIdentifier(ref)
+data class ExampleState(val swap: ExampleDeal,
+                        val buyer: Party,
+                        val seller: Party,
+                        override val contract: ExampleContract,
+                        override val linearId: UniqueIdentifier = UniqueIdentifier(swap.swapRef)): DealState {
+    override val ref: String = linearId.externalId!! // Same as the constructor for UniqueIdentified
     override val parties: List<Party> get() = listOf(buyer, seller)
 
     override fun isRelevant(ourKeys: Set<PublicKey>): Boolean {
