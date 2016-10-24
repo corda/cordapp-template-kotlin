@@ -1,4 +1,4 @@
-= Cordapp Template =
+= CorDapp Template =
 
 This template contains the build system and an example application required to get started with [Corda](http://todo.todo).
 
@@ -19,8 +19,8 @@ Windows:
 
      gradle.bat publishToMavenLocal
      
-This will publish a copy of Corda to your local Maven repository for your Cordapp to use. Next open a terminal window
-in your Cordapp directory (this one) and run:
+This will publish a copy of Corda to your local Maven repository for your CorDapp to use. Next open a terminal window
+in your CorDapp directory (this one) and run:
 
 Unix:
 
@@ -42,8 +42,8 @@ Windows:
 Windows users currently have to manually enter each directory in `build/nodes` and run `java -jar corda.jar` in each.
 This will be updated soon.
 
-This will now have nodes running on your machine running this Cordapp. You can now begin developing your Cordapp. 
+This will now have nodes running on your machine running this CorDapp. You can now begin developing your CorDapp.
 
 == Further Reading ==
 
-Tutorials and developer docs for Cordapps and Corda are [here](https://docs.corda.r3cev.com/creating-a-cordapp.html).
+Tutorials and developer docs for CorDapps and Corda are [here](https://docs.corda.r3cev.com/creating-a-cordapp.html).
