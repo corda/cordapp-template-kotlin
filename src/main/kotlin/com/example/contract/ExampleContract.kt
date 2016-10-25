@@ -12,8 +12,9 @@ open class ExampleContract() : Contract {
         class Agree : TypeOnlyCommandData(), Commands  // Both sides agree to trade
     }
 
-    override val legalContractReference: SecureHash = SecureHash.sha256("OGTRADE.KT")
+    override val legalContractReference: SecureHash = SecureHash.sha256("example")
 
+    override fun hashCode() = 0 // Want the same hash code each time
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other?.javaClass != javaClass) return false
