@@ -4,6 +4,7 @@ import com.google.common.net.HostAndPort
 import com.r3corda.client.CordaRPCClient
 import com.r3corda.core.transactions.SignedTransaction
 import com.r3corda.core.utilities.loggerFor
+import com.r3corda.node.services.config.configureTestSSL
 import com.r3corda.node.services.messaging.CordaRPCOps
 import org.graphstream.graph.Edge
 import org.graphstream.graph.Node
@@ -36,10 +37,10 @@ fun main(args: Array<String>) {
 
     val nodeAddress = HostAndPort.fromString(args[0])
     val printOrVisualise = PrintOrVisualise.valueOf(args[1])
-    val certificatePath = Paths.get("build/resources/main/certificates")
 
-    val client = CordaRPCClient(nodeAddress, certificatePath)
-    client.start()
+    val client = CordaRPCClient(nodeAddress, configureTestSSL())
+    // Default user details from automatically created rpc-users.properties in the node folder.
+    client.start("user1", "test")
     val proxy = client.proxy()
 
     val (transactions: List<SignedTransaction>, futureTransactions: Observable<SignedTransaction>) =
