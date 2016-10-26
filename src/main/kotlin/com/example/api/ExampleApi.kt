@@ -1,7 +1,7 @@
 package com.example.api
 
 import com.example.contract.ExampleState
-import com.example.deal.ExampleDeal
+import com.example.model.ExampleModel
 import com.example.protocol.ExampleProtocol
 import com.r3corda.core.node.ServiceHub
 import com.r3corda.core.node.services.linearHeadsOfType
@@ -43,7 +43,7 @@ class ExampleApi(val services: ServiceHub) {
      */
     @PUT
     @Path("{party}/create-deal")
-    fun createDeal(swap: ExampleDeal, @PathParam("party") partyName: String): Response {
+    fun createDeal(swap: ExampleModel, @PathParam("party") partyName: String): Response {
         val otherParty = services.identityService.partyFromName(partyName)
         if(otherParty != null) {
             // The line below blocks and waits for the future to resolve.

@@ -1,6 +1,6 @@
 package com.example.contract
 
-import com.example.deal.ExampleDeal
+import com.example.model.ExampleModel
 import com.r3corda.core.contracts.Command
 import com.r3corda.core.contracts.DealState
 import com.r3corda.core.contracts.TransactionType
@@ -11,7 +11,7 @@ import java.security.PublicKey
 import java.util.*
 
 
-data class ExampleState(val swap: ExampleDeal,
+data class ExampleState(val swap: ExampleModel,
                         val buyer: Party,
                         val seller: Party,
                         override val contract: ExampleContract,
