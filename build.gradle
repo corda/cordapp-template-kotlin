@@ -69,7 +69,7 @@ dependencies {
         exclude group: "bouncycastle"
     }
 
-    // Cordapp dependencies
+    // CorDapp dependencies
     // Specify your cordapp's dependencies below, including dependent cordapps
 }
 
