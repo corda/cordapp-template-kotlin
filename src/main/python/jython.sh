@@ -12,10 +12,18 @@ export JYTHON=jython
 # export JYTHON=/location/of/jython
 
 if ! [ -x "$(command -v $JYTHON)" ]; then
-  echo "jython not in path or \$JYTHON variable is not set to the correct location (please edit $0)" >&2
+  echo "jython not in path or \$JYTHON variable is not set to the correct location (please edit $0)"
   exit
 fi
 
-export CLASSPATH=~/.m2/repository/com/r3corda/client/$VERSION/client-$VERSION.jar:~/.m2/repository/com/r3corda/contracts/$VERSION/contracts-$VERSION.jar:~/.m2/repository/com/r3corda/corda/$VERSION/corda-$VERSION.jar:~/.m2/repository/com/r3corda/core/$VERSION/core-$VERSION.jar:~/.m2/repository/com/r3corda/node/$VERSION/node-$VERSION.jar:../../../../../r3prototyping/build/install/r3prototyping/lib/*
+export JYTHON_LIB_DIR=../../../build/jythonDeps
+
+if ! [ -d $JYTHON_LIB_DIR ]; then
+    echo "Please run './gradlew installJythonDeps' in the root folder of this project"
+    exit
+fi
+
+export CLASSPATH=$JYTHON_LIB_DIR/*
+
 
 $JYTHON $*
