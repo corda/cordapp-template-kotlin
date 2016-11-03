@@ -8,6 +8,3 @@ client = CordaRPCClient(HostAndPort.fromString("localhost:31337"), configureTest
 client.start("user1", "test")
 proxy = client.proxy(None,0)
 print proxy.verifiedTransactions()
-
-
-
