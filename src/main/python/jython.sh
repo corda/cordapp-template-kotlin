@@ -8,8 +8,8 @@ VERSION=0.5-SNAPSHOT
 
 # Either put jython in your path or change the variable below to the correct location
 
-export JYTHON=jython
-# export JYTHON=/location/of/jython
+#export JYTHON=jython
+export JYTHON=~/jython2.7.0/bin/jython
 
 if ! [ -x "$(command -v $JYTHON)" ]; then
   echo "jython not in path or \$JYTHON variable is not set to the correct location (please edit $0)"
