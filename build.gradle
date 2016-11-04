@@ -55,7 +55,7 @@ dependencies {
     // Corda integration dependencies
     compile "com.r3corda:client:$corda_version"
     compile "com.r3corda:core:$corda_version"
-    compile "com.r3corda:contracts:$corda_version"
+    compile "com.r3corda:finance:$corda_version"
     compile "com.r3corda:node:$corda_version"
     compile "com.r3corda:corda:$corda_version"
     compile "com.r3corda:test-utils:$corda_version"
