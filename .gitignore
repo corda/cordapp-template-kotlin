@@ -11,23 +11,8 @@ tags
 .gradle
 
 # General build files
-**/build/classes
-**/build/install
-**/build/kotlin-classes
-**/build/libs
-**/build/resources
-**/build/tmp
-**/build/reports
-**/build/jacoco
-**/build/test-results
-**/build/[0-9]*
-**/build/nodes
-**/build/kotlin
-**/build/kotlin-build
-**/build/publications
-
-# gradle's buildSrc build/
-/buildSrc/build/
+**/build/*
+!docs/build/*
 
 lib/dokka.jar
 
