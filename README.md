@@ -42,7 +42,24 @@ This command will create several nodes in `build/nodes` of the cordapp-template 
 Windows users currently have to manually enter each directory in `build/nodes` and run `java -jar corda.jar` in each.
 This will be updated soon.
 
-You will now have nodes running on your machine serving this CorDapp. You can now begin developing your CorDapp.
+You will now have nodes running on your machine serving this CorDapp. 
+
+## Interacting with the CorDapp
+
+The CorDapp defines a couple of HTTP API end-points and serves some static web content. They allow you to list agreements and add agreements.
+
+The nodes can be found using the following port numbers, defined in `build.gradle`:
+
+     31339: NodeA
+     31340: NodeB
+
+To add an agreement, use the following command to add an agreement between NodeA and NodeB:
+
+**Unix:**
+
+     echo '{ "swapRef": "0", "data": "badger" }' | curl -T - -H 'Content-Type: application/json' http://localhost:31339/api/example/NodeB/create-agreement
+
+To view all agreements navigate to `http://localhost:31339/api/example/agreements`.
 
 ## Further Reading
 
