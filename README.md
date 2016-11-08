@@ -1,6 +1,6 @@
 # CorDapp Template 
 
-This template contains the build system and an example application required to get started with [Corda](http://todo.todo).
+This template contains the build system and an example application required to get started with Corda.
 
 ## Prerequisites
 
@@ -9,7 +9,7 @@ installed and available on your path.
 
 ## Getting Started
 
-First clone this repository and the Corda repository locally. Then open a terminal window in the Corda directory and run:
+First clone this repository and the Corda repository locally. Then open a terminal window in the Corda (r3prototyping) directory and run:
  
 **Unix:** 
 
@@ -30,7 +30,7 @@ in your CorDapp directory (this one) and run:
 
      gradlew.bat deployNodes
      
-This command will create several nodes in `build/nodes` that you can now run with:
+This command will create several nodes in `build/nodes` of the cordapp-template folder that you can now run with:
 
 **Unix:**
 
@@ -42,7 +42,7 @@ This command will create several nodes in `build/nodes` that you can now run wit
 Windows users currently have to manually enter each directory in `build/nodes` and run `java -jar corda.jar` in each.
 This will be updated soon.
 
-This will now have nodes running on your machine running this CorDapp. You can now begin developing your CorDapp.
+You will now have nodes running on your machine serving this CorDapp. You can now begin developing your CorDapp.
 
 ## Further Reading
 
