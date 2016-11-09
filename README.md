@@ -50,8 +50,8 @@ The CorDapp defines a couple of HTTP API end-points and serves some static web c
 
 The nodes can be found using the following port numbers, defined in `build.gradle`:
 
-     31339: NodeA
-     31340: NodeB
+     localhost:31339: NodeA
+     localhost:31340: NodeB
 
 To add an agreement, use the following command to add an agreement between NodeA and NodeB:
 
