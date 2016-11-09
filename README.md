@@ -61,6 +61,19 @@ To add an agreement, use the following command to add an agreement between NodeA
 
 To view all agreements navigate to `http://localhost:31339/api/example/agreements`.
 
+## Technical webinar code
+
+For those of you who watched the Corda technical Webinar on November 8th. The code from the session is available on the branch `technical-webinar-code`. 
+
+You can access the web interface for the demo from:
+
+     NodeA: http://localhost:31339/web/example/
+     NodeB: http://localhost:31340/web/example/
+
+You can add new agreements and view all agreements on the web page. Use the refresh button once you've added an agreement. The client is written using jQuery and Bootstrap. All JS libraries are obtained via a CDN, so the webpage wont work if you are trying it offline. If you are, then use `curl` instead to add agreements. E.g.:
+
+     echo '{ "id": "0", "message": "badger" }' | curl -T - -H 'Content-Type: application/json' http://localhost:31339/api/example/NodeB/create-agreement
+
 ## Further Reading
 
 Tutorials and developer docs for CorDapps and Corda are [here](https://docs.corda.r3cev.com/creating-a-cordapp.html).
