@@ -4,9 +4,9 @@ import co.paralleluniverse.fibers.Suspendable
 import com.example.contract.ExampleContract
 import com.example.contract.ExampleState
 import com.example.model.ExampleModel
-import com.r3corda.core.crypto.Party
-import com.r3corda.core.node.PluginServiceHub
-import com.r3corda.core.protocols.ProtocolLogic
+import net.corda.core.crypto.Party
+import net.corda.core.node.PluginServiceHub
+import net.corda.core.protocols.ProtocolLogic
 
 /**
  * This example shows a protocol sending and receiving data.

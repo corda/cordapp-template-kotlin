@@ -1,8 +1,8 @@
 package com.example.contract
 
-import com.r3corda.core.contracts.*
-import com.r3corda.core.contracts.clauses.*
-import com.r3corda.core.crypto.SecureHash
+import net.corda.core.contracts.*
+import net.corda.core.contracts.clauses.*
+import net.corda.core.crypto.SecureHash
 import java.math.BigDecimal
 
 open class ExampleContract() : Contract {

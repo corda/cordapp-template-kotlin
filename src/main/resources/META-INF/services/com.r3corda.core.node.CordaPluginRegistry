@@ -1,2 +1,2 @@
-# Register a ServiceLoader service extending from com.r3corda.node.CordaPluginRegistry
+# Register a ServiceLoader service extending from net.corda.node.CordaPluginRegistry
 com.example.plugin.ExamplePlugin

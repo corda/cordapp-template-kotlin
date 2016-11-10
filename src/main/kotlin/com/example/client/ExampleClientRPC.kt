@@ -1,11 +1,11 @@
 package com.example.client
 
 import com.google.common.net.HostAndPort
-import com.r3corda.client.CordaRPCClient
-import com.r3corda.core.transactions.SignedTransaction
-import com.r3corda.core.utilities.loggerFor
-import com.r3corda.node.services.config.configureTestSSL
-import com.r3corda.node.services.messaging.CordaRPCOps
+import net.corda.client.CordaRPCClient
+import net.corda.core.transactions.SignedTransaction
+import net.corda.core.utilities.loggerFor
+import net.corda.node.services.config.configureTestSSL
+import net.corda.node.services.messaging.CordaRPCOps
 import org.graphstream.graph.Edge
 import org.graphstream.graph.Node
 import org.graphstream.graph.implementations.SingleGraph

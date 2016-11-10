@@ -3,8 +3,8 @@ package com.example.plugin
 import com.example.api.ExampleApi
 import com.example.model.ExampleModel
 import com.example.protocol.ExampleProtocol
-import com.r3corda.core.crypto.Party
-import com.r3corda.core.node.CordaPluginRegistry
+import net.corda.core.crypto.Party
+import net.corda.core.node.CordaPluginRegistry
 
 
 class ExamplePlugin : CordaPluginRegistry() {

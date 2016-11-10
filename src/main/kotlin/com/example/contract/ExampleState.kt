@@ -1,12 +1,12 @@
 package com.example.contract
 
 import com.example.model.ExampleModel
-import com.r3corda.core.contracts.Command
-import com.r3corda.core.contracts.DealState
-import com.r3corda.core.contracts.TransactionType
-import com.r3corda.core.contracts.UniqueIdentifier
-import com.r3corda.core.crypto.Party
-import com.r3corda.core.transactions.TransactionBuilder
+import net.corda.core.contracts.Command
+import net.corda.core.contracts.DealState
+import net.corda.core.contracts.TransactionType
+import net.corda.core.contracts.UniqueIdentifier
+import net.corda.core.crypto.Party
+import net.corda.core.transactions.TransactionBuilder
 import java.security.PublicKey
 import java.util.*
 

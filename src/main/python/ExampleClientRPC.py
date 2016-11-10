@@ -2,10 +2,10 @@
 # Example python (via jython) code to use the RPC interface, return transactions and then delve deeper into those types
 # Works best against a node that has generated some cash issuance txns.
 
-from com.r3corda.client import CordaRPCClient
-from com.r3corda.node.services.config.ConfigUtilitiesKt import configureTestSSL
+from net.corda.client import CordaRPCClient
+from net.corda.node.services.config.ConfigUtilitiesKt import configureTestSSL
 from com.google.common.net import HostAndPort
-from com.r3corda.contracts.asset import Cash
+from net.corda.contracts.asset import Cash
 
 import java.util.Currency
 

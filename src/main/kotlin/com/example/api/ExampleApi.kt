@@ -3,9 +3,9 @@ package com.example.api
 import com.example.contract.ExampleState
 import com.example.model.ExampleModel
 import com.example.protocol.ExampleProtocol
-import com.r3corda.core.node.ServiceHub
-import com.r3corda.core.node.services.linearHeadsOfType
-import com.r3corda.core.transactions.SignedTransaction
+import net.corda.core.node.ServiceHub
+import net.corda.core.node.services.linearHeadsOfType
+import net.corda.core.transactions.SignedTransaction
 import java.time.LocalDateTime
 import javax.ws.rs.*
 import javax.ws.rs.core.MediaType

@@ -1,8 +1,8 @@
 package com.example
 
-import com.r3corda.node.driver.driver
-import com.r3corda.node.services.transactions.SimpleNotaryService
-import com.r3corda.core.node.services.ServiceInfo
+import net.corda.node.driver.driver
+import net.corda.node.services.transactions.SimpleNotaryService
+import net.corda.core.node.services.ServiceInfo
 
 /**
  * This file is exclusively for being able to run your nodes through an IDE (as opposed to running deployNodes)
