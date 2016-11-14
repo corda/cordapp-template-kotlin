@@ -57,9 +57,9 @@ To add an agreement, use the following command to add an agreement between NodeA
 
 **Unix:**
 
-     echo '{ "swapRef": "0", "data": "badger" }' | curl -T - -H 'Content-Type: application/json' http://localhost:31339/api/example/NodeB/create-agreement
+     echo '{ "swapRef": "0", "data": "badger" }' | curl -T - -H 'Content-Type: application/json' http://localhost:31339/api/example/NodeB/create-deal
 
-To view all agreements navigate to `http://localhost:31339/api/example/agreements`.
+To view all agreements navigate to `http://localhost:31339/api/example/deals`.
 
 ## Technical webinar code
 
