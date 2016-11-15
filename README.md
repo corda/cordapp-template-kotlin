@@ -50,16 +50,16 @@ The CorDapp defines a couple of HTTP API end-points and serves some static web c
 
 The nodes can be found using the following port numbers, defined in `build.gradle`:
 
-     localhost:31339: NodeA
-     localhost:31340: NodeB
+     localhost:10005: NodeA
+     localhost:10007: NodeB
 
 To add an agreement, use the following command to add an agreement between NodeA and NodeB:
 
 **Unix:**
 
-     echo '{ "swapRef": "0", "data": "badger" }' | curl -T - -H 'Content-Type: application/json' http://localhost:31339/api/example/NodeB/create-deal
+     echo '{ "swapRef": "0", "data": "badger" }' | curl -T - -H 'Content-Type: application/json' http://localhost:10005/api/example/NodeB/create-deal
 
-To view all agreements navigate to `http://localhost:31339/api/example/deals`.
+To view all agreements navigate to `http://localhost:10005/api/example/deals`.
 
 ## Technical webinar code
 
@@ -67,12 +67,12 @@ For those of you who watched the Corda technical Webinar on November 8th. The co
 
 You can access the web interface for the demo from:
 
-     NodeA: http://localhost:31339/web/example/
-     NodeB: http://localhost:31340/web/example/
+     NodeA: http://localhost:10005/web/example/
+     NodeB: http://localhost:10007/web/example/
 
 You can add new agreements and view all agreements on the web page. Use the refresh button once you've added an agreement. The client is written using jQuery and Bootstrap. All JS libraries are obtained via a CDN, so the webpage wont work if you are trying it offline. If you are, then use `curl` instead to add agreements. E.g.:
 
-     echo '{ "id": "0", "message": "badger" }' | curl -T - -H 'Content-Type: application/json' http://localhost:31339/api/example/NodeB/create-agreement
+     echo '{ "id": "0", "message": "badger" }' | curl -T - -H 'Content-Type: application/json' http://localhost:10005/api/example/NodeB/create-agreement
 
 ## Further Reading
 
