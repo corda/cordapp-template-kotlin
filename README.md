@@ -13,11 +13,11 @@ First clone this repository and the Corda repository locally. Then open a termin
  
 **Unix:** 
 
-     ./gradlew publishToMavenLocal
+     ./gradlew install
      
 **Windows:**
 
-     gradle.bat publishToMavenLocal
+     gradle.bat install
      
 This will publish a copy of Corda to your local Maven repository for your CorDapp to use. Next open a terminal window
 in your CorDapp directory (this one) and run:
