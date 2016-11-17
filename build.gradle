@@ -1,6 +1,7 @@
 buildscript {
     ext.kotlin_version = '1.0.5'
     ext.corda_version = '0.6-SNAPSHOT'
+    ext.local_corda_version = '0.6-SNAPSHOT' // Until all packages are published to maven we will keep two targets. (remove at M6)
     ext.quasar_version = '0.7.6'
     ext.jersey_version = '2.23.1'
 
@@ -12,9 +13,9 @@ buildscript {
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "net.corda.plugins:quasar-utils:$corda_version"
+        classpath "net.corda.plugins:quasar-utils:$local_corda_version"
         classpath "net.corda.plugins:publish-utils:$corda_version"
-        classpath "net.corda.plugins:cordformation:$corda_version"
+        classpath "net.corda.plugins:cordformation:$local_corda_version"
     }
 }
 
