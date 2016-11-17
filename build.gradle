@@ -128,7 +128,7 @@ publishing {
     publications {
         jarAndSources(MavenPublication) {
             from components.java
-            artifactId 'template-cordapp'
+            artifactId 'cordapp-name-goes-here'
 
             artifact sourceJar
             artifact javadocJar
