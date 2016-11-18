@@ -1,7 +1,7 @@
 buildscript {
     ext.kotlin_version = '1.0.5'
     ext.corda_version = '0.6-SNAPSHOT'
-    ext.local_corda_version = '0.6-SNAPSHOT' // Until all packages are published to maven we will keep two targets. (remove at M6)
+    ext.published_corda_version = '0.5' // Until all packages are published to maven we will keep two targets. (remove at M6)
     ext.quasar_version = '0.7.6'
     ext.jersey_version = '2.23.1'
 
@@ -9,13 +9,17 @@ buildscript {
         mavenLocal()
         mavenCentral()
         jcenter()
+        // TODO: Remove this once all packages are published to jcenter or maven central. (M6 or 7).
+        maven {
+            url  "http://r3.bintray.com/corda"
+        }
     }
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "net.corda.plugins:quasar-utils:$local_corda_version"
-        classpath "net.corda.plugins:publish-utils:$corda_version"
-        classpath "net.corda.plugins:cordformation:$local_corda_version"
+        classpath "net.corda.plugins:quasar-utils:$published_corda_version"
+        classpath "net.corda.plugins:publish-utils:$published_corda_version"
+        classpath "net.corda.plugins:cordformation:$published_corda_version"
     }
 }
 
