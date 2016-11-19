@@ -1,10 +1,99 @@
+<!--
+--------
+WARNING:
+--------
+
+THIS CODE IS ONLY MADE AVAILABLE FOR DEMONSTRATION PURPOSES AND IS NOT SECURE! DO NOT USE IN PRODUCTION!
+
+FOR SECURITY REASONS, USING A JAVASCRIPT WEB APP HOSTED VIA THE CORDA NODE IS NOT THE RECOMMENDED WAY TO INTERFACE
+WITH CORDA NODES! HOWEVER, FOR THIS PRE-ALPHA RELEASE IT'S A USEFUL WAY TO EXPERIMENT WITH THE PLATFORM AS IT ALLOWS
+YOU TO QUICKLY BUILD A UI FOR DEMONSTRATION PURPOSES.
+
+GOING FORWARD WE RECOMMEND IMPLEMENTING A STANDALONE WEB SERVER THAT AUTHORISES VIA THE NODE'S RPC INTERFACE. IN THE
+COMING WEEKS WE'LL WRITE A TUTORIAL ON HOW BEST TO DO THIS.
+-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Example Page</title>
+    <title>Example CorDapp</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script src="js/example.js"></script>
 </head>
 <body>
-    This page is an example.
+<nav class="navbar navbar-default">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="#" id="currentNode"></a>
+        </div>
+        <button type="button" class="btn btn-primary navbar-btn" data-toggle="modal" data-target="#exampleModal">Create agreement</button>
+        <button type="button" class="btn btn-default navbar-btn" id="refresh"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></button>
+    </div>
+</nav>
+<div class="modal bs-example-modal-sm" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="exampleModalLabel">Add new transaction</h4>
+            </div>
+            <div class="modal-body">
+                <form>
+                    <div class="form-group">
+                        <label for="counterparty" class="control-label">Counter-party:</label>
+                        <select class="form-control" id="counterparty">
+                            <option selected disabled hidden>Select counterparty</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="orderNumber" class="control-label">Order Number (Int):</label>
+                        <input type="text" class="form-control" id="orderNumber">
+                    </div>
+                    <div class="form-group">
+                        <label for="deliveryDate" class="control-label">Delivery Date (Format: YYYY-MM-DD):</label>
+                        <input type="text" class="form-control" id="deliveryDate">
+                    </div>
+                    <div class="form-group">
+                        <label for="city" class="control-label">City (String):</label>
+                        <input type="text" class="form-control" id="city">
+                    </div>
+                    <div class="form-group">
+                        <label for="country" class="control-label">Country (Two letter code, e.g. US / UK):</label>
+                        <input type="text" class="form-control" id="country">
+                    </div>
+                    <div class="form-group">
+                        <label for="itemName" class="control-label">Item name (String):</label>
+                        <input type="text" class="form-control" id="itemName">
+                    </div>
+                    <div class="form-group">
+                        <label for="itemAmount" class="control-label">Item amount (Int):</label>
+                        <input type="text" class="form-control" id="itemAmount">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="send">Create offer</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-9" id="agreements">
+        <div class="panel panel-primary" id="noAgreements">
+            <div class="panel-heading">
+                <h3 class="panel-title">There are no recorded agreements</h3>
+            </div>
+            <div class="panel-body">Use the "Create agreement" button to make an agreement with a peer.</div>
+        </div>
+    </div>
+    <div class="col-md-1"></div>
+</div>
+
+
 </body>
 </html>
