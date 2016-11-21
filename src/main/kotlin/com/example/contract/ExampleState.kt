@@ -6,10 +6,9 @@ import net.corda.core.contracts.DealState
 import net.corda.core.contracts.TransactionType
 import net.corda.core.contracts.UniqueIdentifier
 import net.corda.core.crypto.Party
-import net.corda.core.crypto.PublicKeyTree
+import net.corda.core.crypto.CompositeKey
 import net.corda.core.transactions.TransactionBuilder
 import java.security.PublicKey
-import java.util.*
 
 
 data class ExampleState(val swap: ExampleModel,
@@ -30,5 +29,5 @@ data class ExampleState(val swap: ExampleModel,
         return TransactionType.General.Builder(notary).withItems(state, Command(ExampleContract.Commands.Agree(), parties.map { it.owningKey }))
     }
 
-    override val participants: List<PublicKeyTree> = parties.map { it.owningKey }
+    override val participants: List<CompositeKey> = parties.map { it.owningKey }
 }
