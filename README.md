@@ -39,10 +39,10 @@ This command will create several nodes in `build/nodes` of the cordapp-template 
 
 **Windows:**
 
-Windows users currently have to manually enter each directory in `build/nodes` and run `java -jar corda.jar` in each.
-This will be updated soon.
-
-You will now have nodes running on your machine serving this CorDapp. 
+    cd build/nodes
+    runnodes.bat
+    
+You will now have nodes running on your machine serving this CorDapp, one in each terminal window opened. 
 
 ## Interacting with the CorDapp
 

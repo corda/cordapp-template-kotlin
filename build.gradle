@@ -8,13 +8,17 @@ buildscript {
         mavenLocal()
         mavenCentral()
         jcenter()
+        // TODO: Remove this once all packages are published to jcenter or maven central. (M6 or 7).
+        maven {
+            url  "http://r3.bintray.com/corda"
+        }
     }
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "net.corda.plugins:quasar-utils:$corda_version"
-        classpath "net.corda.plugins:publish-utils:$corda_version"
-        classpath "net.corda.plugins:cordformation:$corda_version"
+        classpath "net.corda.plugins:quasar-utils:0.5.1"
+        classpath "net.corda.plugins:publish-utils:0.5"
+        classpath "net.corda.plugins:cordformation:0.5.2"
     }
 }
 
