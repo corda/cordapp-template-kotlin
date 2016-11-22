@@ -1,4 +1,4 @@
-package com.example.protocol
+package com.example.flow
 
 import co.paralleluniverse.fibers.Suspendable
 import com.example.contract.ExampleContract
@@ -6,16 +6,16 @@ import com.example.contract.ExampleState
 import com.example.model.ExampleModel
 import net.corda.core.crypto.Party
 import net.corda.core.node.PluginServiceHub
-import net.corda.core.protocols.ProtocolLogic
+import net.corda.core.flows.FlowLogic
 
 /**
- * This example shows a protocol sending and receiving data.
+ * This example shows a flow sending and receiving data.
  */
-object ExampleProtocol {
+object ExampleFlow {
     /**
      * Initiates the agreement between the two parties
      */
-    class Requester(val swap: ExampleModel, val otherParty: Party): ProtocolLogic<ExampleState>() {
+    class Requester(val swap: ExampleModel, val otherParty: Party): FlowLogic<ExampleState>() {
         @Suspendable
         override fun call(): ExampleState {
             val state = ExampleState(swap, serviceHub.myInfo.legalIdentity, otherParty, ExampleContract())
@@ -24,7 +24,7 @@ object ExampleProtocol {
         }
     }
 
-    class Receiver(val otherParty: Party): ProtocolLogic<ExampleState>() {
+    class Receiver(val otherParty: Party): FlowLogic<ExampleState>() {
         @Suspendable
         override fun call(): ExampleState {
             val offer = receive<ExampleState>(otherParty).unwrap { it }
@@ -35,7 +35,7 @@ object ExampleProtocol {
 
     class Service(services: PluginServiceHub) {
         init {
-            services.registerProtocolInitiator(Requester::class, ::Receiver)
+            services.registerFlowInitiator(Requester::class, ::Receiver)
         }
     }
 }
