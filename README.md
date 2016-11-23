@@ -182,24 +182,22 @@ terminal windows for NodeA and NodeB:
 
 *NodeA:*
 
-     Constructing message to send across the wire.
-     Sending message to counterparty.
-     Received partially signed transaction from counterparty.
+     Constructing proposed purchase order.
+     Sending purchase order to seller for review.
+     Received partially signed transaction from seller.
      Verifying signatures and contract constraints.
-     Signing transaction with private key.
+     Signing transaction with our private key.
      Obtaining notary signature.
      Recording transaction in vault.
-     Sending fully signed transaction to counterparty.
+     Sending fully signed transaction to seller.
      Done
 
 *NodeB:*
 
-     Receiving message.
-     Generating transaction based on message.
-     Timestamping transaction.
-     Signing transaction with private key.
-     Sending partially signed transaction to counterparty.
-     Receiving fully signed transaction from counterparty.
+     Receiving proposed purchase order from buyer.
+     Generating transaction based on proposed purchase order.
+     Signing proposed transaction with our private key.
+     Sending partially signed transaction to buyer and wait for a response.
      Verifying signatures and contract constraints.
      Recording transaction in vault.
      Done
@@ -223,7 +221,7 @@ Navigate to `http://localhost:10005/web/example/`Click the refresh
 button in the top left-hand side of the page. You should see the newly
 created agreement on the page.
 
-## Accessing the n2 database via h2 web console
+## Accessing the h2 database via h2 web console
 
 You can connect to the h2 database to see the current state of the
 ledger, among other data such as the network map cache.
@@ -263,3 +261,16 @@ available tables and provides an interface for you to query them using SQL.
 
 Tutorials and developer docs for CorDapps and Corda are
 [here](https://docs.corda.r3cev.com/tutorial-cordapp.html).
+
+## TODO
+
+* Make the progress tracker steps more instructive
+* Add a Kryo serialiser for PurchaseOrderState
+* Amend the Jython RPC demo such that it works with PurchaseOrderStates
+* Amend the client RPC demo to use PurchaseOrderStates
+* Fix the `web/example` front end
+* Add a schema for PurchaserderState
+* Add an attachment to the 'Place' transaction
+* Add contract unit tests
+* Add flow unit tests
+* Add an integration test
