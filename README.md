@@ -143,8 +143,8 @@ A purchase order can be created via accessing the
 hosted at `/web/example`.
 
 **NOTE: The content in `web/example` is only available for demonstration
-purposes and has not been designed with security best practises in mind.
-It's simply a useful way to quickly mock-up a UI for a Corda node.**
+purposes and does not implement any anti-XSS/XSRF security techniques. Do
+not copy such code directly into products meant for production use.**
 
 **Submitting a purchase order via HTTP API:**
 
