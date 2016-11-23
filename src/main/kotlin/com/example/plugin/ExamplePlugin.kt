@@ -2,7 +2,7 @@ package com.example.plugin
 
 import com.example.api.ExampleApi
 import com.example.model.ExampleModel
-import com.example.protocol.ExampleProtocol
+import com.example.flow.ExampleFlow
 import net.corda.core.crypto.Party
 import net.corda.core.node.CordaPluginRegistry
 
@@ -10,11 +10,11 @@ import net.corda.core.node.CordaPluginRegistry
 class ExamplePlugin : CordaPluginRegistry() {
     // A list of classes that expose web APIs.
     override val webApis: List<Class<*>> = listOf(ExampleApi::class.java)
-    // A list of protocols that are required for this cordapp
-    override val requiredProtocols: Map<String, Set<String>> = mapOf(
-            ExampleProtocol.Requester::class.java.name to setOf(ExampleModel::class.java.name, Party::class.java.name)
+    // A list of flows that are required for this cordapp
+    override val requiredFlows: Map<String, Set<String>> = mapOf(
+            ExampleFlow.Requester::class.java.name to setOf(ExampleModel::class.java.name, Party::class.java.name)
     )
-    override val servicePlugins: List<Class<*>> = listOf(ExampleProtocol.Service::class.java)
+    override val servicePlugins: List<Class<*>> = listOf(ExampleFlow.Service::class.java)
     // A list of directories in the resources directory that will be served by Jetty under /web
     override val staticServeDirs: Map<String, String> = mapOf(
             // This will serve the exampleWeb directory in resources to /web/example

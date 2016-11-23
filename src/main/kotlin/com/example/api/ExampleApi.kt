@@ -2,7 +2,7 @@ package com.example.api
 
 import com.example.contract.ExampleState
 import com.example.model.ExampleModel
-import com.example.protocol.ExampleProtocol
+import com.example.flow.ExampleFlow
 import net.corda.core.node.ServiceHub
 import net.corda.core.node.services.linearHeadsOfType
 import net.corda.core.transactions.SignedTransaction
@@ -38,7 +38,7 @@ class ExampleApi(val services: ServiceHub) {
     }
 
     /**
-     * This initiates a protocol to agree a deal with the other party. Once the protocol finishes it will
+     * This initiates a flow to agree a deal with the other party. Once the flow finishes it will
      * have written this deal to the ledger.
      */
     @PUT
@@ -47,7 +47,7 @@ class ExampleApi(val services: ServiceHub) {
         val otherParty = services.identityService.partyFromName(partyName)
         if(otherParty != null) {
             // The line below blocks and waits for the future to resolve.
-            services.invokeProtocolAsync<ExampleState>(ExampleProtocol.Requester::class.java, swap, otherParty).resultFuture.get()
+            services.invokeFlowAsync<ExampleState>(ExampleFlow.Requester::class.java, swap, otherParty).resultFuture.get()
             return Response.status(Response.Status.CREATED).build()
         } else {
             return Response.status(Response.Status.BAD_REQUEST).build()
