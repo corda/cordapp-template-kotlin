@@ -62,22 +62,22 @@ COMING WEEKS WE'LL WRITE A TUTORIAL ON HOW BEST TO DO THIS.
                         <input type="text" ng-model="demoApp.form.city" class="form-control" id="city">
                     </div>
                     <div class="form-group">
-                        <label for="country" class="control-label">Country (Two letter code, e.g. US / UK):</label>
+                        <label for="country" class="control-label">Country (Two letter code, e.g. UK):</label>
                         <input type="text" ng-model="demoApp.form.country" class="form-control" id="country">
                     </div>
                     <div ng-repeat="item in demoApp.items">
                         <div class="form-group">
-                            <label for="itemName" class="control-label">Item name (String):</label>
+                            <label for="itemName" class="control-label">Item {{$index+1}} name (String):</label>
                             <input type="text" ng-model="item.name" class="form-control" id="itemName">
                         </div>
                         <div class="form-group">
-                            <label for="itemAmount" class="control-label">Item amount (Int):</label>
+                            <label for="itemAmount" class="control-label">Item {{$index+1}} amount (Int, max 10):</label>
                             <input type="text" ng-model="item.amount" class="form-control" id="itemAmount">
                         </div>
                     </div>
                     <div class="form-group">
-                        <button ng-click="demoApp.addItem()" type="button" class="btn btn-default">Add Additional Item</button>
-                        <button ng-click="demoApp.deleteItem()" type="button" class="btn btn-default">Remove Last Item</button>
+                        <button ng-click="demoApp.addItem()" type="button" class="btn btn-default">Add Additional Items</button>
+                        <button ng-click="demoApp.deleteItem()" type="button" class="btn btn-default">Remove Last Set of Items</button>
                     </div>                    
                 </div>
                 <div class="modal-footer">
