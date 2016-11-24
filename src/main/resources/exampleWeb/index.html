@@ -33,12 +33,12 @@ COMING WEEKS WE'LL WRITE A TUTORIAL ON HOW BEST TO DO THIS.
         <button type="button" class="btn btn-primary navbar-btn" data-toggle="modal" data-target="#exampleModal">Create agreement</button>
     </div>
 </nav>
-<div class="modal bs-example-modal-sm" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
+<div class="modal bs-example-modal-sm" id="exampleModal" tabindex="-1" role="dialog">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="exampleModalLabel">Add new transaction</h4>
+                <button type="button" class="close" data-dismiss="modal"></button>
+                <h4 class="modal-title">Add new transaction</h4>
             </div>
             <form ng-submit="demoApp.submitPO()">
                 <div class="modal-body">
@@ -77,6 +77,7 @@ COMING WEEKS WE'LL WRITE A TUTORIAL ON HOW BEST TO DO THIS.
                     </div>
                     <div class="form-group">
                         <button ng-click="demoApp.addItem()" type="button" class="btn btn-default">Add Additional Item</button>
+                        <button ng-click="demoApp.deleteItem()" type="button" class="btn btn-default">Remove Last Item</button>
                     </div>                    
                 </div>
                 <div class="modal-footer">
@@ -89,7 +90,7 @@ COMING WEEKS WE'LL WRITE A TUTORIAL ON HOW BEST TO DO THIS.
 </div>
 <div class="row">
     <div class="col-md-1"></div>
-    <div class="col-md-9" id="agreements">
+    <div class="col-md-9">
         <div ng-show="demoApp.pos.length===0" class="panel panel-primary">
             <div class="panel-heading">
                 <h3 class="panel-title">There are no recorded agreements</h3>
@@ -103,19 +104,22 @@ COMING WEEKS WE'LL WRITE A TUTORIAL ON HOW BEST TO DO THIS.
         </div>
         <div ng-repeat="po in demoApp.pos" class="panel panel-default">
             <div class="panel-body">
-                <p>Purchase Order ID: {{po.po.orderNumber}}</p>
-                <p>Linear ID: {{po.linearId.id}}</p>
-                <p>Contract hash: {{po.contract.legalContractReference}}</p>
-                <p>Buyer: {{po.buyer}}</p>
-                <p>Seller: {{po.seller}}</p>
-                <p>Delivery City: {{po.po.deliveryAddress.city}}</p>
-                <p>Delivery Address: {{po.po.deliveryAddress.country}}</p>
+                <ul>
+                    <li>Purchase Order ID: {{po.po.orderNumber}}</li>
+                    <li>Contract hash: {{po.contract.legalContractReference}}</li>
+                    <li>Buyer: {{po.buyer}}</li>
+                    <li>Seller: {{po.seller}}</li>
+                    <li>Delivery City: {{po.po.deliveryAddress.city}}</li>
+                    <li>Delivery Address: {{po.po.deliveryAddress.country}}</li>
+                    <ul>
+                        <li ng-repeat="item in po.po.items">{{item.name}} ({{item.amount}})</li>
+                    </ul>
+                </ul>
             </div>
         </div>
     </div>
     <div class="col-md-1"></div>
 </div>
-
 
 </body>
 </html>

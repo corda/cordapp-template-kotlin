@@ -29,6 +29,8 @@ angular.module('demoAppModule', [])
             items: demoApp.items
         };
 
+        console.log(po)
+
         var createPoEndpoint = apiBaseURL + demoApp.form.counterparty + "/create-purchase-order";
         $http.put(createPoEndpoint, angular.toJson(po)).then(function(response) {
             // Refresh the purchase-order list.
@@ -54,6 +56,10 @@ angular.module('demoAppModule', [])
 
     demoApp.addItem = function() {
         demoApp.items.push({});
+    };
+
+    demoApp.deleteItem = function() {
+        demoApp.items.pop();
     };
 
     var pos = demoApp.getPOs();
