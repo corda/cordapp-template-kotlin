@@ -4,12 +4,11 @@
 # Download jython from http://www.jython.org/
 # We find 2.7.0 works acceptably
 
-VERSION=0.5-SNAPSHOT
+VERSION=0.6-SNAPSHOT
 
 # Either put jython in your path or change the variable below to the correct location
 
-export JYTHON=jython
-#export JYTHON=/location/of/jython
+export JYTHON=/path/to/jython
 
 if ! [ -x "$(command -v $JYTHON)" ]; then
   echo "jython not in path or \$JYTHON variable is not set to the correct location (please edit $0)"
@@ -23,7 +22,6 @@ if ! [ -d $JYTHON_LIB_DIR ]; then
     exit
 fi
 
-export CLASSPATH=$JYTHON_LIB_DIR/*
-
+export CLASSPATH=$JYTHON_LIB_DIR/*:../../../build/libs/*
 
 $JYTHON $*
