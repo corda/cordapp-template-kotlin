@@ -21,16 +21,16 @@ COMING WEEKS WE'LL WRITE A TUTORIAL ON HOW BEST TO DO THIS.
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-    <script src="js/example.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.0-rc.1/angular.min.js"></script>
+    <script src="js/angular-module.js"></script>
 </head>
-<body>
+<body ng-app="demoAppModule" ng-controller="DemoAppController as demoApp">
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="#" id="currentNode"></a>
+            <a class="navbar-brand" href="#">{{demoApp.thisNode}}</a>
         </div>
         <button type="button" class="btn btn-primary navbar-btn" data-toggle="modal" data-target="#exampleModal">Create agreement</button>
-        <button type="button" class="btn btn-default navbar-btn" id="refresh"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span></button>
     </div>
 </nav>
 <div class="modal bs-example-modal-sm" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel">
@@ -40,55 +40,77 @@ COMING WEEKS WE'LL WRITE A TUTORIAL ON HOW BEST TO DO THIS.
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title" id="exampleModalLabel">Add new transaction</h4>
             </div>
-            <div class="modal-body">
-                <form>
+            <form ng-submit="demoApp.submitPO()">
+                <div class="modal-body">
                     <div class="form-group">
                         <label for="counterparty" class="control-label">Counter-party:</label>
-                        <select class="form-control" id="counterparty">
+                        <select ng-model="demoApp.form.counterparty" class="form-control">
                             <option selected disabled hidden>Select counterparty</option>
+                            <option ng-repeat="peer in demoApp.peers">{{peer}}</option>
                         </select>
                     </div>
                     <div class="form-group">
                         <label for="orderNumber" class="control-label">Order Number (Int):</label>
-                        <input type="text" class="form-control" id="orderNumber">
+                        <input type="text" ng-model="demoApp.form.orderNumber" class="form-control" id="orderNumber">
                     </div>
                     <div class="form-group">
                         <label for="deliveryDate" class="control-label">Delivery Date (Format: YYYY-MM-DD):</label>
-                        <input type="text" class="form-control" id="deliveryDate">
+                        <input type="text" ng-model="demoApp.form.deliveryDate" class="form-control" id="deliveryDate">
                     </div>
                     <div class="form-group">
                         <label for="city" class="control-label">City (String):</label>
-                        <input type="text" class="form-control" id="city">
+                        <input type="text" ng-model="demoApp.form.city" class="form-control" id="city">
                     </div>
                     <div class="form-group">
                         <label for="country" class="control-label">Country (Two letter code, e.g. US / UK):</label>
-                        <input type="text" class="form-control" id="country">
+                        <input type="text" ng-model="demoApp.form.country" class="form-control" id="country">
+                    </div>
+                    <div ng-repeat="item in demoApp.items">
+                        <div class="form-group">
+                            <label for="itemName" class="control-label">Item name (String):</label>
+                            <input type="text" ng-model="item.name" class="form-control" id="itemName">
+                        </div>
+                        <div class="form-group">
+                            <label for="itemAmount" class="control-label">Item amount (Int):</label>
+                            <input type="text" ng-model="item.amount" class="form-control" id="itemAmount">
+                        </div>
                     </div>
                     <div class="form-group">
-                        <label for="itemName" class="control-label">Item name (String):</label>
-                        <input type="text" class="form-control" id="itemName">
-                    </div>
-                    <div class="form-group">
-                        <label for="itemAmount" class="control-label">Item amount (Int):</label>
-                        <input type="text" class="form-control" id="itemAmount">
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="send">Create offer</button>
-            </div>
+                        <button ng-click="demoApp.addItem()" type="button" class="btn btn-default">Add Additional Item</button>
+                    </div>                    
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-primary">Create offer</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
 <div class="row">
     <div class="col-md-1"></div>
     <div class="col-md-9" id="agreements">
-        <div class="panel panel-primary" id="noAgreements">
+        <div ng-show="demoApp.pos.length===0" class="panel panel-primary">
             <div class="panel-heading">
                 <h3 class="panel-title">There are no recorded agreements</h3>
             </div>
             <div class="panel-body">Use the "Create agreement" button to make an agreement with a peer.</div>
+        </div>
+        <div ng-show="demoApp.pos.length>0" class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Recorded agreements:</h3>
+            </div>
+        </div>
+        <div ng-repeat="po in demoApp.pos" class="panel panel-default">
+            <div class="panel-body">
+                <p>Purchase Order ID: {{po.po.orderNumber}}</p>
+                <p>Linear ID: {{po.linearId.id}}</p>
+                <p>Contract hash: {{po.contract.legalContractReference}}</p>
+                <p>Buyer: {{po.buyer}}</p>
+                <p>Seller: {{po.seller}}</p>
+                <p>Delivery City: {{po.po.deliveryAddress.city}}</p>
+                <p>Delivery Address: {{po.po.deliveryAddress.country}}</p>
+            </div>
         </div>
     </div>
     <div class="col-md-1"></div>

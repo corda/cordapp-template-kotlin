@@ -15,13 +15,20 @@
  * COMING WEEKS WE'LL WRITE A TUTORIAL ON HOW BEST TO DO THIS.
  */
 
-/**
- * A bit of global state to keep track of the current node being used and other nodes on the network.
- */
-var state = {
-    "pos": Array(),
-    "port": location.port
-};
+// Render all agreements for this node.
+function renderAgreements() {
+    console.log(state.pos.length)
+    if (state.pos.length > 0) {
+        $('#noAgreements').hide();
+        $('#agreements').empty();
+        state.pos.forEach(function(po) {
+            $('#agreements').append(renderPurchaseOrder(po));
+        });
+    } else {
+        $('#noAgreements').show();
+        console.log("There are no purchase orders.");
+    }
+} 
 
 // Render an individual purchase order.
 function renderPurchaseOrder(po) {
@@ -38,103 +45,3 @@ function renderPurchaseOrder(po) {
         '</div>' +
         '</div>';
 }
-
-// Render all agreements for this node.
-function renderAgreements() {
-    console.log(state.pos.length)
-    if (state.pos.length > 0) {
-        $('#noAgreements').hide();
-        $('#agreements').empty();
-        state.pos.forEach(function(po) {
-            $('#agreements').append(renderPurchaseOrder(po));
-        });
-    } else {
-        $('#noAgreements').show();
-        console.log("There are no purchase orders.");
-    }
-}
-
-// Grab agreements from the node.
-function populateAgreements() {
-    // TODO: XSRF.
-    $.ajax({
-        headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
-        url: "http://localhost:" + state.port + "/api/example/purchase-orders",
-        type: "GET",
-        dataType: "json",
-        success: (result) => {
-        state.pos = [];
-    Object.keys(result).reverse().forEach((txHash) => {
-        const po = result[txHash].state.data;
-    state.pos.push(po);
-});
-    renderAgreements();
-}
-});
-}
-
-$(() => {
-    // On page load...
-    $(document).ready(function() {
-    // Populate agreements if there are any.
-    populateAgreements();
-    // Build our base url.
-    state.url = "http://localhost:" + state.port + "/api/example";
-
-    // Get current node name.
-    // TODO: XSRF.
-    $.ajax({
-        headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
-        url: state.url + "/who-am-i",
-        type: "GET",
-        dataType: "json",
-        success: (result) => {
-            state.currentNode = result.me;
-            $("#currentNode").text(state.currentNode);
-        }
-    });
-
-    // Populate counterparty dropdown menu.
-    // TODO: XSRF.
-    $.ajax({
-        headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
-        url: state.url + "/get-peers",
-        type: "GET",
-        dataType: "json",
-        success: (result) => {
-            state.peers = result.peers.filter((peer) => { return peer != state.currentNode });
-            state.peers.forEach(function(peer) {
-                $("#counterparty").append('<option>' + peer + '</option>');
-            });
-        }
-    });
-});
-
-// Send transaction.
-$("#send").click(() => {
-    const data = Object();
-    data.orderNumber = $("#orderNumber").val();
-    data.deliveryDate = $("#deliveryDate").val();
-    data.deliveryAddress = Object();
-    data.deliveryAddress.city = $("#city").val();
-    data.deliveryAddress.country = $("#country").val();
-    data.items = Array();
-    const item = Object();
-    item.name = $("#itemName").val();
-    item.amount = $("#itemAmount").val();
-    data.items.push(item);
-    console.log(data);
-    const counterparty = $("#counterparty").val();
-    // TODO: XSRF.
-    $.ajax({
-            headers: {'Accept': 'application/json', 'Content-Type': 'application/json'},
-            url: state.url + "/" + counterparty + "/create-purchase-order",
-            type: "PUT",
-            dataType: "json",
-            data: JSON.stringify(data),
-            complete: (result) => { $('#exampleModal').modal('toggle'); }
-        });
-    });
-    // Handle refreshing of agreements.
-    $("#refresh").click(() => populateAgreements());
-});
