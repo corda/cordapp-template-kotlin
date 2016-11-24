@@ -16,7 +16,7 @@ buildscript {
 
     dependencies {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
-        classpath "net.corda.plugins:quasar-utils:0.5.1"
+        classpath "net.corda.plugins:quasar-utils:0.5.2"
         classpath "net.corda.plugins:publish-utils:0.5"
         classpath "net.corda.plugins:cordformation:0.5.3"
     }
@@ -134,8 +134,6 @@ idea {
         downloadSources = true
     }
 }
-
-quasarScan.dependsOn('classes')
 
 publishing {
     publications {
