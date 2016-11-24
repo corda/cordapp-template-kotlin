@@ -1,8 +1,11 @@
 package com.example.plugin
 
+import com.esotericsoftware.kryo.Kryo
 import com.example.api.ExampleApi
+import com.example.contract.PurchaseOrderContract
 import com.example.contract.PurchaseOrderState
 import com.example.flow.ExampleFlow
+import com.example.model.PurchaseOrder
 import com.example.service.ExampleService
 import net.corda.core.crypto.Party
 import net.corda.core.node.CordaPluginRegistry
@@ -31,7 +34,7 @@ class ExamplePlugin : CordaPluginRegistry() {
     /**
      * A list of long lived services to be hosted within the node. Typically you would use these to register flow
      * factories that would be used when an initiating party attempts to communicate with our node using a particular
-     * flow. See the [Service] class within [ExampleService] object for an implementation which sets up a
+     * flow. See the [ExampleService.Service] class for an implementation which sets up a
      */
     override val servicePlugins: List<Class<*>> = listOf(ExampleService.Service::class.java)
     /** A list of directories in the resources directory that will be served by Jetty under /web */
@@ -40,5 +43,13 @@ class ExamplePlugin : CordaPluginRegistry() {
             "example" to javaClass.classLoader.getResource("exampleWeb").toExternalForm()
     )
 
-    // TODO: Add Kyro serialiser for PurchaseOrderState.
+    /**
+     * Register required types with Kryo.
+     */
+    override fun registerRPCKryoTypes(kryo: Kryo): Boolean {
+        kryo.register(PurchaseOrderState::class.java)
+        kryo.register(PurchaseOrderContract::class.java)
+        kryo.register(PurchaseOrder::class.java)
+        return true
+    }
 }

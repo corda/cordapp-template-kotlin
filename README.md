@@ -257,6 +257,31 @@ paste it in to the `JDBC URL` field and click *Connect*.
 You will be presented with a web application that enumerates all the
 available tables and provides an interface for you to query them using SQL.
 
+## Using the Example RPC client
+
+The `ExampleClientRPC.kt` file is a simple utility which uses the client
+RPC library to connect to a node and log the 'placed' purchase orders.
+It will log any existing purchase orders and listen for any future
+purchase orders. To build the client use the following gradle task:
+
+     ./gradlew runExampleClientRPC
+     
+To run the client:
+
+**Via IntelliJ:**
+
+Select the 'Run Example RPC Client' run configuration which, by default,
+connects to NodeA (Artemis port 10004). Click the Green Arrow to run the
+client. 
+
+**Via command line:**
+
+Run the following gradle task:
+
+     ./gradlew runExampleClientRPC
+     
+The RPC client should output some purchase order objects to the console.
+
 ## Further Reading
 
 Tutorials and developer docs for CorDapps and Corda are
@@ -265,11 +290,9 @@ Tutorials and developer docs for CorDapps and Corda are
 ## TODO
 
 * Make the progress tracker steps more instructive
-* Add a Kryo serialiser for PurchaseOrderState
 * Amend the Jython RPC demo such that it works with PurchaseOrderStates
-* Amend the client RPC demo to use PurchaseOrderStates
 * Fix the `web/example` front end
-* Add a schema for PurchaserderState
+* Add a schema for PurchaseOrderState
 * Add an attachment to the 'Place' transaction
 * Add contract unit tests
 * Add flow unit tests

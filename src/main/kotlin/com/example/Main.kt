@@ -1,7 +1,11 @@
 package com.example
 
+import com.example.flow.ExampleFlow
 import net.corda.node.driver.driver
 import net.corda.core.node.services.ServiceInfo
+import net.corda.flows.CashFlow
+import net.corda.node.services.User
+import net.corda.node.services.startFlowPermission
 import net.corda.node.services.transactions.ValidatingNotaryService
 
 /**
@@ -19,11 +23,13 @@ import net.corda.node.services.transactions.ValidatingNotaryService
  * 5. Run the "Debug CorDapp" remote debug run configuration.
  */
 fun main(args: Array<String>) {
+    // No permissions required as we are not invoking flows.
+    val user = User("user1", "test", permissions = setOf())
     driver(dsl = {
         startNode("Controller", setOf(ServiceInfo(ValidatingNotaryService.type)))
-        startNode("NodeA")
-        startNode("NodeB")
-        startNode("NodeC")
+        startNode("NodeA", rpcUsers = listOf(user))
+        startNode("NodeB", rpcUsers = listOf(user))
+        startNode("NodeC", rpcUsers = listOf(user))
         waitForAllNodesToFinish()
     }, isDebug = true)
 }
