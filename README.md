@@ -159,7 +159,7 @@ to NodeB. Upon verification and completion of the process, both nodes
 
 **Submitting a purchase order via ``web/example``:**
 
-Click the "Create agreement" button at the top left of the
+Click the "Create purchase order" button at the top left of the
 page and enter the purchase order details, e.g.
 
      Counter-party: Node B
@@ -170,7 +170,7 @@ page and enter the purchase order details, e.g.
      Item 1 name:   Things
      Item 1 amount: 5
 
-and click "Create offer". The modal dialogue should close.
+and click "Create purchase order". The modal dialogue should close.
 
 To check what validation is performed on the purchase order data, have a look 
 at the `Place` class in `PurchaseOrderContract.kt`. For example, Entering a
@@ -221,7 +221,7 @@ navigate to `http://localhost:10007/api/example/purchase-orders`.
 
 Navigate to `http://localhost:10005/web/example/` and click the refresh
 button at the top left-hand side of the page. You should see the newly
-created agreement on the page.
+created purchase order on the page.
 
 ## Accessing the h2 database via h2 web console
 

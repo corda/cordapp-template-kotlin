@@ -1,5 +1,18 @@
 "use strict";
 
+// --------
+// WARNING:
+// --------
+
+// THIS CODE IS ONLY MADE AVAILABLE FOR DEMONSTRATION PURPOSES AND IS NOT SECURE! DO NOT USE IN PRODUCTION!
+
+// FOR SECURITY REASONS, USING A JAVASCRIPT WEB APP HOSTED VIA THE CORDA NODE IS NOT THE RECOMMENDED WAY TO INTERFACE
+// WITH CORDA NODES! HOWEVER, FOR THIS PRE-ALPHA RELEASE IT'S A USEFUL WAY TO EXPERIMENT WITH THE PLATFORM AS IT ALLOWS
+// YOU TO QUICKLY BUILD A UI FOR DEMONSTRATION PURPOSES.
+
+// GOING FORWARD WE RECOMMEND IMPLEMENTING A STANDALONE WEB SERVER THAT AUTHORISES VIA THE NODE'S RPC INTERFACE. IN THE
+// COMING WEEKS WE'LL WRITE A TUTORIAL ON HOW BEST TO DO THIS.
+
 var app = angular.module('demoAppModule', ['ui.bootstrap']);
 
 app.controller('DemoAppController', function($http, $location, $uibModal) {
@@ -9,17 +22,36 @@ app.controller('DemoAppController', function($http, $location, $uibModal) {
     var nodePort = $location.port();
     var apiBaseURL = "http://localhost:" + nodePort + "/api/example/";
     demoApp.thisNode = '';
+    demoApp.peers = [];
     demoApp.pos = [];
 
     $http.get(apiBaseURL + "who-am-i").then(function(response) {
         demoApp.thisNode = response.data.me;
     });
 
+    $http.get(apiBaseURL + "get-peers").then(function(response) {
+        demoApp.peers = response.data.peers;
+    });
+
     demoApp.openModal = function (size) {
         var modalInstance = $uibModal.open({
             templateUrl: 'demoAppModal.html',
             controller: 'ModalInstanceCtrl',
-            controllerAs: 'modalInstance'
+            controllerAs: 'modalInstance',
+            resolve: {
+                peers: function() {
+                    return demoApp.peers;
+                },
+                apiBaseURL: function() {
+                    return apiBaseURL;
+                }
+            }
+        });
+
+        modalInstance.result.then(function () {
+            // Ignore modal close.
+        }, function () {
+            // Ignore modal dismissal.
         });
     };
 
@@ -39,19 +71,13 @@ app.controller('DemoAppController', function($http, $location, $uibModal) {
     demoApp.getPOs();
 });
 
-app.controller('ModalInstanceCtrl', function ($http, $location, $uibModalInstance) {
+app.controller('ModalInstanceCtrl', function ($http, $location, $uibModalInstance, peers, apiBaseURL) {
     var modalInstance = this;
 
-    var nodePort = $location.port();
-    var apiBaseURL = "http://localhost:" + nodePort + "/api/example/";
     modalInstance.form = {};
     modalInstance.formError = false;
-    modalInstance.peers = [];
+    modalInstance.peers = peers;
     modalInstance.items = [{}];
-
-    $http.get(apiBaseURL + "get-peers").then(function(response) {
-        modalInstance.peers = response.data.peers;
-    });
 
     modalInstance.create = function () {
         if (invalidFormInput()) {

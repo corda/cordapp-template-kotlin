@@ -31,7 +31,7 @@ COMING WEEKS WE'LL WRITE A TUTORIAL ON HOW BEST TO DO THIS.
         <div class="navbar-header">
             <a class="navbar-brand" href="#">{{demoApp.thisNode}}</a>
         </div>
-        <button ng-click="demoApp.openModal()" type="button" class="btn btn-primary navbar-btn">Create agreement</button>
+        <button ng-click="demoApp.openModal()" type="button" class="btn btn-primary navbar-btn">Create purchase order</button>
         <button ng-click="demoApp.getPOs()" type="button" class="btn btn-default navbar-btn"><span class="glyphicon glyphicon-refresh"></span></button>
     </div>
 </nav>
@@ -44,8 +44,7 @@ COMING WEEKS WE'LL WRITE A TUTORIAL ON HOW BEST TO DO THIS.
         <div class="modal-body">
             <div class="form-group">
                 <label for="counterparty" class="control-label">Counter-party:</label>
-                <select ng-model="modalInstance.form.counterparty" class="form-control">
-                    <option ng-repeat="peer in modalInstance.peers">{{peer}}</option>
+                <select ng-model="modalInstance.form.counterparty" class="form-control" id="counterparty" ng-options="peer as peer for peer in modalInstance.peers">
                 </select>
             </div>
             <div class="form-group">
@@ -82,13 +81,13 @@ COMING WEEKS WE'LL WRITE A TUTORIAL ON HOW BEST TO DO THIS.
                 <div class="alert alert-danger" role="alert">
                     <span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
                     <span class="sr-only">Error:</span>
-                    Enter a valid purchase order
+                    Enter valid purchase order parameters
                 </div>
             </div>           
         </div>
         <div class="modal-footer">
             <button ng-click="modalInstance.cancel()" type="button" class="btn btn-default">Close</button>
-            <button ng-click="modalInstance.create()" type="button" class="btn btn-primary">Create offer</button>
+            <button ng-click="modalInstance.create()" type="button" class="btn btn-primary">Create purchase order</button>
         </div>
     </form>
 </div>
@@ -98,13 +97,13 @@ COMING WEEKS WE'LL WRITE A TUTORIAL ON HOW BEST TO DO THIS.
     <div class="col-md-9">
         <div ng-show="!demoApp.pos.length" class="panel panel-primary">
             <div class="panel-heading">
-                <h3 class="panel-title">There are no recorded agreements</h3>
+                <h3 class="panel-title">There are no recorded purchase orders</h3>
             </div>
-            <div class="panel-body">Use the "Create agreement" button to make an agreement with a peer.</div>
+            <div class="panel-body">Use the "Create purchase order" button to establish a purchase order with a peer.</div>
         </div>
         <div ng-show="demoApp.pos.length" class="panel panel-primary">
             <div class="panel-heading">
-                <h3 class="panel-title">Recorded agreements:</h3>
+                <h3 class="panel-title">Recorded purchase orders:</h3>
             </div>
         </div>
         <div ng-repeat="po in demoApp.pos" class="panel panel-default">
