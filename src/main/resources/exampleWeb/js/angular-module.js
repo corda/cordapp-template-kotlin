@@ -22,7 +22,7 @@ app.controller('DemoAppController', function($http, $location, $uibModal) {
     var nodePort = $location.port();
     var apiBaseURL = "http://localhost:" + nodePort + "/api/example/";
     demoApp.thisNode = '';
-    demoApp.peers = [];
+    var peers = [];
     demoApp.pos = [];
 
     $http.get(apiBaseURL + "who-am-i").then(function(response) {
@@ -30,7 +30,7 @@ app.controller('DemoAppController', function($http, $location, $uibModal) {
     });
 
     $http.get(apiBaseURL + "get-peers").then(function(response) {
-        demoApp.peers = response.data.peers;
+        peers = response.data.peers;
     });
 
     demoApp.openModal = function (size) {
@@ -39,11 +39,14 @@ app.controller('DemoAppController', function($http, $location, $uibModal) {
             controller: 'ModalInstanceCtrl',
             controllerAs: 'modalInstance',
             resolve: {
-                peers: function() {
-                    return demoApp.peers;
+                nodePort: function() {
+                    return nodePort;
                 },
                 apiBaseURL: function() {
                     return apiBaseURL;
+                }, 
+                peers: function() {
+                    return peers;
                 }
             }
         });
@@ -71,19 +74,13 @@ app.controller('DemoAppController', function($http, $location, $uibModal) {
     demoApp.getPOs();
 });
 
-app.controller('ModalInstanceCtrl', function ($http, $location, $uibModalInstance) {
+app.controller('ModalInstanceCtrl', function ($http, $location, $uibModalInstance, nodePort, apiBaseURL, peers) {
     var modalInstance = this;
 
-    var nodePort = $location.port();
-    var apiBaseURL = "http://localhost:" + nodePort + "/api/example/";
+    modalInstance.peers = peers;
     modalInstance.form = {};
     modalInstance.formError = false;
-    modalInstance.peers = [];
     modalInstance.items = [{}];
-
-    $http.get(apiBaseURL + "get-peers").then(function(response) {
-        modalInstance.peers = response.data.peers;
-    });
 
     modalInstance.create = function () {
         if (invalidFormInput()) {
@@ -127,16 +124,10 @@ app.controller('ModalInstanceCtrl', function ($http, $location, $uibModalInstanc
             || !modalInstance.form.city
             || !modalInstance.form.country;
 
-        var inValidCounterparty = true;
-        for (var i = 0; i < modalInstance.peers.length; i++) {
-            if (modalInstance.peers[i] === modalInstance.form.counterparty) {
-                inValidCounterparty = false;
-                break;
-            }
-        }
+        var inValidCounterparty = modalInstance.form.counterparty === undefined;
 
         var invalidItemFields = false;
-        for (i = 0; i < modalInstance.items.length; i++) {
+        for (var i = 0; i < modalInstance.items.length; i++) {
             var item = modalInstance.items[i];
             if (!item.name || !item.amount || isNaN(item.amount)) {
                 invalidItemFields = true;
