@@ -159,19 +159,21 @@ to NodeB. Upon verification and completion of the process, both nodes
 
 **Submitting a purchase order via ``web/example``:**
 
-Navigate to the "create purchase order" button at the top left of the
-page, enter in the purchase order details e.g.
+Click the "Create purchase order" button at the top left of the
+page and enter the purchase order details, e.g.
 
+     Counter-party: Node B
      Order Number:  1
      Delivery Date: 2018-09-15
      City:          London
      Country Code:  UK
-     Item name:     Things
-     Item amount:   5
+     Item 1 name:   Things
+     Item 1 amount: 5
 
-and click submit. The modal dialogue should close. To check what
-validation is performed over the purchase order data, have a look at the
-`Place` class in `PurchaseOrderContract.kt`. For example, Entering a
+and click "Create purchase order". The modal dialogue should close.
+
+To check what validation is performed on the purchase order data, have a look 
+at the `Place` class in `PurchaseOrderContract.kt`. For example, Entering a
 'Country Code' other than 'UK' will cause the verify function to return an
 Exception in the terminal and logs.
 
@@ -217,9 +219,9 @@ navigate to `http://localhost:10007/api/example/purchase-orders`.
 
 **Via web/example:**
 
-Navigate to `http://localhost:10005/web/example/`Click the refresh
-button in the top left-hand side of the page. You should see the newly
-created agreement on the page.
+Navigate to `http://localhost:10005/web/example/` and click the refresh
+button at the top left-hand side of the page. You should see the newly
+created purchase order on the page.
 
 ## Accessing the h2 database via h2 web console
 
