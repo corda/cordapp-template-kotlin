@@ -71,13 +71,19 @@ app.controller('DemoAppController', function($http, $location, $uibModal) {
     demoApp.getPOs();
 });
 
-app.controller('ModalInstanceCtrl', function ($http, $location, $uibModalInstance, peers, apiBaseURL) {
+app.controller('ModalInstanceCtrl', function ($http, $location, $uibModalInstance) {
     var modalInstance = this;
 
+    var nodePort = $location.port();
+    var apiBaseURL = "http://localhost:" + nodePort + "/api/example/";
     modalInstance.form = {};
     modalInstance.formError = false;
-    modalInstance.peers = peers;
+    modalInstance.peers = [];
     modalInstance.items = [{}];
+
+    $http.get(apiBaseURL + "get-peers").then(function(response) {
+        modalInstance.peers = response.data.peers;
+    });
 
     modalInstance.create = function () {
         if (invalidFormInput()) {
