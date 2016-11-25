@@ -69,10 +69,10 @@ app.controller('ModalInstanceCtrl', function ($http, $location, $uibModalInstanc
                 items: modalInstance.items
             };
 
+            $uibModalInstance.close();
+
             var createPoEndpoint = apiBaseURL + modalInstance.form.counterparty + "/create-purchase-order";
-            $http.put(createPoEndpoint, angular.toJson(po)).then(function(response) {
-                $uibModalInstance.close();
-            });
+            $http.put(createPoEndpoint, angular.toJson(po));
         }
     };
 

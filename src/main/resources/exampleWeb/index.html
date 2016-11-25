@@ -116,6 +116,7 @@ COMING WEEKS WE'LL WRITE A TUTORIAL ON HOW BEST TO DO THIS.
                     <li>Seller: {{po.seller}}</li>
                     <li>Delivery City: {{po.po.deliveryAddress.city}}</li>
                     <li>Delivery Address: {{po.po.deliveryAddress.country}}</li>
+                    <li>Items:</li>
                     <ul>
                         <li ng-repeat="item in po.po.items">{{item.name}} ({{item.amount}})</li>
                     </ul>
