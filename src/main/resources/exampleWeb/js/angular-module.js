@@ -1,43 +1,25 @@
 "use strict";
 
-angular.module('demoAppModule', [])
-  .controller('DemoAppController', function($http) {
+var app = angular.module('demoAppModule', ['ui.bootstrap']);
+
+app.controller('DemoAppController', function($http, $location, $uibModal) {
     var demoApp = this;
 
-    // TODO: change this to location.port
-    var nodePort = 10005;
+    // We identify the node based on its localhost port.
+    var nodePort = $location.port();
     var apiBaseURL = "http://localhost:" + nodePort + "/api/example/";
-
-    demoApp.items = [{}];
-
-    $http.get(apiBaseURL + "get-peers").then(function(response) {
-        demoApp.peers = response.data.peers;
-    });
+    demoApp.thisNode = '';
+    demoApp.pos = [];
 
     $http.get(apiBaseURL + "who-am-i").then(function(response) {
         demoApp.thisNode = response.data.me;
     });
 
-    demoApp.submitPO = function() {
-        var po = {
-            orderNumber: demoApp.form.orderNumber,
-            deliveryDate: demoApp.form.deliveryDate,
-            deliveryAddress: {
-                city: demoApp.form.city,
-                country: demoApp.form.country
-            },
-            items: demoApp.items
-        };
-
-        console.log(po)
-
-        var createPoEndpoint = apiBaseURL + demoApp.form.counterparty + "/create-purchase-order";
-        $http.put(createPoEndpoint, angular.toJson(po)).then(function(response) {
-            // Refresh the purchase-order list.
-            demoApp.getPOs();
-            // Clear the form.
-            demoApp.form = null;
-            demoApp.items = [{}];
+    demoApp.openModal = function (size) {
+        var modalInstance = $uibModal.open({
+            templateUrl: 'demoAppModal.html',
+            controller: 'ModalInstanceCtrl',
+            controllerAs: 'modalInstance'
         });
     };
 
@@ -54,13 +36,82 @@ angular.module('demoAppModule', [])
         });
     };
 
-    demoApp.addItem = function() {
-        demoApp.items.push({});
+    demoApp.getPOs();
+});
+
+app.controller('ModalInstanceCtrl', function ($http, $location, $uibModalInstance) {
+    var modalInstance = this;
+
+    var nodePort = $location.port();
+    var apiBaseURL = "http://localhost:" + nodePort + "/api/example/";
+    modalInstance.form = {};
+    modalInstance.formError = false;
+    modalInstance.peers = [];
+    modalInstance.items = [{}];
+
+    $http.get(apiBaseURL + "get-peers").then(function(response) {
+        modalInstance.peers = response.data.peers;
+    });
+
+    modalInstance.create = function () {
+        if (invalidFormInput()) {
+            modalInstance.formError = true;
+        } else {
+            modalInstance.formError = false;
+
+            var po = {
+                orderNumber: modalInstance.form.orderNumber,
+                deliveryDate: modalInstance.form.deliveryDate,
+                deliveryAddress: {
+                    city: modalInstance.form.city,
+                    country: modalInstance.form.country
+                },
+                items: modalInstance.items
+            };
+
+            var createPoEndpoint = apiBaseURL + modalInstance.form.counterparty + "/create-purchase-order";
+            $http.put(createPoEndpoint, angular.toJson(po)).then(function(response) {
+                $uibModalInstance.close();
+            });
+        }
     };
 
-    demoApp.deleteItem = function() {
-        demoApp.items.pop();
+    modalInstance.cancel = function () {
+        $uibModalInstance.dismiss();
     };
 
-    var pos = demoApp.getPOs();
-  });
+    modalInstance.addItem = function() {
+        modalInstance.items.push({});
+    };
+
+    modalInstance.deleteItem = function() {
+        modalInstance.items.pop();
+    };
+
+    function invalidFormInput() {
+        var invalidNonItemFields = !modalInstance.form.orderNumber
+            || isNaN(modalInstance.form.orderNumber)
+            || !modalInstance.form.deliveryDate
+            || !modalInstance.form.city
+            || !modalInstance.form.country;
+
+        var inValidCounterparty = true;
+        for (var i = 0; i < modalInstance.peers.length; i++) {
+            if (modalInstance.peers[i] === modalInstance.form.counterparty) {
+                inValidCounterparty = false;
+                break;
+            }
+        }
+
+        var invalidItemFields = false;
+        for (i = 0; i < modalInstance.items.length; i++) {
+            var item = modalInstance.items[i];
+            if (!item.name || !item.amount || isNaN(item.amount)) {
+                invalidItemFields = true;
+                break;
+            }
+        }
+
+        return invalidNonItemFields || inValidCounterparty || invalidItemFields;
+    }
+});
