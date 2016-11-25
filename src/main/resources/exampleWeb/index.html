@@ -1,4 +1,4 @@
-<!--
+ <!--
 --------
 WARNING:
 --------
@@ -104,27 +104,6 @@ COMING WEEKS WE'LL WRITE A TUTORIAL ON HOW BEST TO DO THIS.
         <div ng-show="demoApp.pos.length" class="panel panel-primary">
             <div class="panel-heading">
                 <h3 class="panel-title">Recorded purchase orders:</h3>
-            </div>
-        </div>
-        <div ng-repeat="po in demoApp.pos" class="panel panel-default">
-            <div class="panel-body">
-                <ul>
-                    <li>Purchase Order ID: {{po.po.orderNumber}}</li>
-                    <li>Contract hash: {{po.contract.legalContractReference}}</li>
-                    <li>Buyer: {{po.buyer}}</li>
-                    <li>Seller: {{po.seller}}</li>
-                    <li>Delivery City: {{po.po.deliveryAddress.city}}</li>
-                    <li>Delivery Address: {{po.po.deliveryAddress.country}}</li>
-                    <li>Items:</li>
-                    <ul>
-                        <li ng-repeat="item in po.po.items">{{item.name}} ({{item.amount}})</li>
-                    </ul>
-                </ul>
-            </div>
-        </div>
-        <div ng-show="demoApp.pos.length" class="panel panel-primary">
-            <div class="panel-heading">
-                <h3 class="panel-title">Recorded agreements:</h3>
             </div>
         </div>
         <div ng-repeat="po in demoApp.pos" class="panel panel-default">
