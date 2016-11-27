@@ -44,7 +44,7 @@ class ExamplePlugin : CordaPluginRegistry() {
     )
 
     /**
-     * Register required types with Kryo.
+     * Register required types with Kryo (our serialisation framework)..
      */
     override fun registerRPCKryoTypes(kryo: Kryo): Boolean {
         kryo.register(PurchaseOrderState::class.java)

@@ -1,4 +1,4 @@
- <!--
+<!--
 --------
 WARNING:
 --------
@@ -37,8 +37,7 @@ COMING WEEKS WE'LL WRITE A TUTORIAL ON HOW BEST TO DO THIS.
 </nav>
 <script type="text/ng-template" id="demoAppModal.html">
     <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal"></button>
-        <h4 class="modal-title">Add new transaction</h4>
+        <h4 class="modal-title">Add new purchase order</h4>
     </div>
     <form>
         <div class="modal-body">
@@ -83,18 +82,23 @@ COMING WEEKS WE'LL WRITE A TUTORIAL ON HOW BEST TO DO THIS.
                     <span class="sr-only">Error:</span>
                     Enter valid purchase order parameters
                 </div>
-            </div>           
+            </div>
         </div>
         <div class="modal-footer">
             <button ng-click="modalInstance.cancel()" type="button" class="btn btn-default">Close</button>
             <button ng-click="modalInstance.create()" type="button" class="btn btn-primary">Create purchase order</button>
         </div>
     </form>
-</div>
+    </div>
+</script>
+<script type="text/ng-template" id="messageContent.html">
+    <div class="modal-body" id="modal-body">
+        {{ modalInstanceTwo.message }}
+    </div>
 </script>
 <div class="row">
     <div class="col-md-1"></div>
-    <div class="col-md-9">
+    <div class="col-md-10">
         <div ng-show="!demoApp.pos.length" class="panel panel-primary">
             <div class="panel-heading">
                 <h3 class="panel-title">There are no recorded purchase orders</h3>

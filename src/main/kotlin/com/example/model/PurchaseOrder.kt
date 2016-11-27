@@ -17,8 +17,8 @@ import java.util.*
 /**
  * The name, amount and price of an item to be purchased. It is assumed that the buyer has the seller's item catalogue
  * and will only place orders for valid items. Of course, a reference to a particular version of the catalogue could be
- * included with the Issue() purchase order transaction such that the seller can check the items are valid. For more
- * details on attachments see
+ * included with the Issue() purchase order transaction as an attachment, such that the seller can check the items are valid.
+ * For more details on attachments see
  *
  * samples/attachment-demo/src/kotlin/net/corda/attachmentdemo
  *
