@@ -51,7 +51,7 @@ Build the CorDapp template:
      
 **Windows:**
 
-     gradle.bat deployNodes
+     gradlew.bat deployNodes
      
 Note. You will be building the example CorDapp. If you want to make any
 changes they should be made before building, of course!
