@@ -18,7 +18,7 @@ buildscript {
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
         classpath "net.corda.plugins:quasar-utils:0.5.2"
         classpath "net.corda.plugins:publish-utils:0.5"
-        classpath "net.corda.plugins:cordformation:0.5.3"
+        classpath "net.corda.plugins:cordformation:0.5.6"
     }
 }
 
@@ -97,6 +97,7 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['build']) {
         artemisPort 10004
         webPort 10005
         cordapps = []
+        rpcUsers = [[ user: "user1", "password": "test", "permissions": []]]
     }
     node {
         name "NodeB"
@@ -106,6 +107,7 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['build']) {
         artemisPort 10006
         webPort 10007
         cordapps = []
+        rpcUsers = [[ user: "user1", "password": "test", "permissions": []]]
     }
     node {
         name "NodeC"
@@ -115,6 +117,7 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['build']) {
         artemisPort 10008
         webPort 10009
         cordapps = []
+        rpcUsers = [[ user: "user1", "password": "test", "permissions": []]]
     }
 }
 
