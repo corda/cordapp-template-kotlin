@@ -4,9 +4,9 @@ import com.example.contract.PurchaseOrderContract
 import com.example.contract.PurchaseOrderState
 import com.example.model.PurchaseOrder
 import com.example.flow.ExampleFlow
+import com.example.flow.ExampleFlowResult
 import net.corda.core.node.ServiceHub
 import net.corda.core.node.services.linearHeadsOfType
-import net.corda.core.transactions.SignedTransaction
 import javax.ws.rs.*
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
@@ -15,11 +15,12 @@ import javax.ws.rs.core.Response
 @Path("example")
 class ExampleApi(val services: ServiceHub) {
     val me: String = services.myInfo.legalIdentity.name
+
     /**
      * Returns the party name of the node providing this end-point.
      */
     @GET
-    @Path("who-am-i")
+    @Path("me")
     @Produces(MediaType.APPLICATION_JSON)
     fun whoami() = mapOf("me" to me)
 
@@ -28,11 +29,11 @@ class ExampleApi(val services: ServiceHub) {
      * by using the [IdentityService].
      */
     @GET
-    @Path("get-peers")
+    @Path("peers")
     @Produces(MediaType.APPLICATION_JSON)
     fun getPeers() = mapOf("peers" to services.networkMapCache.partyNodes
             .map { it.legalIdentity.name }
-            .filter { it != me })
+            .filter { it != me && it != "Controller" })
 
     /**
      * Displays all purchase order states that exist in the vault.
@@ -54,13 +55,24 @@ class ExampleApi(val services: ServiceHub) {
      */
     @PUT
     @Path("{party}/create-purchase-order")
-    fun createDeal(po: PurchaseOrder, @PathParam("party") partyName: String): Response {
+    fun createPurchaseOrder(po: PurchaseOrder, @PathParam("party") partyName: String): Response {
         val otherParty = services.identityService.partyFromName(partyName)
         if(otherParty != null) {
             val state = PurchaseOrderState(po, services.myInfo.legalIdentity, otherParty, PurchaseOrderContract())
             // The line below blocks and waits for the future to resolve.
-            services.invokeFlowAsync<SignedTransaction>(ExampleFlow.Initiator::class.java, state, otherParty).resultFuture.get()
-            return Response.status(Response.Status.CREATED).build()
+            val result: ExampleFlowResult = services.invokeFlowAsync(ExampleFlow.Initiator::class.java, state, otherParty).resultFuture.get()
+            when (result) {
+                is ExampleFlowResult.Success ->
+                    return Response
+                            .status(Response.Status.CREATED)
+                            .entity(result.message)
+                            .build()
+                is ExampleFlowResult.Failure ->
+                    return Response
+                            .status(Response.Status.BAD_REQUEST)
+                            .entity(result.message)
+                            .build()
+            }
         } else {
             return Response.status(Response.Status.BAD_REQUEST).build()
         }

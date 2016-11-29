@@ -78,7 +78,7 @@ open class PurchaseOrderContract() : Contract {
                 val command = tx.commands.requireSingleCommand<Commands.Place>()
                 requireThat {
                     // Generic constraints around generation of the issue purchase order transaction.
-                    "No inputs should be consumed when issuing a purchase order." by (inputs.size == 0)
+                    "No inputs should be consumed when issuing a purchase order." by (inputs.isEmpty())
                     "Only one output state should be created for each group." by (outputs.size == 1)
                     val out = outputs.single()
                     "The buyer and the seller cannot be the same entity." by (out.buyer != out.seller)
@@ -87,7 +87,7 @@ open class PurchaseOrderContract() : Contract {
 
                     // Purchase order specific constraints.
                     "We only deliver to the UK." by (out.po.deliveryAddress.country == "UK")
-                    "You must order at least one type of item." by (out.po.items.size > 0)
+                    "You must order at least one type of item." by (out.po.items.isNotEmpty())
                     "You cannot order zero or negative amounts of an item." by (out.po.items.map(Item::amount).all { it > 0 })
                     "You can only order up to 10 items at a time." by (out.po.items.map(Item::amount).sum() <= 10)
                     val time = tx.timestamp?.midpoint
