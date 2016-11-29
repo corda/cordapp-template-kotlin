@@ -175,7 +175,7 @@ and click "Create purchase order". The modal dialogue should close.
 To check what validation is performed on the purchase order data, have a look 
 at the `Place` class in `PurchaseOrderContract.kt`. For example, Entering a
 'Country Code' other than 'UK' will cause the verify function to return an
-Exception in the terminal and logs.
+Exception and you should rceeive an error message in response.
 
 **Once a purchase order has been submitted:**
 
@@ -287,13 +287,11 @@ The RPC client should output some purchase order objects to the console.
 ## Further Reading
 
 Tutorials and developer docs for CorDapps and Corda are
-[here](https://docs.corda.r3cev.com/tutorial-cordapp.html).
+[here](https://docs.corda.net/tutorial-cordapp.html).
 
 ## TODO
 
 * Make the progress tracker steps more instructive
-* Amend the Jython RPC demo such that it works with PurchaseOrderStates
-* Fix the `web/example` front end
 * Add a schema for PurchaseOrderState
 * Add an attachment to the 'Place' transaction
 * Add contract unit tests

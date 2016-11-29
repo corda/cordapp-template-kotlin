@@ -51,7 +51,7 @@ COMING WEEKS WE'LL WRITE A TUTORIAL ON HOW BEST TO DO THIS.
                 <input type="text" ng-model="modalInstance.form.orderNumber" class="form-control" id="orderNumber">
             </div>
             <div class="form-group">
-                <label for="deliveryDate" class="control-label">Delivery Date (Format: YYYY-MM-DD):</label>
+                <label for="deliveryDate" class="control-label">Future delivery Date (Format: YYYY-MM-DD):</label>
                 <input type="text" ng-model="modalInstance.form.deliveryDate" class="form-control" id="deliveryDate">
             </div>
             <div class="form-group">
@@ -59,8 +59,12 @@ COMING WEEKS WE'LL WRITE A TUTORIAL ON HOW BEST TO DO THIS.
                 <input type="text" ng-model="modalInstance.form.city" class="form-control" id="city">
             </div>
             <div class="form-group">
-                <label for="country" class="control-label">Country (Two letter code, e.g. UK):</label>
+                <label for="country" class="control-label">Country (Only deliver to the UK):</label>
                 <input type="text" ng-model="modalInstance.form.country" class="form-control" id="country">
+            </div>
+            <div class="form-group">
+                <h4>Items:</h4>
+                <p>Will deliver up to max 100 items.</p>
             </div>
             <div ng-repeat="item in modalInstance.items">
                 <div class="form-group">
@@ -68,7 +72,7 @@ COMING WEEKS WE'LL WRITE A TUTORIAL ON HOW BEST TO DO THIS.
                     <input type="text" ng-model="item.name" class="form-control" id="itemName">
                 </div>
                 <div class="form-group">
-                    <label for="itemAmount" class="control-label">Item {{$index+1}} amount (Int, max 10):</label>
+                    <label for="itemAmount" class="control-label">Item {{$index+1}} amount (Int):</label>
                     <input type="text" ng-model="item.amount" class="form-control" id="itemAmount">
                 </div>
             </div>
