@@ -129,8 +129,8 @@ in `build/nodes/NodeX`` etc:
 Also, as the nodes start-up they should tell you which host and port the
 embedded web server is running on. The API endpoints served are as follows:
 
-     /api/example/who-am-i
-     /api/example/get-peers
+     /api/example/me
+     /api/example/peers
      /api/example/purchase-orders
      /api/example/{COUNTERPARTY}/create-purchase-order
      
@@ -207,6 +207,9 @@ terminal windows for NodeA and NodeB:
 *NodeC:*
 
      You shouldn't see any activity.
+     
+Alternatively, try adding a purchase order with a delivery date in the past 
+or a delivery country other than the UK.
 
 Next you can view the newly created purchase order by accessing the
 vault of NodeA or NodeB:
@@ -251,7 +254,7 @@ first need to obtain a JDBC connection string. Each node outputs its
 connection string in the terminal window as it starts up. In a terminal
 window where a node is running, look for the following string:
 
-     ``Database connection url is              : jdbc:h2:tcp://10.18.0.150:56736/node``
+     ``Database connection url is              : jdbc:h2:tcp://xxx.xxx.xxx.xxx:xxxxx/node``
      
 you can use the string on the right to connect to the h2 database: just
 paste it in to the `JDBC URL` field and click *Connect*.
