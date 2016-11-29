@@ -89,7 +89,7 @@ open class PurchaseOrderContract() : Contract {
                     "We only deliver to the UK." by (out.po.deliveryAddress.country == "UK")
                     "You must order at least one type of item." by (out.po.items.isNotEmpty())
                     "You cannot order zero or negative amounts of an item." by (out.po.items.map(Item::amount).all { it > 0 })
-                    "You can only order up to 10 items at a time." by (out.po.items.map(Item::amount).sum() <= 10)
+                    "You can only order up to 100 items in total." by (out.po.items.map(Item::amount).sum() <= 10)
                     val time = tx.timestamp?.midpoint
                     "The delivery date must be in the future." by (out.po.deliveryDate.toInstant() > time)
                 }

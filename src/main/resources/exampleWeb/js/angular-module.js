@@ -76,7 +76,7 @@ app.controller('ModalInstanceCtrl', function ($http, $location, $uibModalInstanc
                 orderNumber: modalInstance.form.orderNumber,
                 deliveryDate: modalInstance.form.deliveryDate,
                 deliveryAddress: {
-                    city: modalInstance.form.city,
+                    city: modalInstance.form.city.toUpperCase(),
                     country: modalInstance.form.country
                 },
                 items: modalInstance.items
@@ -105,6 +105,7 @@ app.controller('ModalInstanceCtrl', function ($http, $location, $uibModalInstanc
             resolve: { message: () => message }
         });
 
+        // No behaviour on close / dismiss.
         modalInstanceTwo.result.then(() => {}, () => {});
     };
 
