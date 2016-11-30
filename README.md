@@ -1,11 +1,11 @@
 # CorDapp Template
 
-Welcome to the CorDapp Template. This README is an abridged version of
+Welcome to the CorDapp template. The CorDapp template is a example CorDapp 
+and which you can use to bootstrap your own CorDapp projects.
+
+This README is an abridged version of 
 the [CorDapp tutorial](http://docs.corda.net/tutorial-cordapp.html) found on
 the Corda docsite.
-
-The CorDapp template is a example CorDapp and accompanying tests which you can
-use to bootstrap your own CorDapp projects.
 
 **Instead, if you are interested in exploring the Corda codebase itself,
 contributing to the core Corda platform or viewing and running sample
@@ -42,6 +42,15 @@ To get started, clone this repository with:
 Change directories to the newly cloned repo:
 
      cd cordapp-template
+     
+Now check out the latest stable milestone release:
+
+     git checkout -b corda-m6-template tags/release-M6.0
+     
+Instead, if you would like to build your CorDapp against a SNAPSHOT 
+release of Corda then you can follow the instructions on the 
+[CorDapp tutorial page](http://docs.corda.net/tutorial-cordapp.html) under 
+the "Using a SNAPSHOT release" heading.
      
 Build the CorDapp template:
  
