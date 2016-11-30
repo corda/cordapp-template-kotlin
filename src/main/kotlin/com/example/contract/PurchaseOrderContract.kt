@@ -15,13 +15,13 @@ import net.corda.core.random63BitValue
  * For a new [PurchaseOrderState] to be issued onto the ledger a transaction is required which takes:
  * - Zero input states.
  * - One output state: the new [PurchaseOrderState].
- * - An Issue() command with the public keys of the buyer and seller parties.
+ * - An Place() command with the public keys of the buyer and seller parties.
  * - A timestamp.
  *
  * The contract code (implemented within the [Timestamped] and [Issue] clauses) is run when the transaction is
  * verified via the verify() function.
  * - [Timestamped] checks for the existence of a timestamp
- * - [Issue] runs a series of constraints, see more below
+ * - [Place] runs a series of constraints, see more below
  *
  * All contracts must sub-class the [Contract] interface.
  */
@@ -89,7 +89,7 @@ open class PurchaseOrderContract() : Contract {
                     "We only deliver to the UK." by (out.po.deliveryAddress.country == "UK")
                     "You must order at least one type of item." by (out.po.items.isNotEmpty())
                     "You cannot order zero or negative amounts of an item." by (out.po.items.map(Item::amount).all { it > 0 })
-                    "You can only order up to 100 items in total." by (out.po.items.map(Item::amount).sum() <= 10)
+                    "You can only order up to 100 items in total." by (out.po.items.map(Item::amount).sum() <= 100)
                     val time = tx.timestamp?.midpoint
                     "The delivery date must be in the future." by (out.po.deliveryDate.toInstant() > time)
                 }
