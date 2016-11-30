@@ -55,6 +55,12 @@ release of Corda then you can follow the instructions on the
 the "Using a SNAPSHOT release" heading.
      
 Build the CorDapp template:
+
+**NOTE: Building the CorDapp Template from master WILL fail without 
+first running `/gradlew install` (or `gradlew.bat install`) from the master 
+branch of the [corda repository](https://github.com/corda/corda). Make sure
+you have checked out the M6 release tag from this repository before you build, 
+UNLESS you wish to build from a SNAPSHOT release.**
  
 **Unix:** 
 
