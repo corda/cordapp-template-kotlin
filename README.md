@@ -1,3 +1,5 @@
+![Corda](https://www.corda.net/wp-content/uploads/2016/11/fg005_corda_b.png)
+
 # CorDapp Template
 
 Welcome to the CorDapp template. The CorDapp template is a example CorDapp 
