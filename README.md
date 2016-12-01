@@ -2,7 +2,7 @@
 
 # CorDapp Template
 
-Welcome to the CorDapp template. The CorDapp template is a example CorDapp 
+Welcome to the CorDapp template. The CorDapp template is an example CorDapp 
 and which you can use to bootstrap your own CorDapp projects.
 
 This README is an abridged version of 
@@ -309,11 +309,12 @@ The RPC client should output some purchase order objects to the console.
 Tutorials and developer docs for CorDapps and Corda are
 [here](https://docs.corda.net/tutorial-cordapp.html).
 
-## TODO
-
+<!---
+TODOs
 * Make the progress tracker steps more instructive
 * Add a schema for PurchaseOrderState
 * Add an attachment to the 'Place' transaction
 * Add contract unit tests
 * Add flow unit tests
 * Add an integration test
+-->
