@@ -82,8 +82,7 @@ open class PurchaseOrderContract() : Contract {
                     "Only one output state should be created for each group." by (outputs.size == 1)
                     val out = outputs.single()
                     "The buyer and the seller cannot be the same entity." by (out.buyer != out.seller)
-                    "The 'participants' and 'parties' must be the same." by (out.parties.map { it.owningKey }.containsAll(out.participants))
-                    "The buyer and the seller are the parties." by (out.parties.containsAll(listOf(out.buyer, out.seller)))
+                    "All of the participants must be signers." by (command.signers.containsAll(out.participants))
 
                     // Purchase order specific constraints.
                     "We only deliver to the UK." by (out.po.deliveryAddress.country == "UK")

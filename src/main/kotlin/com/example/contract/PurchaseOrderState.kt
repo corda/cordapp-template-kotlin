@@ -31,9 +31,11 @@ data class PurchaseOrderState(val po: PurchaseOrder,
                               override val linearId: UniqueIdentifier = UniqueIdentifier(po.orderNumber.toString())):
         DealState {
     /** Another ref field, for matching with data in external systems. In this case the external Id is the po number. */
-    override val ref: String = linearId.externalId!!
+    override val ref: String get() = linearId.externalId!!
     /** List of parties involved in this particular deal */
-    override val parties: List<Party> = listOf(buyer, seller)
+    override val parties: List<Party> get() = listOf(buyer, seller)
+    /** The public keys of the parties that are able to consume this state in a valid transaction. */
+    override val participants: List<CompositeKey> get() = parties.map { it.owningKey }
 
     /**
      * This returns true if the state should be tracked by the vault of a particular node. In this case the logic is
@@ -52,9 +54,6 @@ data class PurchaseOrderState(val po: PurchaseOrder,
      * */
     override fun generateAgreement(notary: Party): TransactionBuilder {
         return TransactionType.General.Builder(notary)
-                .withItems(this, Command(PurchaseOrderContract.Commands.Place(), parties.map { it.owningKey }))
+                .withItems(this, Command(PurchaseOrderContract.Commands.Place(), participants))
     }
-
-    /** The public keys of party that is able to consume this state in a valid transaction. */
-    override val participants: List<CompositeKey> = parties.map { it.owningKey }
 }
