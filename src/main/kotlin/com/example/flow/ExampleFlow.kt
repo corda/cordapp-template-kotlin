@@ -89,19 +89,20 @@ object ExampleFlow {
                 // Flow jumps to Acceptor.
                 // -----------------------
                 progressTracker.currentStep = RECEIVED_PARTIAL_TRANSACTION
-                val ptx = sendAndReceive<SignedTransaction>(otherParty, offerMessage).unwrap {
+                val ptx = sendAndReceive<SignedTransaction>(otherParty, offerMessage).unwrap { stx ->
                     // Stage 7.
                     // Receive the partially signed transaction off the wire from the other party.
                     // Check that the signature of the other party is valid.
                     // Our signature and the Notary's signature are allowed to be omitted at this stage as this is only a
                     // partially signed transaction.
                     progressTracker.currentStep = VERIFYING
-                    val wtx: WireTransaction = it.verifySignatures(myKeyPair.public.composite, notaryPubKey)
+                    val wtx: WireTransaction = stx.verifySignatures(myKeyPair.public.composite, notaryPubKey)
                     // Run the contract's verify function.
                     // We want to be sure that the PurchaseOrderState agreed upon is a valid instance of an PurchaseOrderContract, to do
                     // this we need to run the contract's verify() function.
                     wtx.toLedgerTransaction(serviceHub).verify()
-                    it
+                    // We've verified the signed transaction, return it
+                    stx
                 }
                 // Stage 8.
                 progressTracker.currentStep = SIGNING
@@ -184,14 +185,14 @@ object ExampleFlow {
                 progressTracker.currentStep = SEND_TRANSACTION_AND_WAIT_FOR_RESPONSE
                 // Stage 12.
                 // Receive the notarised transaction off the wire.
-                val ntx = sendAndReceive<SignedTransaction>(otherParty, stx).unwrap {
+                val ntx = sendAndReceive<SignedTransaction>(otherParty, stx).unwrap { stx ->
                     progressTracker.currentStep = VERIFYING_TRANSACTION
                     // Validate transaction.
                     // No need to allow for any omited signatures as everyone should have signed.
-                    it.verifySignatures()
+                    stx.verifySignatures()
                     // Check it's valid.
-                    it.toLedgerTransaction(serviceHub).verify()
-                    it
+                    stx.toLedgerTransaction(serviceHub).verify()
+                    stx
                 }
                 // Record the transaction.
                 progressTracker.currentStep = RECORDING
