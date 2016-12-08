@@ -78,7 +78,7 @@ the sample application and create several local Corda nodes. Once the
 build concludes, change directories to the folder where the newly built
 nodes are located:
 
-     cd build/nodes
+     cd kotlin/build/nodes
      
 The Gradle build script will have created a folder for each node. You'll
 see three folders, one for each node and a `runnodes` script. You can
@@ -137,7 +137,7 @@ agreements.
 
 The nodes can be found using the following port numbers, defined in
 `build.gradle` and the respective `node.conf` file for each node found
-in `build/nodes/NodeX`` etc:
+in `kotlin/build/nodes/NodeX`` etc:
 
      NodeA: localhost:10005
      NodeB: localhost:10007
