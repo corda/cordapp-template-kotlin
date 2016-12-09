@@ -55,7 +55,8 @@ open class PurchaseOrderContract() : Contract {
                                 inputs: List<ContractState>,
                                 outputs: List<ContractState>,
                                 commands: List<AuthenticatedObject<Commands>>,
-                                groupingKey: Unit?): Set<Commands> {
+                                groupingKey: Unit?): Set<Commands>
+            {
                 require(tx.timestamp?.midpoint != null) { "must be timestamped" }
                 // We return an empty set because we don't process any commands
                 return emptySet()

@@ -2,13 +2,12 @@ package com.example.client
 
 import com.example.contract.PurchaseOrderState
 import com.google.common.net.HostAndPort
-import net.corda.client.CordaRPCClient
 import net.corda.core.transactions.SignedTransaction
 import net.corda.core.utilities.loggerFor
 import net.corda.node.services.config.configureTestSSL
+import net.corda.node.services.messaging.CordaRPCClient
 import org.slf4j.Logger
 import rx.Observable
-import java.util.concurrent.CompletableFuture
 
 /**
  *  Demonstration of using the CordaRPCClient to connect to a Corda Node and
@@ -38,12 +37,11 @@ private class ExampleClientRPC {
                 proxy.verifiedTransactions()
 
         // Log the 'placed' purchase order states and listen for new ones.
-        futureTransactions.startWith(transactions).subscribe { transaction ->
+        futureTransactions.startWith(transactions).toBlocking().subscribe { transaction ->
             transaction.tx.outputs.forEach { output ->
                 val state = output.data as PurchaseOrderState
                 logger.info(state.po.toString())
             }
         }
-        CompletableFuture<Unit>().get()
     }
 }

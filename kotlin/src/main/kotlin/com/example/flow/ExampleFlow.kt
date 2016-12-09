@@ -1,6 +1,9 @@
 package com.example.flow
 
 import co.paralleluniverse.fibers.Suspendable
+import com.example.contract.PurchaseOrderState
+import com.example.flow.ExampleFlow.Acceptor
+import com.example.flow.ExampleFlow.Initiator
 import net.corda.core.contracts.DealState
 import net.corda.core.contracts.TransactionState
 import net.corda.core.crypto.Party
@@ -32,9 +35,8 @@ import net.corda.flows.NotaryFlow
  * explains each stage of the flow.
  */
 object ExampleFlow {
-    class Initiator(val po: DealState,
-                    val otherParty: Party,
-                    override val progressTracker: ProgressTracker = Initiator.tracker()): FlowLogic<ExampleFlowResult>() {
+    class Initiator(val po: PurchaseOrderState,
+                    val otherParty: Party): FlowLogic<ExampleFlowResult>() {
         /**
          * The progress tracker checkpoints each stage of the flow and outputs the specified messages when each
          * checkpoint is reached in the code. See the 'progressTracker.currentStep' expressions within the call() function.
@@ -60,6 +62,8 @@ object ExampleFlow {
                     SENDING_FINAL_TRANSACTION
             )
         }
+
+        override val progressTracker = tracker()
 
         /**
          * The flow logic is encapsulated within the call() method.
@@ -135,8 +139,7 @@ object ExampleFlow {
         }
     }
 
-    class Acceptor(val otherParty: Party,
-                   override val progressTracker: ProgressTracker = Acceptor.tracker()): FlowLogic<ExampleFlowResult>() {
+    class Acceptor(val otherParty: Party): FlowLogic<ExampleFlowResult>() {
         companion object {
             object WAITING_FOR_PROPOSAL : ProgressTracker.Step("Receiving proposed purchase order from buyer.")
             object GENERATING_TRANSACTION : ProgressTracker.Step("Generating transaction based on proposed purchase order.")
@@ -154,6 +157,8 @@ object ExampleFlow {
                     RECORDING
             )
         }
+
+        override val progressTracker = tracker()
 
         @Suspendable
         override fun call(): ExampleFlowResult {

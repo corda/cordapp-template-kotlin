@@ -1,5 +1,6 @@
 package com.example.contract
 
+import com.example.contract.PurchaseOrderContract.Commands
 import com.example.model.PurchaseOrder
 import net.corda.core.contracts.Command
 import net.corda.core.contracts.DealState
@@ -54,6 +55,6 @@ data class PurchaseOrderState(val po: PurchaseOrder,
      * */
     override fun generateAgreement(notary: Party): TransactionBuilder {
         return TransactionType.General.Builder(notary)
-                .withItems(this, Command(PurchaseOrderContract.Commands.Place(), participants))
+                .withItems(this, Command(Commands.Place(), participants))
     }
 }

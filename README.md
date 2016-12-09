@@ -3,7 +3,7 @@
 # CorDapp Template
 
 Welcome to the CorDapp template. The CorDapp template is an example CorDapp 
-and which you can use to bootstrap your own CorDapp projects.
+which you can use to bootstrap your own CorDapp projects.
 
 This README is an abridged version of 
 the [CorDapp tutorial](http://docs.corda.net/tutorial-cordapp.html) found on
@@ -19,16 +19,20 @@ orders to other nodes. You can also enumerate all the purchase orders
 which have been agreed with other nodes. The nodes also provide a simple
 web interface which can be used to interact with the CorDapp.
 
+The source code for this CorDapp is provided in both Kotlin (under `/kotlin`)
+and Java (under `/java`), and users can choose to write their CorDapps in
+either language.
+
 ## Pre-requisites
 
 You will need the following installed on your machine before you can start:
 
-* [JDK 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) installed and available on your path.
-* Latest version of
-  [IntelliJ IDEA](https://www.jetbrains.com/idea/download/) (note the
-  community edition is free)
+* [JDK 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) 
+  installed and available on your path.
+* Latest version of [IntelliJ IDEA](https://www.jetbrains.com/idea/download/) 
+  (note the community edition is free)
 * [h2 web console](http://www.h2database.com/html/download.html)
-  (download the "platform-independent zip)"
+  (download the "platform-independent zip")
 * git
 
 For more detailed information, see the
@@ -74,11 +78,15 @@ Note. You will be building the example CorDapp. If you want to make any
 changes they should be made before building, of course!
      
 Gradle will grab all the dependencies for you from Maven and then build 
-the sample application and create several local Corda nodes. Once the
+two sample applications and create several local Corda nodes. Once the
 build concludes, change directories to the folder where the newly built
 nodes are located:
 
-     cd kotlin/build/nodes
+     cd kotlin/build/nodes (for the kotlin version)
+
+     or
+
+     cd java/build/nodes (for the java version)
      
 The Gradle build script will have created a folder for each node. You'll
 see three folders, one for each node and a `runnodes` script. You can
@@ -137,7 +145,7 @@ agreements.
 
 The nodes can be found using the following port numbers, defined in
 `build.gradle` and the respective `node.conf` file for each node found
-in `kotlin/build/nodes/NodeX`` etc:
+in `kotlin/build/nodes/NodeX` or `java/build/nodes/NodeX`:
 
      NodeA: localhost:10005
      NodeB: localhost:10007

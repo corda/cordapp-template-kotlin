@@ -1,11 +1,8 @@
 package com.example
 
-import com.example.flow.ExampleFlow
-import net.corda.node.driver.driver
 import net.corda.core.node.services.ServiceInfo
-import net.corda.flows.CashFlow
+import net.corda.node.driver.driver
 import net.corda.node.services.User
-import net.corda.node.services.startFlowPermission
 import net.corda.node.services.transactions.ValidatingNotaryService
 
 /**

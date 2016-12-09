@@ -5,14 +5,21 @@ import com.example.api.ExampleApi
 import com.example.contract.PurchaseOrderContract
 import com.example.contract.PurchaseOrderState
 import com.example.flow.ExampleFlow
+import com.example.flow.ExampleFlowResult
+import com.example.model.Address
+import com.example.model.Item
 import com.example.model.PurchaseOrder
 import com.example.service.ExampleService
 import net.corda.core.crypto.Party
+import net.corda.core.messaging.CordaRPCOps
 import net.corda.core.node.CordaPluginRegistry
+import net.corda.core.node.PluginServiceHub
+import java.util.*
+import java.util.function.Function
 
 class ExamplePlugin : CordaPluginRegistry() {
     /** A list of classes that expose web APIs. */
-    override val webApis: List<Class<*>> = listOf(ExampleApi::class.java)
+    override val webApis: List<Function<CordaRPCOps, out Any>> = listOf(Function(::ExampleApi))
     /**
      * A list of flows required for this CorDapp.
      *
@@ -36,7 +43,7 @@ class ExamplePlugin : CordaPluginRegistry() {
      * factories that would be used when an initiating party attempts to communicate with our node using a particular
      * flow. See the [ExampleService.Service] class for an implementation which sets up a
      */
-    override val servicePlugins: List<Class<*>> = listOf(ExampleService.Service::class.java)
+    override val servicePlugins: List<Function<PluginServiceHub, out Any>> = listOf(Function(ExampleService::Service))
     /** A list of directories in the resources directory that will be served by Jetty under /web */
     override val staticServeDirs: Map<String, String> = mapOf(
             // This will serve the exampleWeb directory in resources to /web/example
@@ -44,12 +51,17 @@ class ExamplePlugin : CordaPluginRegistry() {
     )
 
     /**
-     * Register required types with Kryo (our serialisation framework)..
+     * Register required types with Kryo (our serialisation framework).
      */
     override fun registerRPCKryoTypes(kryo: Kryo): Boolean {
         kryo.register(PurchaseOrderState::class.java)
         kryo.register(PurchaseOrderContract::class.java)
         kryo.register(PurchaseOrder::class.java)
+        kryo.register(Address::class.java)
+        kryo.register(Date::class.java)
+        kryo.register(Item::class.java)
+        kryo.register(ExampleFlowResult.Success::class.java)
+        kryo.register(ExampleFlowResult.Failure::class.java)
         return true
     }
 }
