@@ -25,11 +25,11 @@ import java.security.PublicKey
  * transaction types.
  * @param linearId Unique id shared by all [LinearState] states throughout history within the vaults of all parties.
  */
-data class PurchaseOrderState(val po: PurchaseOrder,
+data class PurchaseOrderState(val purchaseOrder: PurchaseOrder,
                               val buyer: Party,
                               val seller: Party,
                               override val contract: PurchaseOrderContract,
-                              override val linearId: UniqueIdentifier = UniqueIdentifier(po.orderNumber.toString())):
+                              override val linearId: UniqueIdentifier = UniqueIdentifier(purchaseOrder.orderNumber.toString())):
         DealState {
     /** Another ref field, for matching with data in external systems. In this case the external Id is the po number. */
     override val ref: String get() = linearId.externalId!!

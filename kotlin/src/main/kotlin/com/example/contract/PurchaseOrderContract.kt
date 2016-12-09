@@ -86,12 +86,12 @@ open class PurchaseOrderContract() : Contract {
                     "All of the participants must be signers." by (command.signers.containsAll(out.participants))
 
                     // Purchase order specific constraints.
-                    "We only deliver to the UK." by (out.po.deliveryAddress.country == "UK")
-                    "You must order at least one type of item." by (out.po.items.isNotEmpty())
-                    "You cannot order zero or negative amounts of an item." by (out.po.items.map(Item::amount).all { it > 0 })
-                    "You can only order up to 100 items in total." by (out.po.items.map(Item::amount).sum() <= 100)
+                    "We only deliver to the UK." by (out.purchaseOrder.deliveryAddress.country == "UK")
+                    "You must order at least one type of item." by (out.purchaseOrder.items.isNotEmpty())
+                    "You cannot order zero or negative amounts of an item." by (out.purchaseOrder.items.map(Item::amount).all { it > 0 })
+                    "You can only order up to 100 items in total." by (out.purchaseOrder.items.map(Item::amount).sum() <= 100)
                     val time = tx.timestamp?.midpoint
-                    "The delivery date must be in the future." by (out.po.deliveryDate.toInstant() > time)
+                    "The delivery date must be in the future." by (out.purchaseOrder.deliveryDate.toInstant() > time)
                 }
 
                 return setOf(command.value)

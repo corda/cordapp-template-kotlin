@@ -40,7 +40,7 @@ private class ExampleClientRPC {
         futureTransactions.startWith(transactions).toBlocking().subscribe { transaction ->
             transaction.tx.outputs.forEach { output ->
                 val state = output.data as PurchaseOrderState
-                logger.info(state.po.toString())
+                logger.info(state.purchaseOrder.toString())
             }
         }
     }
