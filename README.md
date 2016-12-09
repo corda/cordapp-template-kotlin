@@ -23,7 +23,30 @@ The source code for this CorDapp is provided in both Kotlin (under `/kotlin`)
 and Java (under `/java`), and users can choose to write their CorDapps in
 either language.
 
-## Pre-requisites
+## The Example CorDapp
+
+The Example CorDapp implements a basic scenario where a buyer wishes to
+submit purchase orders to a seller. The scenario defines four nodes:
+
+* **Controller** which hosts the network map service and validating notary
+  service.
+* **NodeA** who is the buyer.
+* **NodeB** who is the seller.
+* **NodeC** an unrelated third party.
+
+NodeA can generate purchase orders for lists and quantities of items and
+associated metadata such as delivery address and delivery date. The
+flows used to facilitate the agreement process always result in an
+agreement with the seller as long as the purchase order meets the
+contract constraints which are defined in `PurchaseOrderContract.kt`.
+
+All agreed purchase orders between NodeA and NodeB become "shared facts"
+between NodeA and NodeB. Note that NodeC won't see any of these
+transactions or have copies of any of the resulting `PurchaseOrderState`
+objects. This is because data is only propagated on a need-to-know
+basis.
+
+## Pre-Requisites
 
 You will need the following installed on your machine before you can start:
 
@@ -39,7 +62,7 @@ For more detailed information, see the
 [pre-requisites](https://docs.corda.net/pre-requisites.html) page on the
 Corda docsite.
 
-## Getting Started
+## Getting Set Up
 
 To get started, clone this repository with:
 
@@ -78,15 +101,20 @@ Note. You will be building the example CorDapp. If you want to make any
 changes they should be made before building, of course!
      
 Gradle will grab all the dependencies for you from Maven and then build 
-two sample applications and create several local Corda nodes. Once the
-build concludes, change directories to the folder where the newly built
-nodes are located:
+two sample applications and create several local Corda nodes.
 
-     cd kotlin/build/nodes (for the kotlin version)
+## Running the Nodes
 
-     or
+Once the build concludes, change directories to the folder where the newly 
+built nodes are located:
 
-     cd java/build/nodes (for the java version)
+**Kotlin:**
+
+     cd kotlin/build/nodes
+
+**Java:**
+
+     cd java/build/nodes
      
 The Gradle build script will have created a folder for each node. You'll
 see three folders, one for each node and a `runnodes` script. You can
@@ -114,30 +142,7 @@ CorDapp see the
 [Cordapp tutorial](https://docs.corda.net/tutorial-cordapp.html) on the
 Corda docsite.
 
-## The Example CorDapp
-
-The Example CorDapp implements a basic scenario where a buyer wishes to
-submit purchase orders to a seller. The scenario defines four nodes:
-
-* **Controller** which hosts the network map service and validating notary
-  service.
-* **NodeA** who is the buyer.
-* **NodeB** who is the seller.
-* **NodeC** an unrelated third party.
-
-NodeA can generate purchase orders for lists and quantities of items and
-associated metadata such as delivery address and delivery date. The
-flows used to facilitate the agreement process always result in an
-agreement with the seller as long as the purchase order meets the
-contract constraints which are defined in `PurchaseOrderContract.kt`.
-
-All agreed purchase orders between NodeA and NodeB become "shared facts"
-between NodeA and NodeB. Note that NodeC won't see any of these
-transactions or have copies of any of the resulting `PurchaseOrderState`
-objects. This is because data is only propagated on a need-to-know
-basis.
-
-## Interacting with the CorDapp
+## Interacting with the CorDapp via HTTP
 
 The CorDapp defines a couple of HTTP API end-points and also serves some
 static web content. The end-points allow you to list agreements and add
@@ -182,7 +187,7 @@ end-point path. This command instructs NodeA to create and send an order
 to NodeB. Upon verification and completion of the process, both nodes
 (but not NodeC) will have a signed, notarised copy of the purchase order.
 
-**Submitting a purchase order via ``web/example``:**
+**Submitting a purchase order via `web/example`:**
 
 Click the "Create purchase order" button at the top left of the
 page and enter the purchase order details, e.g.
@@ -202,7 +207,7 @@ at the `Place` class in `PurchaseOrderContract.kt`. For example, Entering a
 'Country Code' other than 'UK' will cause the verify function to return an
 Exception and you should rceeive an error message in response.
 
-**Once a purchase order has been submitted:**
+**Viewing the submitted purchase order:**
 
 Inspect the terminal for the nodes. You should see some activity in the
 terminal windows for NodeA and NodeB:
@@ -251,7 +256,7 @@ Navigate to `http://localhost:10005/web/example/` and click the refresh
 button at the top left-hand side of the page. You should see the newly
 created purchase order on the page.
 
-## Accessing the h2 database via h2 web console
+## Accessing a Node's Database via the h2 Web Console
 
 You can connect to the h2 database to see the current state of the
 ledger, among other data such as the network map cache.
@@ -261,25 +266,25 @@ as part of the pre-requisites section, above.
 
 Change directories to the bin folder:
 
-     ``cd h2/bin``
+     cd h2/bin
      
 Where there are a bunch of shell scripts and batch files. Run the web
 console:
 
 **Unix:**
 
-     ``sh h2.sh``
+     sh h2.sh
      
 **Windows::**
 
-     ``h2.bat``
+     h2.bat
      
 The h2 web console should start up in a web browser tab. To connect we
 first need to obtain a JDBC connection string. Each node outputs its
 connection string in the terminal window as it starts up. In a terminal
 window where a node is running, look for the following string:
 
-     ``Database connection url is              : jdbc:h2:tcp://xxx.xxx.xxx.xxx:xxxxx/node``
+     Database connection url is      : jdbc:h2:tcp://xxx.xxx.xxx.xxx:xxxxx/node
      
 you can use the string on the right to connect to the h2 database: just
 paste it in to the `JDBC URL` field and click *Connect*.
@@ -287,7 +292,7 @@ paste it in to the `JDBC URL` field and click *Connect*.
 You will be presented with a web application that enumerates all the
 available tables and provides an interface for you to query them using SQL.
 
-## Using the Example RPC client
+## Using the Example RPC Client
 
 The `ExampleClientRPC.kt` file is a simple utility which uses the client
 RPC library to connect to a node and log the 'placed' purchase orders.
@@ -304,7 +309,7 @@ Select the 'Run Example RPC Client' run configuration which, by default,
 connects to NodeA (Artemis port 10004). Click the Green Arrow to run the
 client. 
 
-**Via command line:**
+**Via the command line:**
 
 Run the following gradle task:
 
@@ -312,7 +317,39 @@ Run the following gradle task:
      
 The RPC client should output some purchase order objects to the console.
 
-## Further Reading
+## Running the Nodes Across Multiple Machines
+
+The nodes can also be set up to communicate between separate machines on the 
+same subnet.
+
+After deploying the nodes, navigate to the build folder (`kotlin/build/
+nodes` or `java/build/nodes`) and move some of the individual node folders to 
+separate machines on the same subnet (e.g. using a USB key). It is important 
+that no nodes - including the controller node - end up on more than one 
+machine. Each computer should also have a copy of `runnodes` and 
+`runnodes.bat`.
+
+For example, you may end up with the following layout:
+
+* Machine 1: `controller`, `nodea`, `runnodes`, `runnodes.bat`
+* Machine 2: `nodeb`, `nodec`, `runnodes`, `runnodes.bat`
+
+You must now edit the configuration file for each node, including the 
+controller. Open each node's config file (`[nodeName]/node.conf`), and make 
+the following changes:
+
+* Change the artemis address to the machine's ip address (e.g. 
+`artemisAddress="10.18.0.166:10006"`)
+* Change the network map address to the ip address of the machine where the 
+controller node is running (e.g. `networkMapAddress="10.18.0.166:10002"`) 
+(please note that the controller will not have a network map address)
+
+Each machine should now run its nodes using `runnodes` or `runnodes.bat` 
+files. Once they are up and running, the nodes should be able to place 
+purchase orders among themselves in the same way as when they were running on 
+the same machine.
+
+## Further reading
 
 Tutorials and developer docs for CorDapps and Corda are
 [here](https://docs.corda.net/tutorial-cordapp.html).
