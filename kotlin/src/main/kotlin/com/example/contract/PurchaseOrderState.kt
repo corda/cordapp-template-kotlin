@@ -2,12 +2,16 @@ package com.example.contract
 
 import com.example.contract.PurchaseOrderContract.Commands
 import com.example.model.PurchaseOrder
+import com.example.schema.PurchaseOrderSchemaV1
 import net.corda.core.contracts.Command
 import net.corda.core.contracts.DealState
 import net.corda.core.contracts.TransactionType
 import net.corda.core.contracts.UniqueIdentifier
 import net.corda.core.crypto.CompositeKey
 import net.corda.core.crypto.Party
+import net.corda.core.schemas.MappedSchema
+import net.corda.core.schemas.PersistentState
+import net.corda.core.schemas.QueryableState
 import net.corda.core.transactions.TransactionBuilder
 import java.security.PublicKey
 
@@ -30,7 +34,7 @@ data class PurchaseOrderState(val purchaseOrder: PurchaseOrder,
                               val seller: Party,
                               override val contract: PurchaseOrderContract,
                               override val linearId: UniqueIdentifier = UniqueIdentifier(purchaseOrder.orderNumber.toString())):
-        DealState {
+        DealState, QueryableState {
     /** Another ref field, for matching with data in external systems. In this case the external Id is the po number. */
     override val ref: String get() = linearId.externalId!!
     /** List of parties involved in this particular deal */
@@ -57,4 +61,22 @@ data class PurchaseOrderState(val purchaseOrder: PurchaseOrder,
         return TransactionType.General.Builder(notary)
                 .withItems(this, Command(Commands.Place(), participants))
     }
+
+    override fun generateMappedObject(schema: MappedSchema): PersistentState {
+        // TODO: Deal with the one to many relationship between POs and Items.
+        return when (schema) {
+            is PurchaseOrderSchemaV1 -> PurchaseOrderSchemaV1.PersistentPurchaseOrder(
+                purchaseOrderId = this.purchaseOrder.orderNumber,
+                buyerName = this.buyer.name,
+                sellerName = this.seller.name,
+                linearId = this.linearId.toString(),
+                deliveryDate = this.purchaseOrder.deliveryDate,
+                deliveryCity = this.purchaseOrder.deliveryAddress.city,
+                deliveryCountry = this.purchaseOrder.deliveryAddress.country
+            )
+            else -> throw IllegalArgumentException("Unrecognised schema $schema")
+        }
+    }
+
+    override fun supportedSchemas(): Iterable<MappedSchema> = listOf(PurchaseOrderSchemaV1)
 }

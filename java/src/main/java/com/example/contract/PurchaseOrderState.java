@@ -18,6 +18,8 @@ import java.util.UUID;
 
 import static java.util.stream.Collectors.toList;
 
+// TODO: Implement QueryableState and add ORM code (to match Kotlin example).
+
 /**
  * The state object that we will use to record the agreement of a valid purchase order issued by a buyer to a seller.
  *
