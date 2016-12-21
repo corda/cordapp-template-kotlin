@@ -30,6 +30,13 @@ public class PurchaseOrder {
     public Address getDeliveryAddress() { return deliveryAddress; }
     public List<Item> getItems() { return items; }
 
+    public PurchaseOrder(int orderNumber, Date deliveryDate, Address deliveryAddress, List<Item> items) {
+        this.orderNumber = orderNumber;
+        this.deliveryDate = deliveryDate;
+        this.deliveryAddress = deliveryAddress;
+        this.items = items;
+    }
+
     @Override public String toString() {
         return String.format("PurchaseOrder(orderNumber=%d, deliveryDate=%s, deliveryAddress=%s, items=%s)",
                 orderNumber,
@@ -48,6 +55,11 @@ public class PurchaseOrder {
         public String getCity() { return city; }
         public String getCountry() { return country; }
 
+        public Address(String city, String country) {
+            this.city = city;
+            this.country = country;
+        }
+
         @Override public String toString() {
             return String.format("Address(city=%s, country=%s)", city, country);
         }
@@ -62,6 +74,11 @@ public class PurchaseOrder {
 
         public String getName() { return name; }
         public int getAmount() { return amount; }
+
+        public Item(String name, int amount) {
+            this.name = name;
+            this.amount = amount;
+        }
 
         @Override public String toString() {
             return String.format("Item(name=%s, amount=%d)", name, amount);
