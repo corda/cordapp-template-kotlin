@@ -112,7 +112,7 @@ public class ExampleFlow {
                 // Flow jumps to Acceptor.
                 // -----------------------
                 // Receive the partially signed transaction off the wire from the other party.
-                final SignedTransaction ptx = sendAndReceive(otherParty, offerMessage, SignedTransaction.class)
+                final SignedTransaction ptx = sendAndReceive(SignedTransaction.class, otherParty, offerMessage)
                         .unwrap(data -> data);
 
                 // Stage 7.
@@ -201,7 +201,7 @@ public class ExampleFlow {
                 progressTracker.setCurrentStep(WAIT_FOR_AND_RECEIVE_PROPOSAL);
                 // All messages come off the wire as UntrustworthyData. You need to 'unwrap' it. This is an appropriate
                 // place to perform some validation over what you have just received.
-                final TransactionState<DealState> message = this.receive(otherParty, TransactionState.class)
+                final TransactionState<DealState> message = this.receive(TransactionState.class, otherParty)
                         .unwrap(data -> (TransactionState<DealState>) data );
 
                 // Stage 4.
@@ -226,7 +226,7 @@ public class ExampleFlow {
                 // Flow jumps to Initiator.
                 // ------------------------
                 // Receive the signed transaction off the wire from the other party.
-                final SignedTransaction ntx = this.sendAndReceive(otherParty, stx, SignedTransaction.class)
+                final SignedTransaction ntx = this.sendAndReceive(SignedTransaction.class, otherParty, stx)
                         .unwrap(data -> data);
 
                 // Stage 12.

@@ -31,7 +31,7 @@ public class ExampleClientRPC {
 
         // Can be amended in the com.example.Main file.
         client.start("user1", "test");
-        final CordaRPCOps proxy = client.proxy(null, 0);
+        final CordaRPCOps proxy = client.proxy();
 
         // Grab all signed transactions and all future signed transactions.
         final Pair<List<SignedTransaction>, Observable<SignedTransaction>> txsAndFutureTxs =

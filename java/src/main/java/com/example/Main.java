@@ -1,15 +1,9 @@
 package com.example;
 
 import net.corda.core.node.services.ServiceInfo;
-import net.corda.node.driver.PortAllocation;
 import net.corda.node.services.User;
 import net.corda.node.services.transactions.ValidatingNotaryService;
 
-import java.nio.file.Paths;
-import java.time.Instant;
-import java.time.format.DateTimeFormatter;
-
-import static java.time.ZoneOffset.UTC;
 import static java.util.Collections.*;
 import static net.corda.node.driver.Driver.driver;
 
@@ -32,16 +26,12 @@ public class Main {
         // No permissions required as we are not invoking flows.
         final User user = new User("user1", "test", emptySet());
         driver(
-                Paths.get("build", DateTimeFormatter.ofPattern("yyyyMMddHHmmss").withZone(UTC).format(Instant.now())),
-                new PortAllocation.Incremental(10000),
-                new PortAllocation.Incremental(5005),
-                false,
                 true,
                 dsl -> {
                     dsl.startNode("Controller",
-                        singleton(new ServiceInfo(ValidatingNotaryService.Companion.getType(), null)),
-                        emptyList(),
-                        emptyMap());
+                            singleton(new ServiceInfo(ValidatingNotaryService.Companion.getType(), null)),
+                            emptyList(),
+                            emptyMap());
                     dsl.startNode("NodeA", emptySet(), singletonList(user), emptyMap());
                     dsl.startNode("NodeB", emptySet(), singletonList(user), emptyMap());
                     dsl.startNode("NodeC", emptySet(), singletonList(user), emptyMap());
