@@ -40,8 +40,8 @@ dependencies {
     compile "net.corda:core:$corda_version"
     compile "net.corda:finance:$corda_version"
     compile "net.corda:node:$corda_version"
-    compile "net.corda:corda:$corda_version"
     compile "net.corda:test-utils:$corda_version"
+    runtime "net.corda:corda:$corda_version"
 
     // Javax is required for webapis
     compile "org.glassfish.jersey.core:jersey-server:${jersey_version}"
