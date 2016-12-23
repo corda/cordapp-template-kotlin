@@ -59,7 +59,7 @@ You will need the following installed on your machine before you can start:
 * git
 
 For more detailed information, see the
-[pre-requisites](https://docs.corda.net/pre-requisites.html) page on the
+[getting set up](https://docs.corda.net/getting-set-up.html) page on the
 Corda docsite.
 
 ## Getting Set Up
