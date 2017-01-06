@@ -63,6 +63,9 @@ public class PurchaseOrder {
             this.country = country;
         }
 
+        // Dummy constructor used by the createPurchaseOrder API endpoint.
+        public Address() {}
+
         @Override public String toString() {
             return String.format("Address(city=%s, country=%s)", city, country);
         }
@@ -82,6 +85,9 @@ public class PurchaseOrder {
             this.name = name;
             this.amount = amount;
         }
+
+        // Dummy constructor used by the createPurchaseOrder API endpoint.
+        public Item() {}
 
         @Override public String toString() {
             return String.format("Item(name=%s, amount=%d)", name, amount);
