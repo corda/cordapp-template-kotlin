@@ -37,6 +37,9 @@ public class PurchaseOrder {
         this.items = items;
     }
 
+    // Dummy constructor used by the createPurchaseOrder API endpoint.
+    public PurchaseOrder() {}
+
     @Override public String toString() {
         return String.format("PurchaseOrder(orderNumber=%d, deliveryDate=%s, deliveryAddress=%s, items=%s)",
                 orderNumber,
