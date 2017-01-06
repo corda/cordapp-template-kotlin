@@ -4,8 +4,8 @@
 
 import sys
 from com.google.common.net import HostAndPort
-from net.corda.client import CordaRPCClient
-from net.corda.node.services.config.ConfigUtilitiesKt import configureTestSSL
+from net.corda.node.services.messaging import CordaRPCClient
+from net.corda.node.services.config.ConfigUtilities import configureTestSSL
 
 if len(sys.argv) != 2:
     print("USAGE: ./jython.sh ExampleClientRPC.py [HOST:ARTEMIS_PORT]")
