@@ -54,7 +54,6 @@ public class PurchaseOrderState implements DealState {
     @Override public PurchaseOrderContract getContract() { return contract; }
     @Override public UniqueIdentifier getLinearId() { return linearId; }
     @Override public String getRef() { return linearId.getExternalId(); }
-    @Override public Integer getEncumbrance() { return null; }
     @Override public List<Party> getParties() { return Arrays.asList(buyer, seller); }
     @Override public List<CompositeKey> getParticipants() {
         return getParties()
