@@ -40,7 +40,7 @@ open class PurchaseOrderContract() : Contract {
      */
     interface Commands : CommandData {
         data class Place(override val nonce: Long = random63BitValue()) : IssueCommand, Commands
-//        // Additional commands defined below.
+//        // Additional commands go here.
 //        data class Amend(): TypeOnlyCommandData, Commands
     }
 
@@ -63,14 +63,16 @@ open class PurchaseOrderContract() : Contract {
             }
         }
 
-        // If you add additional clauses. Make sure to reference them within the 'Anycomposition()' clause.
-        class Group : GroupClauseVerifier<PurchaseOrderState, Commands, UniqueIdentifier>(AnyComposition(Place())) {
+        // If you add additional clauses, make sure to reference them within the 'FirstComposition()' clause.
+        class Group : GroupClauseVerifier<PurchaseOrderState, Commands, UniqueIdentifier>(FirstComposition(Place())) {
             override fun groupStates(tx: TransactionForContract): List<TransactionForContract.InOutGroup<PurchaseOrderState, UniqueIdentifier>>
                     // Group by purchase order linearId for in / out states
                     = tx.groupStates(PurchaseOrderState::linearId)
         }
 
         class Place : Clause<PurchaseOrderState, Commands, UniqueIdentifier>() {
+            override val requiredCommands: Set<Class<out CommandData>> = setOf(Commands.Place::class.java)
+
             override fun verify(tx: TransactionForContract,
                                 inputs: List<PurchaseOrderState>,
                                 outputs: List<PurchaseOrderState>,
@@ -100,6 +102,8 @@ open class PurchaseOrderContract() : Contract {
 
 //        // Additional clauses go here.
 //        class Amend : Clause<PurchaseOrderState, Commands, UniqueIdentifier>() {
+//            override val requiredCommands: Set<Class<out CommandData>> = setOf(Commands.Amend::class.java)
+//
 //            override fun verify(tx: TransactionForContract,
 //                                inputs: List<PurchaseOrderState>,
 //                                outputs: List<PurchaseOrderState>,

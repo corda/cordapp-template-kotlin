@@ -104,9 +104,9 @@ public class PurchaseOrderContract implements Contract {
             }
         }
 
-        // If you add additional clauses, make sure to reference them within the 'AnyComposition()' clause.
+        // If you add additional clauses, make sure to reference them within the 'FirstComposition()' clause.
         class Group extends GroupClauseVerifier<PurchaseOrderState, Commands, UniqueIdentifier> {
-            public Group() { super(new AnyComposition<>(new Clauses.Place())); }
+            public Group() { super(new FirstComposition<>(new Clauses.Place())); }
 
             @Override public List<InOutGroup<PurchaseOrderState, UniqueIdentifier>> groupStates(TransactionForContract tx) {
                 // Group by purchase order linearId for in/out states.
@@ -118,6 +118,10 @@ public class PurchaseOrderContract implements Contract {
          * Checks various requirements for the placement of a purchase order.
          */
         class Place extends Clause<PurchaseOrderState, Commands, UniqueIdentifier> {
+            @Override public Set<Class<? extends CommandData>> getRequiredCommands() {
+                return Collections.singleton(Commands.Place.class);
+            }
+
             @Override public Set<Commands> verify(TransactionForContract tx,
                 List<? extends PurchaseOrderState> inputs,
                 List<? extends PurchaseOrderState> outputs,

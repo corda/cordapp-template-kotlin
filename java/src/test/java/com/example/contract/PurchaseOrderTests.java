@@ -48,7 +48,7 @@ public class PurchaseOrderTests {
             ledgerDSL.transaction(txDSL -> {
                 txDSL.output(new PurchaseOrderState(purchaseOrder, getMINI_CORP(), getMEGA_CORP(), new PurchaseOrderContract()));
                 txDSL.timestamp(getTEST_TX_TIME());
-                txDSL.failsWith("List is empty.");
+                txDSL.fails();
                 CompositeKey[] keys = new CompositeKey[2];
                 keys[0] = getMEGA_CORP_PUBKEY();
                 keys[1] = getMINI_CORP_PUBKEY();

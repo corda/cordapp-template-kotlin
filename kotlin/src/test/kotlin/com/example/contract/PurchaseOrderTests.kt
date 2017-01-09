@@ -28,7 +28,7 @@ class PurchaseOrderTests {
     }
 
     @Test
-    fun `transaction must include place command`() {
+    fun `transaction must include Place command`() {
         val address = Address("London", "UK")
         val items = listOf(Item("Hammer", 1))
         val deliveryTime = TEST_TX_TIME.plus(Duration.ofDays(7))
@@ -37,7 +37,7 @@ class PurchaseOrderTests {
             transaction {
                 output { PurchaseOrderState(purchaseOrder, MINI_CORP, MEGA_CORP, PurchaseOrderContract()) }
                 timestamp(TEST_TX_TIME)
-                `fails with`("Required com.example.contract.PurchaseOrderContract.Commands.Place command")
+                fails()
                 command(MEGA_CORP_PUBKEY, MINI_CORP_PUBKEY) { PurchaseOrderContract.Commands.Place() }
                 verifies()
             }
