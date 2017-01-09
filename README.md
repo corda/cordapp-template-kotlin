@@ -74,7 +74,7 @@ Change directories to the newly cloned repo:
      
 Now check out the latest stable milestone release:
 
-     git checkout -b corda-m6-template tags/release-M6.0
+     git checkout -b corda-m7-template tags/release-M7.0
      
 Instead, if you would like to build your CorDapp against a SNAPSHOT 
 release of Corda then you can follow the instructions on the 
@@ -86,7 +86,7 @@ Build the CorDapp template:
 **NOTE: Building the CorDapp Template from master WILL fail without 
 first running `/gradlew install` (or `gradlew.bat install`) from the master 
 branch of the [corda repository](https://github.com/corda/corda). Make sure
-you have checked out the M6 release tag from this repository before you build, 
+you have checked out the M7 release tag from this repository before you build, 
 UNLESS you wish to build from a SNAPSHOT release.**
  
 **Unix:** 
