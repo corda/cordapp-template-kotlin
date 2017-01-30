@@ -12,9 +12,6 @@ repositories {
     maven {
         url 'https://dl.bintray.com/kotlin/exposed'
     }
-    maven {
-        url  "http://r3.bintray.com/corda"
-    }
 }
 
 sourceSets {
