@@ -1,6 +1,7 @@
 package com.example;
 
 import net.corda.core.node.services.ServiceInfo;
+import net.corda.node.driver.NodeHandle;
 import net.corda.node.services.User;
 import net.corda.node.services.transactions.ValidatingNotaryService;
 
@@ -32,10 +33,21 @@ public class Main {
                             singleton(new ServiceInfo(ValidatingNotaryService.Companion.getType(), null)),
                             emptyList(),
                             emptyMap());
-                    dsl.startNode("NodeA", emptySet(), singletonList(user), emptyMap());
-                    dsl.startNode("NodeB", emptySet(), singletonList(user), emptyMap());
-                    dsl.startNode("NodeC", emptySet(), singletonList(user), emptyMap());
-                    dsl.waitForAllNodesToFinish();
+
+                    try {
+                        NodeHandle nodeA = dsl.startNode("NodeA", emptySet(), singletonList(user), emptyMap()).get();
+                        NodeHandle nodeB = dsl.startNode("NodeB", emptySet(), singletonList(user), emptyMap()).get();
+                        NodeHandle nodeC = dsl.startNode("NodeC", emptySet(), singletonList(user), emptyMap()).get();
+
+                        dsl.startWebserver(nodeA);
+                        dsl.startWebserver(nodeB);
+                        dsl.startWebserver(nodeC);
+
+                        dsl.waitForAllNodesToFinish();
+                    } catch (Throwable e) {
+                        System.err.println("Encountered exception in node startup: " + e.getMessage());
+                        e.printStackTrace();
+                    }
                     return null;
                 }
         );

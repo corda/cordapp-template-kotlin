@@ -27,7 +27,7 @@ public class ExampleClientRPC {
 
         final Logger logger = LoggerFactory.getLogger(ExampleClientRPC.class);
         final HostAndPort nodeAddress = HostAndPort.fromString(args[0]);
-        final CordaRPCClient client = new CordaRPCClient(nodeAddress, ConfigUtilities.configureTestSSL());
+        final CordaRPCClient client = new CordaRPCClient(nodeAddress, ConfigUtilities.configureTestSSL(), null);
 
         // Can be amended in the com.example.Main file.
         client.start("user1", "test");

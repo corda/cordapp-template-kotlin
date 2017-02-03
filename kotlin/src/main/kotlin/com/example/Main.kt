@@ -1,5 +1,7 @@
 package com.example
 
+import com.google.common.util.concurrent.Futures
+import net.corda.core.getOrThrow
 import net.corda.core.node.services.ServiceInfo
 import net.corda.node.driver.driver
 import net.corda.node.services.User
@@ -22,11 +24,17 @@ import net.corda.node.services.transactions.ValidatingNotaryService
 fun main(args: Array<String>) {
     // No permissions required as we are not invoking flows.
     val user = User("user1", "test", permissions = setOf())
-    driver(dsl = {
+    driver(isDebug = true) {
         startNode("Controller", setOf(ServiceInfo(ValidatingNotaryService.type)))
-        startNode("NodeA", rpcUsers = listOf(user))
-        startNode("NodeB", rpcUsers = listOf(user))
-        startNode("NodeC", rpcUsers = listOf(user))
+        val (nodeA, nodeB, nodeC) = Futures.allAsList(
+                startNode("NodeA", rpcUsers = listOf(user)),
+                startNode("NodeB", rpcUsers = listOf(user)),
+                startNode("NodeC", rpcUsers = listOf(user))).getOrThrow()
+
+        startWebserver(nodeA)
+        startWebserver(nodeB)
+        startWebserver(nodeC)
+
         waitForAllNodesToFinish()
-    }, isDebug = true)
+    }
 }
