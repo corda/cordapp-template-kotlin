@@ -18,6 +18,7 @@ import java.util.concurrent.ExecutionException;
 
 import static java.util.Collections.singletonMap;
 import static java.util.stream.Collectors.toList;
+import static net.corda.core.Utils.getOrThrow;
 
 // This API is accessible from /api/example. All paths specified below are relative to it.
 @Path("example")
@@ -92,11 +93,9 @@ public class ExampleApi {
                 new PurchaseOrderContract());
 
         // The line below blocks and waits for the flow to return.
-        final ExampleFlow.ExampleFlowResult result = services
+        final ExampleFlow.ExampleFlowResult result = getOrThrow(services
                 .startFlowDynamic(ExampleFlow.Initiator.class, state, otherParty)
-                .getReturnValue()
-                .toBlocking()
-                .first();
+                .getReturnValue(), null);
 
         final Response.Status status;
         if (result instanceof ExampleFlow.ExampleFlowResult.Success) {
