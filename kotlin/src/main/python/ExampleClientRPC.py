@@ -11,7 +11,7 @@ if len(sys.argv) != 2:
     print("USAGE: ./jython.sh ExampleClientRPC.py [HOST:ARTEMIS_PORT]")
     exit()
 
-client = CordaRPCClient(HostAndPort.fromString(sys.argv[1]), configureTestSSL())
+client = CordaRPCClient(HostAndPort.fromString(sys.argv[1]), configureTestSSL(), None)
 client.start("user1", "test")
 proxy = client.proxy(None,0)
 txs = proxy.verifiedTransactions().first
@@ -20,4 +20,4 @@ print "There are %s 'unspent' purchase orders on 'NodeA'" % (len(txs))
 
 if len(txs):
     for txn in txs:
-        print(txn.tx.outputs[0].data.po)
+        print(txn.tx.outputs[0].data)

@@ -3,9 +3,6 @@
 # Edit the below as appropriate.
 # Download jython from http://www.jython.org/
 # We find 2.7.0 works acceptably
-
-VERSION=0.6-SNAPSHOT
-
 # Either put jython in your path or change the variable below to the correct location
 
 export JYTHON=/path/to/jython
