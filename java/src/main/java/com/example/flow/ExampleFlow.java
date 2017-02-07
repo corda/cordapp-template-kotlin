@@ -3,6 +3,7 @@ package com.example.flow;
 import co.paralleluniverse.fibers.Suspendable;
 import com.example.contract.PurchaseOrderState;
 import com.google.common.collect.ImmutableSet;
+import net.corda.core.contracts.AttachmentResolutionException;
 import net.corda.core.contracts.TransactionResolutionException;
 import net.corda.core.crypto.CompositeKey;
 import net.corda.core.crypto.CryptoUtilities;
@@ -171,7 +172,7 @@ public class ExampleFlow {
                                 // We want to be sure that the PurchaseOrderState agreed upon is a valid instance of an
                                 // PurchaseOrderContract. To do this we need to run the contract's verify() function.
                                 wireTx.toLedgerTransaction(getServiceHub()).verify();
-                            } catch (SignatureException | FileNotFoundException | TransactionResolutionException ex) {
+                            } catch (SignatureException | AttachmentResolutionException | TransactionResolutionException ex) {
                                 throw new RuntimeException(ex);
                             }
                             return tx;

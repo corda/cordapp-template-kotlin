@@ -12,6 +12,7 @@ import net.corda.core.flows.FlowLogic
 import net.corda.core.seconds
 import net.corda.core.transactions.SignedTransaction
 import net.corda.core.utilities.ProgressTracker
+import net.corda.core.utilities.unwrap
 import net.corda.flows.FinalityFlow
 
 /**
