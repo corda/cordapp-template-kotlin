@@ -34,7 +34,7 @@ public class TemplateApi {
      */
     @PUT
     @Path("templatePutEndpoint")
-    public Response templatePutEndpoint(Object payload) throws InterruptedException, ExecutionException {
+    public Response templatePutEndpoint(Object payload) {
         return Response.accepted().entity("Template PUT endpoint.").build();
     }
 }
