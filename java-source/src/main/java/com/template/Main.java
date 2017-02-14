@@ -1,5 +1,6 @@
 package com.template;
 
+import com.google.common.collect.ImmutableList;
 import net.corda.core.node.services.ServiceInfo;
 import net.corda.node.driver.NodeHandle;
 import net.corda.node.services.User;
@@ -35,9 +36,9 @@ public class Main {
                             emptyMap());
 
                     try {
-                        NodeHandle nodeA = dsl.startNode("NodeA", emptySet(), singletonList(user), emptyMap()).get();
-                        NodeHandle nodeB = dsl.startNode("NodeB", emptySet(), singletonList(user), emptyMap()).get();
-                        NodeHandle nodeC = dsl.startNode("NodeC", emptySet(), singletonList(user), emptyMap()).get();
+                        NodeHandle nodeA = dsl.startNode("NodeA", emptySet(), ImmutableList.of(user), emptyMap()).get();
+                        NodeHandle nodeB = dsl.startNode("NodeB", emptySet(), ImmutableList.of(user), emptyMap()).get();
+                        NodeHandle nodeC = dsl.startNode("NodeC", emptySet(), ImmutableList.of(user), emptyMap()).get();
 
                         dsl.startWebserver(nodeA);
                         dsl.startWebserver(nodeB);
