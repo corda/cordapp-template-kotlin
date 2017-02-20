@@ -9,9 +9,8 @@ repositories {
     mavenLocal()
     mavenCentral()
     jcenter()
-    maven {
-        url 'https://dl.bintray.com/kotlin/exposed'
-    }
+    maven { url 'https://dl.bintray.com/kotlin/exposed' }
+    maven { url 'https://jitpack.io' }
 }
 
 sourceSets {
