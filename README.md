@@ -56,21 +56,21 @@ install step.**
 
      gradlew.bat deployNodes
 
-Note: You'll need to re-run this build step after making any changes to 
+Note: You'll need to re-run this build step after making any changes to
 the template for these to take effect on the node.
 
 ## Running the Nodes
 
-Once the build finishes, change directories to the folder where the newly 
+Once the build finishes, change directories to the folder where the newly
 built nodes are located:
 
 **Kotlin:**
 
-     cd kotlin/build/nodes
+     cd kotlin-source/build/nodes
 
 **Java:**
 
-     cd java/build/nodes
+     cd java-source/build/nodes
 
 The Gradle build script will have created a folder for each node. You'll
 see three folders, one for each node and a `runnodes` script. You can
