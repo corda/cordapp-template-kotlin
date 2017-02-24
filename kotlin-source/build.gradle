@@ -35,8 +35,9 @@ dependencies {
     compile "net.corda:core:$corda_version"
     compile "net.corda:finance:$corda_version"
     compile "net.corda:node:$corda_version"
-    compile "net.corda:test-utils:$corda_version"
     runtime "net.corda:corda:$corda_version"
+
+    testCompile "net.corda:test-utils:$corda_version"
 
     // GraphStream: For visualisation (required by TemplateClientRPC app)
     compile "org.graphstream:gs-core:1.3"
