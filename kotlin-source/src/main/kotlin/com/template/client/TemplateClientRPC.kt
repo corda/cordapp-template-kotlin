@@ -4,7 +4,6 @@ import com.google.common.net.HostAndPort
 import com.template.state.TemplateState
 import net.corda.core.transactions.SignedTransaction
 import net.corda.core.utilities.loggerFor
-import net.corda.node.services.config.configureTestSSL
 import net.corda.node.services.messaging.CordaRPCClient
 import org.slf4j.Logger
 import rx.Observable
@@ -25,7 +24,7 @@ private class TemplateClientRPC {
     fun main(args: Array<String>) {
         require(args.size == 1) { "Usage: TemplateClientRPC <node address>" }
         val nodeAddress = HostAndPort.fromString(args[0])
-        val client = CordaRPCClient(nodeAddress, configureTestSSL())
+        val client = CordaRPCClient(nodeAddress)
 
         // Can be amended in the com.template.MainKt file.
         client.start("user1", "test")
