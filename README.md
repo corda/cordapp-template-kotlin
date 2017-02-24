@@ -38,15 +38,22 @@ To get started, clone this repository with:
 And change directories to the newly cloned repo:
 
      cd cordapp-template
+
+### Releases
+
+It is recommended to checkout a milestone release of Corda. To do this you must run: 
+
+    git checkout -b release-M8.2
+
+### Snapshots
+
+**Warning**: Snapshots are very unstable, it is recommended to use a milestone instead.
+
+When building from the latest SNAPSHOT release you must also clone the master
+branch of the [corda repository](https://github.com/corda/corda) and then run `gradlew install`
+to build the dependencies required for this template.
 ​     
 ##Building the CorDapp template:
-
-**NOTE: Building the CorDapp Template WILL fail without 
-first running `/gradlew install` (or `gradlew.bat install`) from the master 
-branch of the [corda repository](https://github.com/corda/corda). 
-This template will receive a stable release as part of milestone 9, 
-at which point you'll be able to build the template without running this 
-install step.**
 
 **Unix:** 
 
