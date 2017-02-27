@@ -11,7 +11,7 @@ if len(sys.argv) != 2:
     print("USAGE: ./jython.sh ExampleClientRPC.py [HOST:ARTEMIS_PORT]")
     exit()
 
-client = CordaRPCClient(HostAndPort.fromString(sys.argv[1]), configureTestSSL(), None)
+client = CordaRPCClient(HostAndPort.fromString(sys.argv[1]), None, None)
 client.start("user1", "test")
 proxy = client.proxy(None,0)
 txs = proxy.verifiedTransactions().first
