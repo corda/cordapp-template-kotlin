@@ -1,12 +1,12 @@
 package com.template.plugin
 
-import com.esotericsoftware.kryo.Kryo
 import com.template.api.TemplateApi
 import com.template.flow.TemplateFlow
 import com.template.service.TemplateService
 import net.corda.core.messaging.CordaRPCOps
 import net.corda.core.node.CordaPluginRegistry
 import net.corda.core.node.PluginServiceHub
+import net.corda.core.serialization.SerializationCustomization
 import java.util.function.Function
 
 class TemplatePlugin : CordaPluginRegistry() {
@@ -37,9 +37,9 @@ class TemplatePlugin : CordaPluginRegistry() {
     )
 
     /**
-     * Registering the required types with Kryo, Corda's serialisation framework.
+     * Whitelisting the required types for serialisation by the Corda node.
      */
-    override fun registerRPCKryoTypes(kryo: Kryo): Boolean {
+    override fun customizeSerialization(custom: SerializationCustomization): Boolean {
         return true
     }
 }

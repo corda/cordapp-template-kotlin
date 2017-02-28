@@ -1,6 +1,5 @@
 package com.template.plugin;
 
-import com.esotericsoftware.kryo.Kryo;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableSet;
@@ -10,8 +9,11 @@ import com.template.service.TemplateService;
 import net.corda.core.messaging.CordaRPCOps;
 import net.corda.core.node.CordaPluginRegistry;
 import net.corda.core.node.PluginServiceHub;
+import net.corda.core.serialization.SerializationCustomization;
 
-import java.util.*;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 
 public class TemplatePlugin extends CordaPluginRegistry {
@@ -42,9 +44,10 @@ public class TemplatePlugin extends CordaPluginRegistry {
     );
 
     /**
-     * Registering the required types with Kryo, Corda's serialisation framework.
+     * Whitelisting the required types for serialisation by the Corda node.
      */
-    @Override public boolean registerRPCKryoTypes(Kryo kryo) {
+    @Override
+    public boolean customizeSerialization(SerializationCustomization custom) {
         return true;
     }
 
