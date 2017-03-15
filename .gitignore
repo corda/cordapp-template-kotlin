@@ -27,15 +27,11 @@ lib/dokka.jar
 # if you remove the above rule, at least ignore the following:
 
 # Specific files to avoid churn
-.idea/modules.xml
-.idea/misc.xml
-.idea/compiler.xml
+.idea/*.xml
 .idea/copyright
-.idea/vcs.xml
 .idea/jsLibraryMappings.xml
 
 # User-specific stuff:
-.idea/workspace.xml
 .idea/tasks.xml
 .idea/dictionaries
 
@@ -47,7 +43,6 @@ lib/dokka.jar
 .idea/uiDesigner.xml
 
 # Gradle:
-.idea/gradle.xml
 .idea/libraries
 
 # Mongo Explorer plugin:

@@ -1,7 +1,6 @@
 package com.template.service;
 
 import com.template.flow.TemplateFlow;
-import kotlin.jvm.JvmClassMappingKt;
 import net.corda.core.node.PluginServiceHub;
 
 /**
@@ -16,9 +15,6 @@ import net.corda.core.node.PluginServiceHub;
  */
 public class TemplateService {
     public TemplateService(PluginServiceHub services) {
-        services.registerFlowInitiator(
-                JvmClassMappingKt.getKotlinClass(TemplateFlow.Initiator.class),
-                TemplateFlow.Acceptor::new
-        );
+        services.registerFlowInitiator(TemplateFlow.Initiator.class, TemplateFlow.Acceptor::new);
     }
 }
