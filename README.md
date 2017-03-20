@@ -127,23 +127,28 @@ And the static web content is served from:
 The `ExampleClientRPC.kt` file is a simple utility which uses the client
 RPC library to connect to a node and log its transaction activity.
 It will log any existing states and listen for any future states. To build 
-the client use the following gradle task:
+the client use the following Gradle task:
 
-     ./gradlew runExampleClientRPC
+     ./gradlew runTemplateClientRPC
 
 To run the client:
 
 **Via IntelliJ:**
 
-Select the 'Run Example RPC Client' run configuration which, by default,
-connects to NodeA (Artemis port 10004). Click the Green Arrow to run the
-client. 
+Select either the 'Run Template RPC Client - Java' or 'Run Template RPC Client - Kotlin'
+run configuration which, by default, connect to NodeA (Artemis port 10004). Click the
+Green Arrow to run the client.
 
 **Via the command line:**
 
-Run the following gradle task:
+Run the following Gradle task:
 
-     ./gradlew runExampleClientRPC
+     ./gradlew runTemplateClientRPC
+
+By default this runs the Java version - to run the Kotlin version change to the
+'kotlin-source' directory and run the Gradle task:
+
+     ./gradlew runTemplateClientRPC
 
 ## Running the Nodes Across Multiple Machines
 
