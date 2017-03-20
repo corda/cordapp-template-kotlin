@@ -127,5 +127,5 @@ publishing {
 task runTemplateClientRPC(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     main = 'com.template.client.TemplateClientRPCKt'
-    args 'localhost:10004'
+    args 'localhost:10006'
 }
