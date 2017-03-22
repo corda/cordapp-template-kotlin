@@ -31,10 +31,11 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
 
     // Corda integration dependencies
-    compile "net.corda:client:$corda_version"
     compile "net.corda:core:$corda_version"
     compile "net.corda:finance:$corda_version"
+    compile "net.corda:jackson:$corda_version"
     compile "net.corda:node:$corda_version"
+    compile "net.corda:rpc:$corda_version"
     compile "net.corda:webserver:$corda_version"
     runtime "net.corda:corda:$corda_version"
     runtime "net.corda:corda-webserver:$corda_version"
