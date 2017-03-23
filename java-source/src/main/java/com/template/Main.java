@@ -3,7 +3,7 @@ package com.template;
 import com.google.common.collect.ImmutableList;
 import net.corda.core.node.services.ServiceInfo;
 import net.corda.node.driver.NodeHandle;
-import net.corda.node.services.User;
+import net.corda.nodeapi.User;
 import net.corda.node.services.transactions.ValidatingNotaryService;
 
 import static java.util.Collections.*;
