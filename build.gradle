@@ -1,6 +1,6 @@
 buildscript {
     ext.corda_version = '0.10-SNAPSHOT'
-    ext.corda_gradle_plugins_version = '0.10.1'
+    ext.corda_gradle_plugins_version = '0.10.2'
     ext.kotlin_version = '1.0.7'
     ext.junit_version = '4.12'
 
