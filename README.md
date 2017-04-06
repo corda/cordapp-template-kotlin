@@ -109,8 +109,8 @@ The nodes can be found using the following port numbers, defined in the
 under `kotlin/build/nodes/NodeX` or `java/build/nodes/NodeX`:
 
      NodeA: localhost:10007
-     NodeB: localhost:100010
-     NodeC: localhost:100013
+     NodeB: localhost:10010
+     NodeC: localhost:10013
 
 As the nodes start up, they should tell you which host and port their
 embedded web server is running on. The API endpoints served are:
