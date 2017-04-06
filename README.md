@@ -108,9 +108,9 @@ The nodes can be found using the following port numbers, defined in the
 `build.gradle`, as well as the `node.conf` file for each node found
 under `kotlin/build/nodes/NodeX` or `java/build/nodes/NodeX`:
 
-     NodeA: localhost:10005
-     NodeB: localhost:10007
-     NodeC: localhost:10009
+     NodeA: localhost:10007
+     NodeB: localhost:10010
+     NodeC: localhost:10013
 
 As the nodes start up, they should tell you which host and port their
 embedded web server is running on. The API endpoints served are:
@@ -136,7 +136,7 @@ To run the client:
 **Via IntelliJ:**
 
 Select either the 'Run Template RPC Client - Java' or 'Run Template RPC Client - Kotlin'
-run configuration which, by default, connect to NodeA (Artemis port 10004). Click the
+run configuration which, by default, connect to NodeA (Artemis port 10005). Click the
 Green Arrow to run the client.
 
 **Via the command line:**
@@ -172,7 +172,7 @@ controller. Open each node's config file (`[nodeName]/node.conf`), and make
 the following changes:
 
 * Change the artemis address to the machine's ip address (e.g. 
-  `artemisAddress="10.18.0.166:10006"`)
+  `artemisAddress="10.18.0.166:10005"`)
 * Change the network map address to the ip address of the machine where the 
   controller node is running (e.g. `networkMapAddress="10.18.0.166:10002"`) 
   (please note that the controller will not have a network map address)
