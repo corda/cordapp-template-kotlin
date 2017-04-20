@@ -53,6 +53,15 @@ dependencies {
     // Specify your cordapp's dependencies below, including dependent cordapps
 }
 
+tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
+    kotlinOptions {
+        languageVersion = "1.1"
+        apiVersion = "1.1"
+        jvmTarget = "1.8"
+        javaParameters = true   // Useful for reflection.
+    }
+}
+
 task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['build']) {
     directory "./build/nodes"
     networkMap "Controller"
