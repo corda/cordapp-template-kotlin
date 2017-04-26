@@ -43,7 +43,7 @@ And change directories to the newly cloned repo:
 
 It is recommended to checkout a milestone release of Corda. To do this you must run: 
 
-    git checkout release-M9.2
+    git checkout release-M11
 
 ### Snapshots
 
@@ -85,11 +85,11 @@ run the nodes with:
 
 **Unix:**
 
-     sh runnodes
+     sh runnodes --log-to-console --logging-level=DEBUG
 
 **Windows:**
 
-    runnodes.bat
+    runnodes.bat --log-to-console --logging-level=DEBUG
 
 You should now have four Corda nodes running on your machine serving 
 the template.
