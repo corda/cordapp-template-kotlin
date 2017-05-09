@@ -29,8 +29,7 @@ public class TemplateClientRPC {
         final CordaRPCClient client = new CordaRPCClient(nodeAddress, null, null);
 
         // Can be amended in the Main file.
-        client.start("user1", "test");
-        final CordaRPCOps proxy = client.proxy();
+        final CordaRPCOps proxy = client.start("user1", "test").getProxy();
 
         // Grab all signed transactions and all future signed transactions.
         final Pair<List<SignedTransaction>, Observable<SignedTransaction>> txsAndFutureTxs =

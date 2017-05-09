@@ -1,12 +1,12 @@
 package com.template;
 
 import com.google.common.collect.ImmutableList;
+import static net.corda.core.crypto.X509Utilities.getX509Name;
 import net.corda.core.node.services.ServiceInfo;
 import net.corda.node.driver.NodeHandle;
 import net.corda.node.services.config.VerifierType;
 import net.corda.node.services.transactions.ValidatingNotaryService;
 import net.corda.nodeapi.User;
-import org.bouncycastle.asn1.x500.X500Name;
 
 import static java.util.Collections.*;
 import static net.corda.node.driver.Driver.driver;
@@ -32,16 +32,16 @@ public class Main {
         driver(
                 true,
                 dsl -> {
-                    dsl.startNode("Controller",
-                            singleton(new ServiceInfo(ValidatingNotaryService.Companion.getType(), (X500Name) null)),
+                    dsl.startNode(getX509Name("Controller", "London", "root@city.uk"),
+                            singleton(new ServiceInfo(ValidatingNotaryService.Companion.getType(), null)),
                             emptyList(),
                             VerifierType.InMemory,
                             emptyMap());
 
                     try {
-                        NodeHandle nodeA = dsl.startNode("NodeA", emptySet(), ImmutableList.of(user), VerifierType.InMemory, emptyMap()).get();
-                        NodeHandle nodeB = dsl.startNode("NodeB", emptySet(), ImmutableList.of(user), VerifierType.InMemory, emptyMap()).get();
-                        NodeHandle nodeC = dsl.startNode("NodeC", emptySet(), ImmutableList.of(user), VerifierType.InMemory, emptyMap()).get();
+                        NodeHandle nodeA = dsl.startNode(getX509Name("NodeA", "Paris", "root@city.fr"), emptySet(), ImmutableList.of(user), VerifierType.InMemory, emptyMap()).get();
+                        NodeHandle nodeB = dsl.startNode(getX509Name("NodeB", "Rome", "root@city.it"), emptySet(), ImmutableList.of(user), VerifierType.InMemory, emptyMap()).get();
+                        NodeHandle nodeC = dsl.startNode(getX509Name("NodeC", "New York", "root@city.us"), emptySet(), ImmutableList.of(user), VerifierType.InMemory, emptyMap()).get();
 
                         dsl.startWebserver(nodeA);
                         dsl.startWebserver(nodeB);
