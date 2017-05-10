@@ -25,11 +25,11 @@ fun main(args: Array<String>) {
     // No permissions required as we are not invoking flows.
     val user = User("user1", "test", permissions = setOf())
     driver(isDebug = true) {
-        startNode(getX509Name("Controller", "London", "root@city.uk"), setOf(ServiceInfo(ValidatingNotaryService.type)))
+        startNode(getX509Name("Controller", "London", "root@city.uk.example"), setOf(ServiceInfo(ValidatingNotaryService.type)))
         val (nodeA, nodeB, nodeC) = Futures.allAsList(
-                startNode(getX509Name("NodeA", "Paris", "root@city.fr"), rpcUsers = listOf(user)),
-                startNode(getX509Name("NodeB", "Rome", "root.city.it"), rpcUsers = listOf(user)),
-                startNode(getX509Name("NodeC", "New York", "root@city.us"), rpcUsers = listOf(user))).getOrThrow()
+                startNode(getX509Name("NodeA", "Paris", "root@city.fr.example"), rpcUsers = listOf(user)),
+                startNode(getX509Name("NodeB", "Rome", "root@city.it.example"), rpcUsers = listOf(user)),
+                startNode(getX509Name("NodeC", "New York", "root@city.us.example"), rpcUsers = listOf(user))).getOrThrow()
 
         startWebserver(nodeA)
         startWebserver(nodeB)

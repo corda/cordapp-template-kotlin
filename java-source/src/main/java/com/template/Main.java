@@ -32,16 +32,16 @@ public class Main {
         driver(
                 true,
                 dsl -> {
-                    dsl.startNode(getX509Name("Controller", "London", "root@city.uk"),
+                    dsl.startNode(getX509Name("Controller", "London", "root@city.uk.example"),
                             singleton(new ServiceInfo(ValidatingNotaryService.Companion.getType(), null)),
                             emptyList(),
                             VerifierType.InMemory,
                             emptyMap());
 
                     try {
-                        NodeHandle nodeA = dsl.startNode(getX509Name("NodeA", "Paris", "root@city.fr"), emptySet(), ImmutableList.of(user), VerifierType.InMemory, emptyMap()).get();
-                        NodeHandle nodeB = dsl.startNode(getX509Name("NodeB", "Rome", "root@city.it"), emptySet(), ImmutableList.of(user), VerifierType.InMemory, emptyMap()).get();
-                        NodeHandle nodeC = dsl.startNode(getX509Name("NodeC", "New York", "root@city.us"), emptySet(), ImmutableList.of(user), VerifierType.InMemory, emptyMap()).get();
+                        NodeHandle nodeA = dsl.startNode(getX509Name("NodeA", "Paris", "root@city.fr.example"), emptySet(), ImmutableList.of(user), VerifierType.InMemory, emptyMap()).get();
+                        NodeHandle nodeB = dsl.startNode(getX509Name("NodeB", "Rome", "root@city.it.example"), emptySet(), ImmutableList.of(user), VerifierType.InMemory, emptyMap()).get();
+                        NodeHandle nodeC = dsl.startNode(getX509Name("NodeC", "New York", "root@city.us.example"), emptySet(), ImmutableList.of(user), VerifierType.InMemory, emptyMap()).get();
 
                         dsl.startWebserver(nodeA);
                         dsl.startWebserver(nodeB);
