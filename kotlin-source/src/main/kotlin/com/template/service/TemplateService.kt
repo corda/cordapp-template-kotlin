@@ -16,7 +16,7 @@ import net.corda.core.node.PluginServiceHub
 object TemplateService {
     class Service(services: PluginServiceHub) {
         init {
-            services.registerFlowInitiator(TemplateFlow.Initiator::class.java) { TemplateFlow.Acceptor(it) }
+            services.registerServiceFlow(TemplateFlow.Initiator::class.java) { TemplateFlow.Acceptor(it) }
         }
     }
 }

@@ -2,9 +2,9 @@ package com.template.client
 
 import com.google.common.net.HostAndPort
 import com.template.state.TemplateState
+import net.corda.client.rpc.CordaRPCClient
 import net.corda.core.transactions.SignedTransaction
 import net.corda.core.utilities.loggerFor
-import net.corda.client.rpc.CordaRPCClient
 import org.slf4j.Logger
 import rx.Observable
 

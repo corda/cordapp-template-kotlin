@@ -1,7 +1,7 @@
 package com.template.flow
 
 import co.paralleluniverse.fibers.Suspendable
-import net.corda.core.crypto.Party
+import net.corda.core.identity.Party
 import net.corda.core.flows.FlowLogic
 
 /**
