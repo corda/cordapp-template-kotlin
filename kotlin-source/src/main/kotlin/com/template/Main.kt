@@ -1,6 +1,7 @@
 package com.template
 
 import com.google.common.util.concurrent.Futures
+import net.corda.core.crypto.X509Utilities.getX509Name
 import net.corda.core.getOrThrow
 import net.corda.core.node.services.ServiceInfo
 import net.corda.node.driver.driver
@@ -24,11 +25,11 @@ fun main(args: Array<String>) {
     // No permissions required as we are not invoking flows.
     val user = User("user1", "test", permissions = setOf())
     driver(isDebug = true) {
-        startNode("Controller", setOf(ServiceInfo(ValidatingNotaryService.type)))
+        startNode(getX509Name("Controller", "London", "root@city.uk.example"), setOf(ServiceInfo(ValidatingNotaryService.type)))
         val (nodeA, nodeB, nodeC) = Futures.allAsList(
-                startNode("NodeA", rpcUsers = listOf(user)),
-                startNode("NodeB", rpcUsers = listOf(user)),
-                startNode("NodeC", rpcUsers = listOf(user))).getOrThrow()
+                startNode(getX509Name("NodeA", "Paris", "root@city.fr.example"), rpcUsers = listOf(user)),
+                startNode(getX509Name("NodeB", "Rome", "root@city.it.example"), rpcUsers = listOf(user)),
+                startNode(getX509Name("NodeC", "New York", "root@city.us.example"), rpcUsers = listOf(user))).getOrThrow()
 
         startWebserver(nodeA)
         startWebserver(nodeB)
