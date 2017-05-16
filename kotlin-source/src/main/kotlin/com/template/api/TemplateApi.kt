@@ -18,7 +18,7 @@ class TemplateApi(val services: CordaRPCOps) {
     @Path("templateGetEndpoint")
     @Produces(MediaType.APPLICATION_JSON)
     fun templateGetEndpoint(): Response {
-        return Response.accepted().entity("Template GET endpoint.").build()
+        return Response.ok(mapOf("message" to "Template GET endpoint.")).build()
     }
 
     /**
@@ -27,6 +27,6 @@ class TemplateApi(val services: CordaRPCOps) {
     @PUT
     @Path("templatePutEndpoint")
     fun templatePutEndpoint(payload: Any): Response {
-        return Response.accepted().entity("Template PUT endpoint.").build()
+        return Response.ok("Template PUT endpoint.").build()
     }
 }

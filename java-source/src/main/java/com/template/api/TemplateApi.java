@@ -8,6 +8,8 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 // This API is accessible from /api/template. The endpoint paths specified below are relative to it.
 @Path("template")
@@ -25,7 +27,9 @@ public class TemplateApi {
     @Path("templateGetEndpoint")
     @Produces(MediaType.APPLICATION_JSON)
     public Response templateGetEndpoint() {
-        return Response.accepted().entity("Template GET endpoint.").build();
+        Map<String, Object> entity = new LinkedHashMap<>();
+        entity.put("message", "Template GET endpoint.");
+        return Response.ok(entity).build();
     }
 
     /**
@@ -34,6 +38,6 @@ public class TemplateApi {
     @PUT
     @Path("templatePutEndpoint")
     public Response templatePutEndpoint(Object payload) {
-        return Response.accepted().entity("Template PUT endpoint.").build();
+        return Response.ok("Template PUT endpoint.").build();
     }
 }
