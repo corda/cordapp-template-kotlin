@@ -55,18 +55,16 @@ dependencies {
 
 task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['build']) {
     directory "./build/nodes"
-    networkMap "Controller"
+    networkMap "CN=Controller,O=R3,OU=corda,L=London,C=UK"
     node {
-        name "Controller"
-        nearestCity "London"
+        name "CN=Controller,O=R3,OU=corda,L=London,C=UK"
         advertisedServices = ["corda.notary.validating"]
         p2pPort 10002
         rpcPort 10003
         cordapps = []
     }
     node {
-        name "NodeA"
-        nearestCity "London"
+        name "CN=NodeA,O=NodeA,L=London,C=UK"
         advertisedServices = []
         p2pPort 10005
         rpcPort 10006
@@ -75,8 +73,7 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['build']) {
         rpcUsers = [[ user: "user1", "password": "test", "permissions": []]]
     }
     node {
-        name "NodeB"
-        nearestCity "New York"
+        name "CN=NodeB,O=NodeB,L=New York,C=US"
         advertisedServices = []
         p2pPort 10008
         rpcPort 10009
@@ -85,8 +82,7 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['build']) {
         rpcUsers = [[ user: "user1", "password": "test", "permissions": []]]
     }
     node {
-        name "NodeC"
-        nearestCity "San Francisco"
+        name "CN=NodeC,O=NodeC,L=Paris,C=FR"
         advertisedServices = []
         p2pPort 10011
         rpcPort 10012
