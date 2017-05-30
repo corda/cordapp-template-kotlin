@@ -1,3 +1,3 @@
 package com.template.contract;
 
-public class TemplateTests {}
+public class ContractTests {}
