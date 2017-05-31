@@ -3,6 +3,7 @@ package com.template.flow
 import co.paralleluniverse.fibers.Suspendable
 import net.corda.core.identity.Party
 import net.corda.core.flows.FlowLogic
+import net.corda.core.flows.InitiatedBy
 import net.corda.core.flows.InitiatingFlow
 
 /**
@@ -21,6 +22,7 @@ object TemplateFlow {
         override fun call() {}
     }
 
+    @InitiatedBy(Initiator::class)
     class Acceptor(val counterparty: Party) : FlowLogic<Unit>() {
         /**
          * Define the acceptor's flow logic here.
