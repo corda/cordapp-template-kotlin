@@ -79,7 +79,7 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
         rpcPort 10006
         webPort 10007
         cordapps = []
-        rpcUsers = [[user: "user1", "password": "test", "permissions": []]]
+        rpcUsers = [[ user: "user1", "password": "test", "permissions": []]]
     }
     node {
         name "CN=NodeB,O=NodeB,L=New York,C=US"
@@ -88,7 +88,7 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
         rpcPort 10009
         webPort 10010
         cordapps = []
-        rpcUsers = [[user: "user1", "password": "test", "permissions": []]]
+        rpcUsers = [[ user: "user1", "password": "test", "permissions": []]]
     }
     node {
         name "CN=NodeC,O=NodeC,L=Paris,C=FR"
@@ -97,7 +97,7 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
         rpcPort 10012
         webPort 10013
         cordapps = []
-        rpcUsers = [[user: "user1", "password": "test", "permissions": []]]
+        rpcUsers = [[ user: "user1", "password": "test", "permissions": []]]
     }
 }
 
