@@ -53,7 +53,7 @@ dependencies {
     // Specify your cordapp's dependencies below, including dependent cordapps
 }
 
-task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['build']) {
+task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
     directory "./build/nodes"
     networkMap "CN=Controller,O=R3,OU=corda,L=London,C=UK"
     node {
