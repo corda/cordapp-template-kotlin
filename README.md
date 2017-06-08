@@ -41,9 +41,9 @@ And change directories to the newly cloned repo:
 
 ### Releases
 
-It is recommended to checkout a milestone release of Corda. To do this you must run: 
+It is recommended to checkout a milestone release tag of Corda. To do this you must run: 
 
-    git checkout release-M12
+    git checkout -b [your-branch-name] release-M12.1
 
 ### Snapshots
 
