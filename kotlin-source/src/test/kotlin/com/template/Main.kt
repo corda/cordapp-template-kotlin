@@ -4,9 +4,9 @@ import com.google.common.util.concurrent.Futures
 import net.corda.core.crypto.X509Utilities.getX509Name
 import net.corda.core.getOrThrow
 import net.corda.core.node.services.ServiceInfo
-import net.corda.node.driver.driver
-import net.corda.nodeapi.User
 import net.corda.node.services.transactions.ValidatingNotaryService
+import net.corda.nodeapi.User
+import net.corda.testing.driver.driver
 
 /**
  * This file is exclusively for being able to run your nodes through an IDE (as opposed to running deployNodes)
