@@ -6,12 +6,13 @@ import com.template.api.TemplateApi;
 import net.corda.core.messaging.CordaRPCOps;
 import net.corda.core.node.CordaPluginRegistry;
 import net.corda.core.serialization.SerializationCustomization;
+import net.corda.webserver.services.WebServerPluginRegistry;
 
 import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 
-public class TemplatePlugin extends CordaPluginRegistry {
+public class TemplatePlugin extends CordaPluginRegistry implements WebServerPluginRegistry {
     /**
      * A list of classes that expose web APIs.
      */

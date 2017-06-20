@@ -1,0 +1,2 @@
+# Register here any CorDapp plugins extending from net.corda.webserver.services.WebServerPluginRegistry.
+com.template.plugin.TemplatePlugin

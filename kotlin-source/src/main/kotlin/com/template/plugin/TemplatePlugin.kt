@@ -4,9 +4,10 @@ import com.template.api.TemplateApi
 import net.corda.core.messaging.CordaRPCOps
 import net.corda.core.node.CordaPluginRegistry
 import net.corda.core.serialization.SerializationCustomization
+import net.corda.webserver.services.WebServerPluginRegistry
 import java.util.function.Function
 
-class TemplatePlugin : CordaPluginRegistry() {
+class TemplatePlugin : CordaPluginRegistry(), WebServerPluginRegistry {
     /**
      * A list of classes that expose web APIs.
      */
