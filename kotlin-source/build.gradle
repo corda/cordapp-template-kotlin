@@ -8,8 +8,8 @@ apply plugin: 'maven-publish'
 
 repositories {
     mavenLocal()
-    mavenCentral()
     jcenter()
+    mavenCentral()
     maven { url 'https://dl.bintray.com/kotlin/exposed' }
     maven { url 'https://jitpack.io' }
 }
