@@ -21,7 +21,7 @@ private class TemplateClient {
     }
 
     fun main(args: Array<String>) {
-        require(args.size == 1) { "Usage: TemplateClientRPC <node address>" }
+        require(args.size == 1) { "Usage: TemplateClient <node address>" }
         val nodeAddress = HostAndPort.fromString(args[0])
         val client = CordaRPCClient(nodeAddress)
 

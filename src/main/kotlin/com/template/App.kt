@@ -6,9 +6,11 @@ import net.corda.core.contracts.ContractState
 import net.corda.core.contracts.TransactionForContract
 import net.corda.core.crypto.SecureHash
 import net.corda.core.flows.FlowLogic
+import net.corda.core.flows.InitiatedBy
 import net.corda.core.flows.InitiatingFlow
 import net.corda.core.flows.StartableByRPC
 import net.corda.core.identity.AbstractParty
+import net.corda.core.identity.Party
 import net.corda.core.messaging.CordaRPCOps
 import net.corda.core.node.CordaPluginRegistry
 import net.corda.core.serialization.SerializationCustomization
@@ -62,6 +64,14 @@ class TemplateState(val data: String) : ContractState {
 @InitiatingFlow
 @StartableByRPC
 class Initiator : FlowLogic<Unit>() {
+    @Suspendable
+    override fun call() {
+        return Unit
+    }
+}
+
+@InitiatedBy(Initiator::class)
+class Responder(val otherParty: Party) : FlowLogic<Unit>() {
     @Suspendable
     override fun call() {
         return Unit
