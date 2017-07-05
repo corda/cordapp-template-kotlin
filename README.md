@@ -5,25 +5,22 @@
 Welcome to the CorDapp template. The CorDapp template is a stubbed-out CorDapp 
 which you can use to bootstrap your own CorDapp projects.
 
-**This repository previously contained a simple CorDapp example. This 
-example has now been moved to 
-[cordapp-tutorial](https://github.com/corda/cordapp-tutorial/).**
+**This is the KOTLIN version of the CorDapp template. For the JAVA version click 
+[here](https://github.com/corda/cordapp-template-java/).**
 
-The template's source code is provided in both Kotlin (under `/kotlin-source`)
-and Java (under `/java-source`), and users can write their CorDapps in
-either language.
+**NOTE: Previosuly, the cordapp-template repo included both java and Kotlin versions, however from M14, we have split 
+them out into separate repositories.**
 
 ## Pre-Requisites
 
 You will need the following installed on your machine before you can start:
 
 * [JDK 8](http://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) 
-  installed and available on your path.
-* Latest version of [IntelliJ IDEA](https://www.jetbrains.com/idea/download/) 
-  (note the community edition is free)
-* [h2 web console](http://www.h2database.com/html/download.html)
-  (download the "platform-independent zip")
+  installed and available on your path (Minimum version: 1.8_131).
+* [IntelliJ IDEA](https://www.jetbrains.com/idea/download/) (Minimum version 2017.1)
 * git
+* Optional: [h2 web console](http://www.h2database.com/html/download.html)
+  (download the "platform-independent zip")
 
 For more detailed information, see the
 [getting set up](https://docs.corda.net/getting-set-up.html) page on the
@@ -33,24 +30,24 @@ Corda docsite.
 
 To get started, clone this repository with:
 
-     git clone https://github.com/corda/cordapp-template.git
+     git clone https://github.com/corda/cordapp-template-kotlin.git
 
 And change directories to the newly cloned repo:
 
-     cd cordapp-template
+     cd cordapp-template-kotlin
 
 ### Releases
 
 It is recommended to checkout a milestone release tag of Corda. To do this you must run: 
 
-    git checkout -b [your-branch-name] release-M12.1
+    git checkout -b [your-branch-name] release-M14
 
 ### Snapshots
 
 **Warning**: Snapshots are very unstable, it is recommended to use a milestone instead.
 
 When building from the latest SNAPSHOT release you must also clone the master
-branch of the [corda repository](https://github.com/corda/corda) and then run `gradlew install`
+branch of the [corda repository](https://github.com/corda/corda) and then run `./gradlew install`
 to build the dependencies required for this template.
 ​     
 ## Building the CorDapp template:
@@ -71,13 +68,7 @@ the template for these to take effect on the node.
 Once the build finishes, change directories to the folder where the newly
 built nodes are located:
 
-**Kotlin:**
-
-     cd kotlin-source/build/nodes
-
-**Java:**
-
-     cd java-source/build/nodes
+     cd build/nodes
 
 The Gradle build script will have created a folder for each node. You'll
 see three folders, one for each node and a `runnodes` script. You can
@@ -85,13 +76,13 @@ run the nodes with:
 
 **Unix:**
 
-     sh runnodes --log-to-console --logging-level=DEBUG
+     ./runnodes --log-to-console --logging-level=DEBUG
 
 **Windows:**
 
     runnodes.bat --log-to-console --logging-level=DEBUG
 
-You should now have four Corda nodes running on your machine serving 
+You should now have three Corda nodes running on your machine serving 
 the template.
 
 When the nodes have booted up, you should see a message like the following 
@@ -106,17 +97,15 @@ static web content. Initially, these return generic template responses.
 
 The nodes can be found using the following port numbers, defined in the 
 `build.gradle`, as well as the `node.conf` file for each node found
-under `kotlin/build/nodes/NodeX` or `java/build/nodes/NodeX`:
+under `build/nodes/NodeX` or `build/nodes/NodeX`:
 
      NodeA: localhost:10007
      NodeB: localhost:10010
-     NodeC: localhost:10013
 
 As the nodes start up, they should tell you which host and port their
 embedded web server is running on. The API endpoints served are:
 
      /api/template/templateGetEndpoint
-     /api/template/templatePutEndpoint
 
 And the static web content is served from:
 
@@ -124,39 +113,37 @@ And the static web content is served from:
 
 ## Using the Example RPC Client
 
-The `ExampleClientRPC.kt` file is a simple utility which uses the client
+The `ExampleClient.kt` file is a simple utility which uses the client
 RPC library to connect to a node and log its transaction activity.
 It will log any existing states and listen for any future states. To build 
 the client use the following Gradle task:
 
-     ./gradlew runTemplateClientRPC
+     ./gradlew runTemplateClient
 
 To run the client:
 
 **Via IntelliJ:**
 
-Select either the 'Run Template RPC Client - Java' or 'Run Template RPC Client - Kotlin'
-run configuration which, by default, connect to NodeA (Artemis port 10005). Click the
+Select the 'Run Template RPC Client'
+run configuration which, by default, connect to NodeA (RPC port 10006). Click the
 Green Arrow to run the client.
 
 **Via the command line:**
 
 Run the following Gradle task:
 
-     ./gradlew runTemplateClientRPC
-
-By default this runs the Java version - to run the Kotlin version change to the
-'kotlin-source' directory and run the Gradle task:
-
-     ./gradlew runTemplateClientRPC
+     ./gradlew runTemplateClient
+     
+Note that the template rPC client won't output anything to the console as no state 
+objects are contained in either NodeA's or NodeB's vault.
 
 ## Running the Nodes Across Multiple Machines
 
 The nodes can also be set up to communicate between separate machines on the 
 same subnet.
 
-After deploying the nodes, navigate to the build folder (`kotlin/build/
-nodes` or `java/build/nodes`) and move some of the individual node folders to 
+After deploying the nodes, navigate to the build folder (`build/
+nodes`) and move some of the individual node folders to 
 separate machines on the same subnet (e.g. using a USB key). It is important 
 that no nodes - including the controller node - end up on more than one 
 machine. Each computer should also have a copy of `runnodes` and 
