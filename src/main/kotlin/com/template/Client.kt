@@ -4,6 +4,7 @@ import com.google.common.net.HostAndPort
 import net.corda.client.rpc.CordaRPCClient
 import net.corda.core.transactions.SignedTransaction
 import net.corda.core.utilities.loggerFor
+import net.corda.core.utilities.parseNetworkHostAndPort
 import org.slf4j.Logger
 import rx.Observable
 
@@ -22,7 +23,7 @@ private class TemplateClient {
 
     fun main(args: Array<String>) {
         require(args.size == 1) { "Usage: TemplateClient <node address>" }
-        val nodeAddress = HostAndPort.fromString(args[0])
+        val nodeAddress = args[0].parseNetworkHostAndPort()
         val client = CordaRPCClient(nodeAddress)
 
         // Can be amended in the com.template.MainKt file.
