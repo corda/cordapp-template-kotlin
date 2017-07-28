@@ -3,7 +3,6 @@ package com.template
 import co.paralleluniverse.fibers.Suspendable
 import net.corda.core.contracts.Contract
 import net.corda.core.contracts.ContractState
-import net.corda.core.contracts.TransactionForContract
 import net.corda.core.crypto.SecureHash
 import net.corda.core.flows.FlowLogic
 import net.corda.core.flows.InitiatedBy
@@ -14,6 +13,7 @@ import net.corda.core.identity.Party
 import net.corda.core.messaging.CordaRPCOps
 import net.corda.core.node.CordaPluginRegistry
 import net.corda.core.serialization.SerializationCustomization
+import net.corda.core.transactions.LedgerTransaction
 import net.corda.webserver.services.WebServerPluginRegistry
 import java.util.function.Function
 import javax.ws.rs.GET
@@ -42,7 +42,7 @@ class TemplateApi(val services: CordaRPCOps) {
 open class TemplateContract : Contract {
     // The verify() function of the contract for each of the transaction's input and output states must not throw an
     // exception for a transaction to be considered valid.
-    override fun verify(tx: TransactionForContract) {
+    override fun verify(tx: LedgerTransaction) {
         // Verification logic goes here.
     }
 
