@@ -81,7 +81,14 @@ class Responder(val otherParty: Party) : FlowLogic<Unit>() {
 // *******************
 // * Plugin Registry *
 // *******************
-class TemplatePlugin : CordaPluginRegistry(), WebServerPluginRegistry {
+class TemplatePlugin : CordaPluginRegistry() {
+    // Whitelisting the required types for serialisation by the Corda node.
+    override fun customizeSerialization(custom: SerializationCustomization): Boolean {
+        return true
+    }
+}
+
+class TemplateWebPlugin : WebServerPluginRegistry {
     // A list of classes that expose web JAX-RS REST APIs.
     override val webApis: List<Function<CordaRPCOps, out Any>> = listOf(Function(::TemplateApi))
     //A list of directories in the resources directory that will be served by Jetty under /web.
@@ -90,9 +97,4 @@ class TemplatePlugin : CordaPluginRegistry(), WebServerPluginRegistry {
             // This will serve the templateWeb directory in resources to /web/template
             "template" to javaClass.classLoader.getResource("templateWeb").toExternalForm()
     )
-
-    // Whitelisting the required types for serialisation by the Corda node.
-    override fun customizeSerialization(custom: SerializationCustomization): Boolean {
-        return true
-    }
 }
