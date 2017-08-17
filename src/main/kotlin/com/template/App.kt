@@ -45,9 +45,6 @@ open class TemplateContract : Contract {
     override fun verify(tx: LedgerTransaction) {
         // Verification logic goes here.
     }
-
-    // A reference to the underlying legal contract template and associated parameters.
-    override val legalContractReference: SecureHash = SecureHash.zeroHash
 }
 
 // *********
