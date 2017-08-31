@@ -45,6 +45,18 @@ sourceSets {
             srcDir "config/test"
         }
     }
+    integrationTest {
+        kotlin {
+            compileClasspath += main.output + test.output
+            runtimeClasspath += main.output + test.output
+            srcDir file('src/integration-test/kotlin')
+        }
+    }
+}
+
+configurations {
+    integrationTestCompile.extendsFrom testCompile
+    integrationTestRuntime.extendsFrom testRuntime
 }
 
 dependencies {
@@ -73,6 +85,11 @@ dependencies {
     // CorDapp dependencies
     // Specify your cordapp's dependencies below, including dependent cordapps
     cordapp "net.corda:corda-finance:$corda_release_version"
+}
+
+task integrationTest(type: Test, dependsOn: []) {
+    testClassesDir = sourceSets.integrationTest.output.classesDir
+    classpath = sourceSets.integrationTest.runtimeClasspath
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
