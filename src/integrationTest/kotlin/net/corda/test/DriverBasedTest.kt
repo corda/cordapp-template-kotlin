@@ -13,7 +13,7 @@ import org.junit.Test
 class DriverBasedTest {
     @Test
     fun `run driver test`() {
-        driver(isDebug = true) {
+        driver(isDebug = true, startNodesInProcess = true) {
             // This starts three nodes simultaneously with startNode, which returns a future that completes when the node
             // has completed startup. Then these are all resolved with getOrThrow which returns the NodeHandle list.
             val (notaryHandle, nodeAHandle, nodeBHandle) = listOf(
