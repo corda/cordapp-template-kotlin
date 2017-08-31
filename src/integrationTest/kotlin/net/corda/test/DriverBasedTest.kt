@@ -26,9 +26,9 @@ class DriverBasedTest {
             // started and can communicate. This is a very basic test, in practice tests would be starting flows,
             // and verifying the states in the vault and other important metrics to ensure that your CorDapp is working
             // as intended.
-            Assert.assertEquals(notaryHandle.rpc.partyFromX500Name(DUMMY_BANK_A.name), DUMMY_NOTARY)
-            Assert.assertEquals(nodeAHandle.rpc.partyFromX500Name(DUMMY_BANK_B.name), DUMMY_BANK_B)
-            Assert.assertEquals(nodeBHandle.rpc.partyFromX500Name(DUMMY_NOTARY.name), DUMMY_NOTARY)
+            Assert.assertEquals(notaryHandle.rpc.partyFromX500Name(DUMMY_BANK_A.name)!!.name, DUMMY_BANK_A.name)
+            Assert.assertEquals(nodeAHandle.rpc.partyFromX500Name(DUMMY_BANK_B.name)!!.name, DUMMY_BANK_B.name)
+            Assert.assertEquals(nodeBHandle.rpc.partyFromX500Name(DUMMY_NOTARY.name)!!.name, DUMMY_NOTARY.name)
         }
     }
 }
