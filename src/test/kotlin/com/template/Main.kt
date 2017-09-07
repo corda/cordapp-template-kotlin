@@ -1,6 +1,5 @@
 package com.template
 
-import net.corda.core.internal.concurrent.transpose
 import net.corda.core.node.services.ServiceInfo
 import net.corda.core.utilities.getOrThrow
 import net.corda.core.utilities.getX509Name
@@ -29,7 +28,7 @@ fun main(args: Array<String>) {
         val (nodeA, nodeB, nodeC) = listOf(
                 startNode(providedName = getX509Name("NodeA", "Paris", "root@city.fr.example"), rpcUsers = listOf(user)),
                 startNode(providedName = getX509Name("NodeB", "Rome", "root@city.it.example"), rpcUsers = listOf(user)),
-                startNode(providedName = getX509Name("NodeC", "New York", "root@city.us.example"), rpcUsers = listOf(user))).transpose().getOrThrow()
+                startNode(providedName = getX509Name("NodeC", "New York", "root@city.us.example"), rpcUsers = listOf(user))).map { it.getOrThrow() }
 
         startWebserver(nodeA)
         startWebserver(nodeB)

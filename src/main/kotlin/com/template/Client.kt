@@ -1,12 +1,10 @@
 package com.template
 
-import com.google.common.net.HostAndPort
 import net.corda.client.rpc.CordaRPCClient
-import net.corda.core.transactions.SignedTransaction
+import net.corda.core.contracts.StateAndRef
 import net.corda.core.utilities.loggerFor
 import net.corda.core.utilities.parseNetworkHostAndPort
 import org.slf4j.Logger
-import rx.Observable
 
 /**
  * Demonstration of how to use the CordaRPCClient to connect to a Corda Node and
@@ -19,6 +17,7 @@ fun main(args: Array<String>) {
 private class TemplateClient {
     companion object {
         val logger: Logger = loggerFor<TemplateClient>()
+        private fun logState(state: StateAndRef<TemplateState>) = logger.info("{}", state.state.data)
     }
 
     fun main(args: Array<String>) {
@@ -30,15 +29,12 @@ private class TemplateClient {
         val proxy = client.start("user1", "test").proxy
 
         // Grab all signed transactions and all future signed transactions.
-        val (transactions: List<SignedTransaction>, futureTransactions: Observable<SignedTransaction>) =
-                proxy.internalVerifiedTransactionsFeed()
+        val (snapshot, updates) = proxy.vaultTrack(TemplateState::class.java)
 
         // Log the existing TemplateStates and listen for new ones.
-        futureTransactions.startWith(transactions).toBlocking().subscribe { transaction ->
-            transaction.tx.outputs.forEach { (data) ->
-                val state = data as TemplateState
-                logger.info(state.toString())
-            }
+        snapshot.states.forEach { logState(it) }
+        updates.toBlocking().subscribe { update ->
+            update.produced.forEach { logState(it) }
         }
     }
 }

@@ -1,6 +1,6 @@
 buildscript {
     ext.corda_release_version = '0.16-SNAPSHOT'
-    ext.corda_gradle_plugins_version = '0.15.1'
+    ext.corda_gradle_plugins_version = '0.16.0'
     ext.kotlin_version = '1.1.4'
     ext.junit_version = '4.12'
     ext.quasar_version = '0.7.6'
@@ -71,7 +71,6 @@ dependencies {
     cordaRuntime "net.corda:corda:$corda_release_version"
     cordaRuntime "net.corda:corda-webserver:$corda_release_version"
 
-    testCompile "net.corda:corda-test-utils:$corda_release_version"
     testCompile "net.corda:corda-node-driver:$corda_release_version"
 
     // GraphStream: For visualisation (required by TemplateClientRPC app)
