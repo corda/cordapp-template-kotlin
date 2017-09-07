@@ -17,7 +17,7 @@ fun main(args: Array<String>) {
 private class TemplateClient {
     companion object {
         val logger: Logger = loggerFor<TemplateClient>()
-        private fun logState(state: StateAndRef<TemplateState>) = logger.info("{}", state.state.data))
+        private fun logState(state: StateAndRef<TemplateState>) = logger.info("{}", state.state.data)
     }
 
     fun main(args: Array<String>) {
