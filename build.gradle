@@ -71,7 +71,6 @@ dependencies {
     cordaRuntime "net.corda:corda:$corda_release_version"
     cordaRuntime "net.corda:corda-webserver:$corda_release_version"
 
-    testCompile "net.corda:corda-test-utils:$corda_release_version"
     testCompile "net.corda:corda-node-driver:$corda_release_version"
 
     // GraphStream: For visualisation (required by TemplateClientRPC app)
