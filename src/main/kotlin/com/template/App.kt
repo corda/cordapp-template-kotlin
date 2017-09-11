@@ -38,6 +38,9 @@ class TemplateApi(val services: CordaRPCOps) {
 // *****************
 // * Contract Code *
 // *****************
+// This is used to identify our contract when building a transaction
+val TEMPLATE_CONTRACT_ID = "com.template.TemplateContract"
+
 open class TemplateContract : Contract {
     // The verify() function of the contract for each of the transaction's input and output states must not throw an
     // exception for a transaction to be considered valid.
@@ -51,7 +54,6 @@ open class TemplateContract : Contract {
 // *********
 class TemplateState(val data: String) : ContractState {
     override val participants: List<AbstractParty> get() = listOf()
-    override val contract: TemplateContract get() = TemplateContract()
 }
 
 // *********
