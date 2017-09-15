@@ -1,8 +1,8 @@
 package com.template
 
+import net.corda.core.identity.CordaX500Name
 import net.corda.core.node.services.ServiceInfo
 import net.corda.core.utilities.getOrThrow
-import net.corda.core.utilities.getX500Name
 import net.corda.node.services.transactions.ValidatingNotaryService
 import net.corda.nodeapi.User
 import net.corda.testing.driver.driver
@@ -24,11 +24,11 @@ fun main(args: Array<String>) {
     // No permissions required as we are not invoking flows.
     val user = User("user1", "test", permissions = setOf())
     driver(isDebug = true) {
-        startNode(providedName = getX500Name("Controller", "London", "root@city.uk.example"), advertisedServices = setOf(ServiceInfo(ValidatingNotaryService.type)))
+        startNode(providedName = CordaX500Name("Controller", "London", "UK"), advertisedServices = setOf(ServiceInfo(ValidatingNotaryService.type)))
         val (nodeA, nodeB, nodeC) = listOf(
-                startNode(providedName = getX500Name("NodeA", "Paris", "root@city.fr.example"), rpcUsers = listOf(user)),
-                startNode(providedName = getX500Name("NodeB", "Rome", "root@city.it.example"), rpcUsers = listOf(user)),
-                startNode(providedName = getX500Name("NodeC", "New York", "root@city.us.example"), rpcUsers = listOf(user))).map { it.getOrThrow() }
+                startNode(providedName = CordaX500Name("NodeA", "Paris", "FR"), rpcUsers = listOf(user)),
+                startNode(providedName = CordaX500Name("NodeB", "Rome", "IT"), rpcUsers = listOf(user)),
+                startNode(providedName = CordaX500Name("NodeC", "New York", "US"), rpcUsers = listOf(user))).map { it.getOrThrow() }
 
         startWebserver(nodeA)
         startWebserver(nodeB)
