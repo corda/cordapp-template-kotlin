@@ -15,8 +15,8 @@ class FlowTests {
     fun setup() {
         net = MockNetwork()
         val nodes = net.createSomeNodes(2)
-        a = nodes.partyNodes[0]
-        b = nodes.partyNodes[1]
+        a = nodes.partyNodes[0].internals
+        b = nodes.partyNodes[1].internals
         nodes.partyNodes.forEach {
             it.registerInitiatedFlow(Responder::class.java)
         }
