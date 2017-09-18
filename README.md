@@ -95,12 +95,12 @@ in the console:
 The CorDapp defines a couple of HTTP API end-points and also serves some
 static web content. Initially, these return generic template responses.
 
-The nodes can be found using the following port numbers, defined in the 
+The nodes can be found using the following port numbers, defined in 
 `build.gradle`, as well as the `node.conf` file for each node found
-under `build/nodes/NodeX` or `build/nodes/NodeX`:
+under `build/nodes/partyX`:
 
-     NodeA: localhost:10007
-     NodeB: localhost:10010
+     PartyA: localhost:10007
+     PartyB: localhost:10010
 
 As the nodes start up, they should tell you which host and port their
 embedded web server is running on. The API endpoints served are:
@@ -125,7 +125,7 @@ To run the client:
 **Via IntelliJ:**
 
 Select the 'Run Template RPC Client'
-run configuration which, by default, connect to NodeA (RPC port 10006). Click the
+run configuration which, by default, connect to PartyA (RPC port 10006). Click the
 Green Arrow to run the client.
 
 **Via the command line:**
@@ -135,7 +135,7 @@ Run the following Gradle task:
      ./gradlew runTemplateClient
      
 Note that the template rPC client won't output anything to the console as no state 
-objects are contained in either NodeA's or NodeB's vault.
+objects are contained in either PartyA's or PartyB's vault.
 
 ## Running the Nodes Across Multiple Machines
 
@@ -151,8 +151,8 @@ machine. Each computer should also have a copy of `runnodes` and
 
 For example, you may end up with the following layout:
 
-* Machine 1: `controller`, `nodea`, `runnodes`, `runnodes.bat`
-* Machine 2: `nodeb`, `nodec`, `runnodes`, `runnodes.bat`
+* Machine 1: `controller`, `partya`, `runnodes`, `runnodes.bat`
+* Machine 2: `partyb`, `partyc`, `runnodes`, `runnodes.bat`
 
 You must now edit the configuration file for each node, including the 
 controller. Open each node's config file (`[nodeName]/node.conf`), and make 

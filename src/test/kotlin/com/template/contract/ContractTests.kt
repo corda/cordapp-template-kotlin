@@ -4,5 +4,5 @@ import org.junit.Test
 
 class ContractTests {
     @Test
-    fun test() = Unit
+    fun dummyTest() = Unit
 }
