@@ -3,7 +3,6 @@ package com.template
 import net.corda.core.identity.CordaX500Name
 import net.corda.core.utilities.getOrThrow
 import net.corda.node.services.transactions.ValidatingNotaryService
-import net.corda.nodeapi.ServiceInfo
 import net.corda.nodeapi.User
 import net.corda.nodeapi.internal.ServiceInfo
 import net.corda.testing.driver.driver
