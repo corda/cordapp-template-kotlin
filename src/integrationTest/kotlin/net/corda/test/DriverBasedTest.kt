@@ -1,8 +1,8 @@
 package net.corda.test
 
-import net.corda.core.node.services.ServiceInfo
 import net.corda.core.utilities.getOrThrow
 import net.corda.node.services.transactions.SimpleNotaryService
+import net.corda.nodeapi.ServiceInfo
 import net.corda.testing.DUMMY_BANK_A
 import net.corda.testing.DUMMY_BANK_B
 import net.corda.testing.DUMMY_NOTARY
@@ -26,9 +26,9 @@ class DriverBasedTest {
             // started and can communicate. This is a very basic test, in practice tests would be starting flows,
             // and verifying the states in the vault and other important metrics to ensure that your CorDapp is working
             // as intended.
-            Assert.assertEquals(notaryHandle.rpc.partyFromX500Name(DUMMY_BANK_A.name)!!.name, DUMMY_BANK_A.name)
-            Assert.assertEquals(nodeAHandle.rpc.partyFromX500Name(DUMMY_BANK_B.name)!!.name, DUMMY_BANK_B.name)
-            Assert.assertEquals(nodeBHandle.rpc.partyFromX500Name(DUMMY_NOTARY.name)!!.name, DUMMY_NOTARY.name)
+            Assert.assertEquals(notaryHandle.rpc.wellKnownPartyFromX500Name(DUMMY_BANK_A.name)!!.name, DUMMY_BANK_A.name)
+            Assert.assertEquals(nodeAHandle.rpc.wellKnownPartyFromX500Name(DUMMY_BANK_B.name)!!.name, DUMMY_BANK_B.name)
+            Assert.assertEquals(nodeBHandle.rpc.wellKnownPartyFromX500Name(DUMMY_NOTARY.name)!!.name, DUMMY_NOTARY.name)
         }
     }
 }
