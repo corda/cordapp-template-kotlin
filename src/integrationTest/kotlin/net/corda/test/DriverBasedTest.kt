@@ -2,7 +2,7 @@ package net.corda.test
 
 import net.corda.core.utilities.getOrThrow
 import net.corda.node.services.transactions.SimpleNotaryService
-import net.corda.nodeapi.ServiceInfo
+import net.corda.nodeapi.internal.ServiceInfo
 import net.corda.testing.DUMMY_BANK_A
 import net.corda.testing.DUMMY_BANK_B
 import net.corda.testing.DUMMY_NOTARY
