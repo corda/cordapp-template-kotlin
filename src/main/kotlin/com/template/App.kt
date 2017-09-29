@@ -10,8 +10,6 @@ import net.corda.core.flows.StartableByRPC
 import net.corda.core.identity.AbstractParty
 import net.corda.core.identity.Party
 import net.corda.core.messaging.CordaRPCOps
-import net.corda.core.node.CordaPluginRegistry
-import net.corda.core.serialization.SerializationCustomization
 import net.corda.core.transactions.LedgerTransaction
 import net.corda.webserver.services.WebServerPluginRegistry
 import java.util.function.Function
@@ -73,16 +71,6 @@ class Responder(val otherParty: Party) : FlowLogic<Unit>() {
     @Suspendable
     override fun call() {
         return Unit
-    }
-}
-
-// *******************
-// * Plugin Registry *
-// *******************
-class TemplatePlugin : CordaPluginRegistry() {
-    // Whitelisting the required types for serialisation by the Corda node.
-    override fun customizeSerialization(custom: SerializationCustomization): Boolean {
-        return true
     }
 }
 
