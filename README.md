@@ -8,9 +8,6 @@ which you can use to bootstrap your own CorDapp projects.
 **This is the KOTLIN version of the CorDapp template. For the JAVA version click 
 [here](https://github.com/corda/cordapp-template-java/).**
 
-**NOTE: Previosuly, the cordapp-template repo included both java and Kotlin versions, however from M14, we have split 
-them out into separate repositories.**
-
 ## Pre-Requisites
 
 You will need the following installed on your machine before you can start:
@@ -40,7 +37,7 @@ And change directories to the newly cloned repo:
 
 It is recommended to checkout a milestone release tag of Corda. To do this you must run: 
 
-    git checkout -b [your-branch-name] release-M14
+    git checkout -b [your-branch-name] release-V1.0.0
 
 ### Snapshots
 
