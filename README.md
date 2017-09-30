@@ -8,7 +8,7 @@ which you can use to bootstrap your own CorDapp projects.
 **This is the KOTLIN version of the CorDapp template. For the JAVA version click 
 [here](https://github.com/corda/cordapp-template-java/).**
 
-**NOTE: Previosuly, the cordapp-template repo included both java and Kotlin versions, however from M14, we have split 
+**NOTE: Previously, the cordapp-template repo included both Java and Kotlin versions. From M14, we have split 
 them out into separate repositories.**
 
 ## Pre-Requisites
