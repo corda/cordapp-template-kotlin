@@ -40,7 +40,7 @@ And change directories to the newly cloned repo:
 
 It is recommended to checkout a milestone release tag of Corda. To do this you must run: 
 
-    git checkout -b [your-branch-name] release-M14
+    git checkout release-M14
 
 ### Snapshots
 
@@ -76,19 +76,19 @@ run the nodes with:
 
 **Unix:**
 
-     ./runnodes --log-to-console --logging-level=DEBUG
+     ./runnodes
 
 **Windows:**
 
-    runnodes.bat --log-to-console --logging-level=DEBUG
+    runnodes.bat
 
 You should now have three Corda nodes running on your machine serving 
 the template.
 
 When the nodes have booted up, you should see a message like the following 
-in the console: 
+in the node terminal windows: 
 
-     Node started up and registered in 5.007 sec
+     Node for [X] started up and registered in x.xxx sec
 
 ## Interacting with the CorDapp via HTTP
 
@@ -115,27 +115,23 @@ And the static web content is served from:
 
 The `ExampleClient.kt` file is a simple utility which uses the client
 RPC library to connect to a node and log its transaction activity.
-It will log any existing states and listen for any future states. To build 
-the client use the following Gradle task:
-
-     ./gradlew runTemplateClient
+It will log any existing states and listen for any future states.
 
 To run the client:
 
 **Via IntelliJ:**
 
-Select the 'Run Template RPC Client'
-run configuration which, by default, connect to PartyA (RPC port 10006). Click the
-Green Arrow to run the client.
+Select the 'Run Template RPC Client' run configuration which, by default, 
+connects to PartyA (RPC port 10006). Click the Green Arrow to run the client.
 
 **Via the command line:**
 
-Run the following Gradle task:
+Run the following Gradle task from the root of the template:
 
      ./gradlew runTemplateClient
      
-Note that the template rPC client won't output anything to the console as no state 
-objects are contained in either PartyA's or PartyB's vault.
+Note that the template RPC client won't output anything to the console as no state 
+objects are contained in PartyA's vault.
 
 ## Running the Nodes Across Multiple Machines
 
