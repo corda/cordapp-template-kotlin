@@ -10,6 +10,7 @@ import net.corda.core.flows.StartableByRPC
 import net.corda.core.identity.AbstractParty
 import net.corda.core.identity.Party
 import net.corda.core.messaging.CordaRPCOps
+import net.corda.core.serialization.SerializationWhitelist
 import net.corda.core.transactions.LedgerTransaction
 import net.corda.webserver.services.WebServerPluginRegistry
 import java.util.function.Function
@@ -73,6 +74,14 @@ class Responder(val otherParty: Party) : FlowLogic<Unit>() {
         return Unit
     }
 }
+
+// Serialization whitelist (only needed for 3rd party classes, but we use a local example here).
+class TemplateSerializationWhitelist : SerializationWhitelist {
+    override val whitelist: List<Class<*>> = listOf(TemplateData::class.java)
+}
+
+// Not annotated with @CordaSerializable just for use with manual whitelisting above.
+data class TemplateData(val payload: String)
 
 class TemplateWebPlugin : WebServerPluginRegistry {
     // A list of classes that expose web JAX-RS REST APIs.
