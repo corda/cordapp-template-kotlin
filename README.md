@@ -33,20 +33,6 @@ And change directories to the newly cloned repo:
 
      cd cordapp-template-kotlin
 
-### Releases
-
-It is recommended to checkout a milestone release tag of Corda. To do this you must run: 
-
-    git checkout -b [your-branch-name] release-V1.0.0
-
-### Snapshots
-
-**Warning**: Snapshots are very unstable, it is recommended to use a milestone instead.
-
-When building from the latest SNAPSHOT release you must also clone the master
-branch of the [corda repository](https://github.com/corda/corda) and then run `./gradlew install`
-to build the dependencies required for this template.
-​     
 ## Building the CorDapp template:
 
 **Unix:** 
