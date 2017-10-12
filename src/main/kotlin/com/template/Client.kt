@@ -8,7 +8,7 @@ import org.slf4j.Logger
 
 /**
  * Demonstration of how to use the CordaRPCClient to connect to a Corda Node and
- * stream some State data from the node.
+ * stream the contents of the node's vault.
  */
 fun main(args: Array<String>) {
     TemplateClient().main(args)
@@ -28,7 +28,7 @@ private class TemplateClient {
         // Can be amended in the com.template.MainKt file.
         val proxy = client.start("user1", "test").proxy
 
-        // Grab all signed transactions and all future signed transactions.
+        // Grab all existing TemplateStates and all future TemplateStates.
         val (snapshot, updates) = proxy.vaultTrack(TemplateState::class.java)
 
         // Log the existing TemplateStates and listen for new ones.

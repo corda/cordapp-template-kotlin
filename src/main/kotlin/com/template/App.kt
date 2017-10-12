@@ -1,14 +1,11 @@
 package com.template
 
 import co.paralleluniverse.fibers.Suspendable
+import net.corda.core.contracts.CommandData
 import net.corda.core.contracts.Contract
 import net.corda.core.contracts.ContractState
-import net.corda.core.flows.FlowLogic
-import net.corda.core.flows.InitiatedBy
-import net.corda.core.flows.InitiatingFlow
-import net.corda.core.flows.StartableByRPC
+import net.corda.core.flows.*
 import net.corda.core.identity.AbstractParty
-import net.corda.core.identity.Party
 import net.corda.core.messaging.CordaRPCOps
 import net.corda.core.serialization.SerializationWhitelist
 import net.corda.core.transactions.LedgerTransaction
@@ -24,13 +21,13 @@ import javax.ws.rs.core.Response
 // * API Endpoints *
 // *****************
 @Path("template")
-class TemplateApi(val services: CordaRPCOps) {
+class TemplateApi(val rpcOps: CordaRPCOps) {
     // Accessible at /api/template/templateGetEndpoint.
     @GET
     @Path("templateGetEndpoint")
     @Produces(MediaType.APPLICATION_JSON)
     fun templateGetEndpoint(): Response {
-        return Response.ok(mapOf("message" to "Template GET endpoint.")).build()
+        return Response.ok("Template GET endpoint.").build()
     }
 }
 
@@ -41,17 +38,22 @@ class TemplateApi(val services: CordaRPCOps) {
 val TEMPLATE_CONTRACT_ID = "com.template.TemplateContract"
 
 open class TemplateContract : Contract {
-    // The verify() function of the contract for each of the transaction's input and output states must not throw an
-    // exception for a transaction to be considered valid.
+    // A transaction is considered valid if the verify() function of the contract of each of the transaction's input
+    // and output states does not throw an exception.
     override fun verify(tx: LedgerTransaction) {
         // Verification logic goes here.
+    }
+
+    // Used to indicate the transaction's intent.
+    interface Commands : CommandData {
+        class Action : Commands
     }
 }
 
 // *********
 // * State *
 // *********
-class TemplateState(val data: String) : ContractState {
+data class TemplateState(val data: String) : ContractState {
     override val participants: List<AbstractParty> get() = listOf()
 }
 
@@ -68,20 +70,12 @@ class Initiator : FlowLogic<Unit>() {
 }
 
 @InitiatedBy(Initiator::class)
-class Responder(val otherParty: Party) : FlowLogic<Unit>() {
+class Responder(val counterpartySession: FlowSession) : FlowLogic<Unit>() {
     @Suspendable
     override fun call() {
         return Unit
     }
 }
-
-// Serialization whitelist (only needed for 3rd party classes, but we use a local example here).
-class TemplateSerializationWhitelist : SerializationWhitelist {
-    override val whitelist: List<Class<*>> = listOf(TemplateData::class.java)
-}
-
-// Not annotated with @CordaSerializable just for use with manual whitelisting above.
-data class TemplateData(val payload: String)
 
 class TemplateWebPlugin : WebServerPluginRegistry {
     // A list of classes that expose web JAX-RS REST APIs.
@@ -93,3 +87,12 @@ class TemplateWebPlugin : WebServerPluginRegistry {
             "template" to javaClass.classLoader.getResource("templateWeb").toExternalForm()
     )
 }
+
+// Serialization whitelist.
+class TemplateSerializationWhitelist : SerializationWhitelist {
+    override val whitelist: List<Class<*>> = listOf(TemplateData::class.java)
+}
+
+// This class is not annotated with @CordaSerializable, so it must be added to the serialization whitelist, above, if
+// we want to send it to other nodes within a flow.
+data class TemplateData(val payload: String)

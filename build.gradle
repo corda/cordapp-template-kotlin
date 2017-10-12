@@ -27,7 +27,6 @@ repositories {
 }
 
 apply plugin: 'kotlin'
-apply plugin: 'idea'
 apply plugin: 'net.corda.plugins.cordformation'
 apply plugin: 'net.corda.plugins.quasar-utils'
 
@@ -73,14 +72,9 @@ dependencies {
 
     testCompile "net.corda:corda-node-driver:$corda_release_version"
 
-    // GraphStream: For visualisation (required by TemplateClientRPC app)
-    compile "org.graphstream:gs-core:1.3"
-    compile("org.graphstream:gs-ui:1.3") {
-        exclude group: "bouncycastle"
-    }
-
     // CorDapp dependencies
-    // Specify your cordapp's dependencies below, including dependent cordapps
+    // Specify your CorDapp's dependencies below, including dependent CorDapps.
+    // We've defined Cash as a dependent CorDapp as an example.
     cordapp "net.corda:corda-finance:$corda_release_version"
 }
 
