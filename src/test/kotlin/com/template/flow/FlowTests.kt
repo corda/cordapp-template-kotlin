@@ -9,25 +9,25 @@ import org.junit.Before
 import org.junit.Test
 
 class FlowTests {
-    lateinit var net: MockNetwork
+    lateinit var network: MockNetwork
     lateinit var a: StartedNode<MockNode>
     lateinit var b: StartedNode<MockNode>
 
     @Before
     fun setup() {
-        net = MockNetwork()
-        val nodes = net.createSomeNodes(2)
+        network = MockNetwork()
+        val nodes = network.createSomeNodes(2)
         a = nodes.partyNodes[0]
         b = nodes.partyNodes[1]
         nodes.partyNodes.forEach {
             it.registerInitiatedFlow(Responder::class.java)
         }
-        net.runNetwork()
+        network.runNetwork()
     }
 
     @After
     fun tearDown() {
-        net.stopNodes()
+        network.stopNodes()
     }
 
     @Test
