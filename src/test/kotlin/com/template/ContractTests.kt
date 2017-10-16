@@ -1,8 +1,8 @@
-package com.template.contract
+package com.template
 
 import org.junit.Test
 
 class ContractTests {
     @Test
-    fun dummyTest() = Unit
+    fun `dummy test`() = Unit
 }

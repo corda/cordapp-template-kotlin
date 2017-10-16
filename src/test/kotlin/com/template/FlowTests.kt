@@ -1,6 +1,5 @@
-package com.template.flow
+package com.template
 
-import com.template.Responder
 import net.corda.node.internal.StartedNode
 import net.corda.testing.node.MockNetwork
 import net.corda.testing.node.MockNetwork.MockNode
@@ -31,5 +30,5 @@ class FlowTests {
     }
 
     @Test
-    fun dummyTest() = Unit
+    fun `dummy test`() = Unit
 }
