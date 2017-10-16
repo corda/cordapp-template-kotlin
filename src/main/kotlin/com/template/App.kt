@@ -77,6 +77,9 @@ class Responder(val counterpartySession: FlowSession) : FlowLogic<Unit>() {
     }
 }
 
+// ***********
+// * Plugins *
+// ***********
 class TemplateWebPlugin : WebServerPluginRegistry {
     // A list of classes that expose web JAX-RS REST APIs.
     override val webApis: List<Function<CordaRPCOps, out Any>> = listOf(Function(::TemplateApi))
