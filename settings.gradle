@@ -1,2 +1,2 @@
-include 'states-and-contracts'
-include 'other-sources'
+include 'cordapp'
+include 'cordapp-contracts-states'
