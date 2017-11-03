@@ -103,8 +103,8 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
         p2pPort 10002
         rpcPort 10003
         cordapps = [
-                "com.template:states-and-contracts:$version",
-                "com.template:other-sources:$version",
+                "$project.group:cordapp-contracts-states:$project.version",
+                "$project.group:cordapp:$project.version",
                 "net.corda:corda-finance:$corda_release_version"
         ]
     }
@@ -115,8 +115,8 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
         rpcPort 10006
         webPort 10007
         cordapps = [
-                "com.template:states-and-contracts:$version",
-                "com.template:other-sources:$version",
+                "$project.group:cordapp-contracts-states:$project.version",
+                "$project.group:cordapp:$project.version",
                 "net.corda:corda-finance:$corda_release_version"
         ]
         rpcUsers = [[ user: "user1", "password": "test", "permissions": []]]
@@ -128,8 +128,8 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
         rpcPort 10009
         webPort 10010
         cordapps = [
-                "com.template:states-and-contracts:$version",
-                "com.template:other-sources:$version",
+                "$project.group:cordapp-contracts-states:$project.version",
+                "$project.group:cordapp:$project.version",
                 "net.corda:corda-finance:$corda_release_version"
         ]
         rpcUsers = [[ user: "user1", "password": "test", "permissions": []]]
