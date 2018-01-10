@@ -1,4 +1,5 @@
 buildscript {
+    ext.corda_release_group = 'net.corda'
     ext.corda_release_version = '2.0.0'
     ext.corda_gradle_plugins_version = '1.0.0'
     ext.kotlin_version = '1.1.4'
@@ -61,23 +62,23 @@ dependencies {
     testCompile "junit:junit:$junit_version"
 
     // Corda integration dependencies
-    cordaCompile "net.corda:corda-core:$corda_release_version"
-    cordaCompile "net.corda:corda-finance:$corda_release_version"
-    cordaCompile "net.corda:corda-jackson:$corda_release_version"
-    cordaCompile "net.corda:corda-rpc:$corda_release_version"
-    cordaCompile "net.corda:corda-node-api:$corda_release_version"
-    cordaCompile "net.corda:corda-webserver-impl:$corda_release_version"
-    cordaRuntime "net.corda:corda:$corda_release_version"
-    cordaRuntime "net.corda:corda-webserver:$corda_release_version"
+    cordaCompile "$corda_release_group:corda-core:$corda_release_version"
+    cordaCompile "$corda_release_group:corda-finance:$corda_release_version"
+    cordaCompile "$corda_release_group:corda-jackson:$corda_release_version"
+    cordaCompile "$corda_release_group:corda-rpc:$corda_release_version"
+    cordaCompile "$corda_release_group:corda-node-api:$corda_release_version"
+    cordaCompile "$corda_release_group:corda-webserver-impl:$corda_release_version"
+    cordaRuntime "$corda_release_group:corda:$corda_release_version"
+    cordaRuntime "$corda_release_group:corda-webserver:$corda_release_version"
 
-    testCompile "net.corda:corda-node-driver:$corda_release_version"
+    testCompile "$corda_release_group:corda-node-driver:$corda_release_version"
 
     // CorDapp dependencies
     // Specify your CorDapp's dependencies below, including dependent CorDapps.
     // We've defined Cash as a dependent CorDapp as an example.
     cordapp project(":cordapp")
     cordapp project(":cordapp-contracts-states")
-    cordapp "net.corda:corda-finance:$corda_release_version"
+    cordapp "$corda_release_group:corda-finance:$corda_release_version"
 }
 
 task integrationTest(type: Test, dependsOn: []) {
@@ -105,7 +106,7 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
         cordapps = [
                 "$project.group:cordapp-contracts-states:$project.version",
                 "$project.group:cordapp:$project.version",
-                "net.corda:corda-finance:$corda_release_version"
+                "$corda_release_group:corda-finance:$corda_release_version"
         ]
     }
     node {
@@ -117,7 +118,7 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
         cordapps = [
                 "$project.group:cordapp-contracts-states:$project.version",
                 "$project.group:cordapp:$project.version",
-                "net.corda:corda-finance:$corda_release_version"
+                "$corda_release_group:corda-finance:$corda_release_version"
         ]
         rpcUsers = [[ user: "user1", "password": "test", "permissions": []]]
     }
@@ -130,7 +131,7 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
         cordapps = [
                 "$project.group:cordapp-contracts-states:$project.version",
                 "$project.group:cordapp:$project.version",
-                "net.corda:corda-finance:$corda_release_version"
+                "$corda_release_group:corda-finance:$corda_release_version"
         ]
         rpcUsers = [[ user: "user1", "password": "test", "permissions": []]]
     }

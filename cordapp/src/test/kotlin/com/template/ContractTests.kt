@@ -19,5 +19,7 @@ class ContractTests {
     }
 
     @Test
-    fun `dummy test`() = Unit
+    fun `dummy test`() {
+
+    }
 }
