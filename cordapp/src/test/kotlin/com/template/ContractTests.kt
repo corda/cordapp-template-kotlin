@@ -1,22 +1,16 @@
 package com.template
 
-import net.corda.finance.DOLLARS
-import net.corda.finance.POUNDS
-import net.corda.finance.contracts.asset.*
-import net.corda.testing.*
+import net.corda.testing.setCordappPackages
+import net.corda.testing.unsetCordappPackages
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
-import java.math.BigDecimal
-import java.math.BigInteger
-import java.time.Duration
-import java.time.Instant
 
 class ContractTests {
 
     @Before
     fun setup() {
-        setCordappPackages("com.template", "net.corda.finance.contracts.asset")
+        setCordappPackages("com.template")
     }
 
     @After
