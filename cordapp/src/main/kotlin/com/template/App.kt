@@ -26,25 +26,6 @@ class TemplateApi(val rpcOps: CordaRPCOps) {
     }
 }
 
-// *********
-// * Flows *
-// *********
-@InitiatingFlow
-@StartableByRPC
-class Initiator : FlowLogic<Unit>() {
-    @Suspendable
-    override fun call() {
-        return Unit
-    }
-}
-
-@InitiatedBy(Initiator::class)
-class Responder(val counterpartySession: FlowSession) : FlowLogic<Unit>() {
-    @Suspendable
-    override fun call() {
-        return Unit
-    }
-}
 
 // ***********
 // * Plugins *
