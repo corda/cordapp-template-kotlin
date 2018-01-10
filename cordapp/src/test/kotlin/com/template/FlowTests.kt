@@ -34,5 +34,7 @@ class FlowTests {
     }
 
     @Test
-    fun `dummy test`() = Unit
+    fun `dummy test`() {
+
+    }
 }
