@@ -22,7 +22,7 @@ class FlowTests {
         a = nodes.partyNodes[0]
         b = nodes.partyNodes[1]
         nodes.partyNodes.forEach {
-            it.registerInitiatedFlow(SellCurrency::class.java)
+            it.registerInitiatedFlow(Responder::class.java)
         }
         network.runNetwork()
     }

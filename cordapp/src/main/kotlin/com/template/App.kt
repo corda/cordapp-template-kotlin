@@ -9,7 +9,6 @@ import net.corda.core.identity.AbstractParty
 import net.corda.core.messaging.CordaRPCOps
 import net.corda.core.serialization.SerializationWhitelist
 import net.corda.core.transactions.LedgerTransaction
-import net.corda.core.utilities.ProgressTracker
 import net.corda.webserver.services.WebServerPluginRegistry
 import java.util.function.Function
 import javax.ws.rs.GET
@@ -32,6 +31,25 @@ class TemplateApi(val rpcOps: CordaRPCOps) {
     }
 }
 
+// *********
+// * Flows *
+// *********
+@InitiatingFlow
+@StartableByRPC
+class Initiator : FlowLogic<Unit>() {
+    @Suspendable
+    override fun call() {
+        return Unit
+    }
+}
+
+@InitiatedBy(Initiator::class)
+class Responder(val counterpartySession: FlowSession) : FlowLogic<Unit>() {
+    @Suspendable
+    override fun call() {
+        return Unit
+    }
+}
 
 // ***********
 // * Plugins *
