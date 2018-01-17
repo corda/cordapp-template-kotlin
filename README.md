@@ -141,11 +141,11 @@ You must now edit the configuration file for each node, including the
 controller. Open each node's config file (`[nodeName]/node.conf`), and make 
 the following changes:
 
-* Change the artemis address to the machine's ip address (e.g. 
-  `artemisAddress="10.18.0.166:10005"`)
+* Change the P2P address to the machine's ip address (e.g. 
+  `p2pAddress="10.18.0.166:10005"`)
 * Change the network map address to the ip address of the machine where the 
-  controller node is running (e.g. `networkMapAddress="10.18.0.166:10002"`) 
-  (please note that the controller will not have a network map address)
+  controller node is running (e.g. `networkMapService { address="10.18.0.166:10002"...`) 
+  (please note that the controller will not have a network map address entry)
 
 Each machine should now run its nodes using `runnodes` or `runnodes.bat` 
 files. Once they are up and running, the nodes should be able to communicate 
