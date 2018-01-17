@@ -16,7 +16,7 @@ class DriverBasedTest {
         driver(isDebug = true, startNodesInProcess = true) {
             // This starts three nodes simultaneously with startNode, which returns a future that completes when the node
             // has completed startup. Then these are all resolved with getOrThrow which returns the NodeHandle list.
-            val (notaryHandle, nodeAHandle, nodeBHandle) = listOf(
+            val (notaryHandle, partyAHandle, partyBHandle) = listOf(
                     startNode(providedName = DUMMY_NOTARY.name, advertisedServices = setOf(ServiceInfo(SimpleNotaryService.type))),
                     startNode(providedName = DUMMY_BANK_A.name),
                     startNode(providedName = DUMMY_BANK_B.name)
@@ -27,8 +27,8 @@ class DriverBasedTest {
             // and verifying the states in the vault and other important metrics to ensure that your CorDapp is working
             // as intended.
             Assert.assertEquals(notaryHandle.rpc.wellKnownPartyFromX500Name(DUMMY_BANK_A.name)!!.name, DUMMY_BANK_A.name)
-            Assert.assertEquals(nodeAHandle.rpc.wellKnownPartyFromX500Name(DUMMY_BANK_B.name)!!.name, DUMMY_BANK_B.name)
-            Assert.assertEquals(nodeBHandle.rpc.wellKnownPartyFromX500Name(DUMMY_NOTARY.name)!!.name, DUMMY_NOTARY.name)
+            Assert.assertEquals(partyAHandle.rpc.wellKnownPartyFromX500Name(DUMMY_BANK_B.name)!!.name, DUMMY_BANK_B.name)
+            Assert.assertEquals(partyBHandle.rpc.wellKnownPartyFromX500Name(DUMMY_NOTARY.name)!!.name, DUMMY_NOTARY.name)
         }
     }
 }
