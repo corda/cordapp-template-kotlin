@@ -1,27 +1,22 @@
 package com.template
 
-import net.corda.node.internal.StartedNode
 import net.corda.testing.node.MockNetwork
-import net.corda.testing.node.MockNetwork.MockNode
-import net.corda.testing.setCordappPackages
-import net.corda.testing.unsetCordappPackages
+import net.corda.testing.node.StartedMockNode
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
 class FlowTests {
     lateinit var network: MockNetwork
-    lateinit var a: StartedNode<MockNode>
-    lateinit var b: StartedNode<MockNode>
+    lateinit var a: StartedMockNode
+    lateinit var b: StartedMockNode
 
     @Before
     fun setup() {
-        setCordappPackages("com.template")
-        network = MockNetwork()
-        val nodes = network.createSomeNodes(2)
-        a = nodes.partyNodes[0]
-        b = nodes.partyNodes[1]
-        nodes.partyNodes.forEach {
+        network = MockNetwork(listOf("com.template"))
+        a = network.createNode()
+        b = network.createNode()
+        listOf(a, b).forEach {
             it.registerInitiatedFlow(Responder::class.java)
         }
         network.runNetwork()
@@ -30,7 +25,6 @@ class FlowTests {
     @After
     fun tearDown() {
         network.stopNodes()
-        unsetCordappPackages()
     }
 
     @Test
