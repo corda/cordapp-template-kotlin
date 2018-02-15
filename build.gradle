@@ -128,21 +128,21 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
         ]
         rpcUsers = [[ user: "user1", "password": "test", "permissions": []]]
     }
-//    node {
-//        name "O=PartyB,L=New York,C=US"
-//        p2pPort 10008
-//        rpcSettings {
-//            port 10009
-//            address "localhost:10009"
-//        }
-//        webPort 10010
-//        cordapps = [
-//                "$project.group:cordapp-contracts-states:$project.version",
-//                "$project.group:cordapp:$project.version",
-//                "$corda_release_group:corda-finance:$corda_release_version"
-//        ]
-//        rpcUsers = [[ user: "user1", "password": "test", "permissions": []]]
-//    }
+    node {
+        name "O=PartyB,L=New York,C=US"
+        p2pPort 10008
+        rpcSettings {
+            port 10009
+            address "localhost:10009"
+        }
+        webPort 10010
+        cordapps = [
+                "$project.group:cordapp-contracts-states:$project.version",
+                "$project.group:cordapp:$project.version",
+                "$corda_release_group:corda-finance:$corda_release_version"
+        ]
+        rpcUsers = [[ user: "user1", "password": "test", "permissions": []]]
+    }
 }
 
 task runTemplateClient(type: JavaExec) {
