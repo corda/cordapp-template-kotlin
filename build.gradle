@@ -103,10 +103,6 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
         name "O=NetworkMapAndNotary,L=London,C=GB"
         notary = [validating : true]
         p2pPort 10002
-        rpcSettings {
-            port 10003
-            address "localhost:10003"
-        }
         cordapps = [
                 "$project.group:cordapp-contracts-states:$project.version",
                 "$project.group:cordapp:$project.version",
@@ -117,8 +113,8 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
         name "O=PartyA,L=London,C=GB"
         p2pPort 10005
         rpcSettings {
-            port 10006
-            address "localhost:10006"
+            address("localhost:10006")
+            adminAddress("localhost:10046")
         }
         webPort 10007
         cordapps = [
@@ -126,14 +122,14 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
                 "$project.group:cordapp:$project.version",
                 "$corda_release_group:corda-finance:$corda_release_version"
         ]
-        rpcUsers = [[ user: "user1", "password": "test", "permissions": []]]
+        rpcUsers = [[ user: "user1", "password": "test", "permissions": ["ALL"]]]
     }
     node {
         name "O=PartyB,L=New York,C=US"
         p2pPort 10008
         rpcSettings {
-            port 10009
-            address "localhost:10009"
+            address("localhost:10009")
+            adminAddress("localhost:10049")
         }
         webPort 10010
         cordapps = [
@@ -141,7 +137,7 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
                 "$project.group:cordapp:$project.version",
                 "$corda_release_group:corda-finance:$corda_release_version"
         ]
-        rpcUsers = [[ user: "user1", "password": "test", "permissions": []]]
+        rpcUsers = [[ user: "user1", "password": "test", "permissions": ["ALL"]]]
     }
 }
 
