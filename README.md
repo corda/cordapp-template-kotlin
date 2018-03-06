@@ -23,6 +23,9 @@ For more detailed information, see the
 [getting set up](https://docs.corda.net/getting-set-up.html) page on the
 Corda docsite.
 
+For IDE, compilation and JVM version issues, see the
+[Troubleshooting](https://docs.corda.net/troubleshooting.html) page on the Corda docsite.
+
 ## Getting Set Up
 
 To get started, clone this repository with:
