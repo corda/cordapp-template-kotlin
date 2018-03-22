@@ -12,7 +12,7 @@ import net.corda.core.transactions.LedgerTransaction
 // This is used to identify our contract when building a transaction
 val TEMPLATE_CONTRACT_ID = "com.template.TemplateContract"
 
-open class TemplateContract : Contract {
+class TemplateContract : Contract {
     // A transaction is considered valid if the verify() function of the contract of each of the transaction's input
     // and output states does not throw an exception.
     override fun verify(tx: LedgerTransaction) {
