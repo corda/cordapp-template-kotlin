@@ -45,9 +45,7 @@ class DriverBasedTest {
         }
     }
 
-    // *********************
-    // * Utility functions *
-    // *********************
+    // region Utility functions
 
     // Runs a test inside the Driver DSL, which provides useful functions for starting nodes, etc.
     private fun withDriver(test: DriverDSL.() -> Unit) = driver(
@@ -69,4 +67,6 @@ class DriverBasedTest {
     private fun DriverDSL.startWebServers(vararg identities: TestIdentity) = startNodes(*identities)
         .map { startWebserver(it) }
         .waitForAll()
+
+    // endregion
 }
