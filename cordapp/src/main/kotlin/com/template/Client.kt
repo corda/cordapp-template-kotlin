@@ -10,9 +10,7 @@ import org.slf4j.Logger
  * Demonstration of how to use the CordaRPCClient to connect to a Corda Node and
  * stream the contents of the node's vault.
  */
-fun main(args: Array<String>) {
-    TemplateClient().main(args)
-}
+fun main(args: Array<String>) = TemplateClient().main(args)
 
 private class TemplateClient {
     companion object {

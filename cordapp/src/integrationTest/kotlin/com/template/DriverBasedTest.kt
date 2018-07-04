@@ -3,58 +3,70 @@ package com.template
 import net.corda.core.identity.CordaX500Name
 import net.corda.core.utilities.getOrThrow
 import net.corda.testing.core.TestIdentity
+import net.corda.testing.driver.DriverDSL
 import net.corda.testing.driver.DriverParameters
+import net.corda.testing.driver.NodeHandle
 import net.corda.testing.driver.driver
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import org.junit.Test
+import java.util.concurrent.Future
 import kotlin.test.assertEquals
 
 class DriverBasedTest {
-    val bankA = TestIdentity(CordaX500Name("BankA", "", "GB"))
-    val bankB = TestIdentity(CordaX500Name("BankB", "", "US"))
+    private val bankA = TestIdentity(CordaX500Name("BankA", "", "GB"))
+    private val bankB = TestIdentity(CordaX500Name("BankB", "", "US"))
 
     @Test
-    fun `node test`() {
-        driver(DriverParameters(isDebug = true, startNodesInProcess = true)) {
-            // This starts two nodes simultaneously with startNode, which returns a future that completes when the node
-            // has completed startup. Then these are all resolved with getOrThrow which returns the NodeHandle list.
-            val (partyAHandle, partyBHandle) = listOf(
-                    startNode(providedName = bankA.name),
-                    startNode(providedName = bankB.name)
-            ).map { it.getOrThrow() }
+    fun `node test`() = withDriver {
+        // Start a pair of nodes and wait for them both to be ready.
+        val (partyAHandle, partyBHandle) = startNodes(bankA, bankB)
 
-            // This test makes an RPC call to retrieve another node's name from the network map, to verify that the
-            // nodes have started and can communicate. This is a very basic test, in practice tests would be starting
-            // flows, and verifying the states in the vault and other important metrics to ensure that your CorDapp is
-            // working as intended.
-            assertEquals(partyAHandle.rpc.wellKnownPartyFromX500Name(bankB.name)!!.name, bankB.name)
-            assertEquals(partyBHandle.rpc.wellKnownPartyFromX500Name(bankA.name)!!.name, bankA.name)
-        }
+        // From each node, make an RPC call to retrieve another node's name from the network map, to verify that the
+        // nodes have started and can communicate.
+
+        // This is a very basic test: in practice tests would be starting flows, and verifying the states in the vault
+        // and other important metrics to ensure that your CorDapp is working as intended.
+        assertEquals(bankB.name, partyAHandle.resolveName(bankB.name))
+        assertEquals(bankA.name, partyBHandle.resolveName(bankA.name))
     }
 
     @Test
-    fun `node webserver test`() {
-        driver(DriverParameters(isDebug = true, startNodesInProcess = true)) {
-            val nodeHandles = listOf(
-                    startNode(providedName = bankA.name),
-                    startNode(providedName = bankB.name)
-            ).map { it.getOrThrow() }
+    fun `node webserver test`() = withDriver {
+        // This test starts each node's webserver and makes an HTTP call to retrieve the body of a GET endpoint on
+        // the node's webserver, to verify that the nodes' webservers have started and have loaded the API.
+        startWebServers(bankA, bankB).forEach {
+            val request = Request.Builder()
+                .url("http://${it.listenAddress}/api/template/templateGetEndpoint")
+                .build()
+            val response = OkHttpClient().newCall(request).execute()
 
-            // This test starts each node's webserver and makes an HTTP call to retrieve the body of a GET endpoint on
-            // the node's webserver, to verify that the nodes' webservers have started and have loaded the API.
-            nodeHandles.forEach { nodeHandle ->
-                val webserverHandle = startWebserver(nodeHandle).getOrThrow()
-
-                val nodeAddress = webserverHandle.listenAddress
-                val url = "http://$nodeAddress/api/template/templateGetEndpoint"
-
-                val request = Request.Builder().url(url).build()
-                val client = OkHttpClient()
-                val response = client.newCall(request).execute()
-
-                assertEquals("Template GET endpoint.", response.body().string())
-            }
+            assertEquals("Template GET endpoint.", response.body().string())
         }
     }
+
+    // *********************
+    // * Utility functions *
+    // *********************
+
+    // Runs a test inside the Driver DSL, which provides useful functions for starting nodes, etc.
+    private fun withDriver(test: DriverDSL.() -> Unit) = driver(
+        DriverParameters(isDebug = true, startNodesInProcess = true)
+    ) { test() }
+
+    // Makes an RPC call to retrieve another node's name from the network map.
+    private fun NodeHandle.resolveName(name: CordaX500Name) = rpc.wellKnownPartyFromX500Name(name)!!.name
+
+    // Resolves a list of futures to a list of the promised values.
+    private fun <T> List<Future<T>>.waitForAll(): List<T> = map { it.getOrThrow() }
+
+    // Starts multiple nodes simultaneously, then waits for them all to be ready.
+    private fun DriverDSL.startNodes(vararg identities: TestIdentity) = identities
+        .map { startNode(providedName = it.name) }
+        .waitForAll()
+
+    // Starts multiple webservers simultaneously, then waits for them all to be ready.
+    private fun DriverDSL.startWebServers(vararg identities: TestIdentity) = startNodes(*identities)
+        .map { startWebserver(it) }
+        .waitForAll()
 }

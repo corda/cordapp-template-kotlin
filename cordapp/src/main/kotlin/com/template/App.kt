@@ -21,9 +21,8 @@ class TemplateApi(val rpcOps: CordaRPCOps) {
     @GET
     @Path("templateGetEndpoint")
     @Produces(MediaType.APPLICATION_JSON)
-    fun templateGetEndpoint(): Response {
-        return Response.ok("Template GET endpoint.").build()
-    }
+    fun templateGetEndpoint(): Response =
+        Response.ok("Template GET endpoint.").build()
 }
 
 // *********
@@ -33,30 +32,26 @@ class TemplateApi(val rpcOps: CordaRPCOps) {
 @StartableByRPC
 class Initiator : FlowLogic<Unit>() {
     @Suspendable
-    override fun call() {
-        return Unit
-    }
+    override fun call() = Unit
 }
 
 @InitiatedBy(Initiator::class)
 class Responder(val counterpartySession: FlowSession) : FlowLogic<Unit>() {
     @Suspendable
-    override fun call() {
-        return Unit
-    }
+    override fun call() = Unit
 }
 
 // ***********
 // * Plugins *
 // ***********
 class TemplateWebPlugin : WebServerPluginRegistry {
-    // A list of classes that expose web JAX-RS REST APIs.
+    // A list of lambdas that create objects exposing web JAX-RS REST APIs.
     override val webApis: List<Function<CordaRPCOps, out Any>> = listOf(Function(::TemplateApi))
     //A list of directories in the resources directory that will be served by Jetty under /web.
     // This template's web frontend is accessible at /web/template.
     override val staticServeDirs: Map<String, String> = mapOf(
-            // This will serve the templateWeb directory in resources to /web/template
-            "template" to javaClass.classLoader.getResource("templateWeb").toExternalForm()
+        // This will serve the templateWeb directory in resources to /web/template
+        "template" to javaClass.classLoader.getResource("templateWeb").toExternalForm()
     )
 }
 
