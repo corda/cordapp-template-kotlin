@@ -21,8 +21,9 @@ class TemplateApi(val rpcOps: CordaRPCOps) {
     @GET
     @Path("templateGetEndpoint")
     @Produces(MediaType.APPLICATION_JSON)
-    fun templateGetEndpoint(): Response =
-        Response.ok("Template GET endpoint.").build()
+    fun templateGetEndpoint(): Response {
+        return Response.ok("Template GET endpoint.").build()
+    }
 }
 
 // *********
@@ -32,13 +33,17 @@ class TemplateApi(val rpcOps: CordaRPCOps) {
 @StartableByRPC
 class Initiator : FlowLogic<Unit>() {
     @Suspendable
-    override fun call() = Unit
+    override fun call() {
+        // Flow implementation goes here
+    }
 }
 
 @InitiatedBy(Initiator::class)
 class Responder(val counterpartySession: FlowSession) : FlowLogic<Unit>() {
     @Suspendable
-    override fun call() = Unit
+    override fun call() {
+        // Flow implementation goes here
+    }
 }
 
 // ***********
