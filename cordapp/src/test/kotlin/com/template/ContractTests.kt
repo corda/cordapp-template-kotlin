@@ -4,7 +4,7 @@ import net.corda.testing.node.MockServices
 import org.junit.Test
 
 class ContractTests {
-    val ledgerServices = MockServices()
+    private val ledgerServices = MockServices()
 
     @Test
     fun `dummy test`() {
