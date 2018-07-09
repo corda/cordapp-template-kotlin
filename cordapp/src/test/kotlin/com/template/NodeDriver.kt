@@ -20,7 +20,6 @@ import net.corda.testing.node.User
  * 5. Run the "Debug CorDapp" remote debug run configuration.
  */
 fun main(args: Array<String>) {
-    // No permissions required as we are not invoking flows.
     val user = User("user1", "test", permissions = setOf("ALL"))
     driver(DriverParameters(isDebug = true, waitForAllNodesToFinish = true)) {
         val (partyA, partyB) = listOf(
