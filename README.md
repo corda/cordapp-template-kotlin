@@ -62,11 +62,11 @@ run the nodes with:
 
 **Unix:**
 
-     ./runnodes --log-to-console --logging-level=DEBUG
+     ./runnodes
 
 **Windows:**
 
-    runnodes.bat --log-to-console --logging-level=DEBUG
+    runnodes.bat
 
 You should now have three Corda nodes running on your machine serving 
 the template.
