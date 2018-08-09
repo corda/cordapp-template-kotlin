@@ -9,10 +9,11 @@ import net.corda.core.transactions.LedgerTransaction
 // *****************
 // * Contract Code *
 // *****************
-// This is used to identify our contract when building a transaction
-val TEMPLATE_CONTRACT_ID = "com.template.TemplateContract"
-
 class TemplateContract : Contract {
+    // This is used to identify our contract when building a transaction
+    companion object {
+        val ID = "com.template.TemplateContract"
+    }
     // A transaction is considered valid if the verify() function of the contract of each of the transaction's input
     // and output states does not throw an exception.
     override fun verify(tx: LedgerTransaction) {
