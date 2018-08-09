@@ -30,5 +30,5 @@ class TemplateContract : Contract {
 // * State *
 // *********
 data class TemplateState(val data: String) : ContractState {
-    override val participants: List<AbstractParty> get() = listOf()
+    override val participants: List<AbstractParty> = listOf()
 }
