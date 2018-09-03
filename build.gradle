@@ -20,12 +20,14 @@ buildscript {
     }
 }
 
-repositories {
-    mavenLocal()
-    jcenter()
-    mavenCentral()
-    maven { url 'https://jitpack.io' }
-    maven { url 'https://ci-artifactory.corda.r3cev.com/artifactory/corda-releases' }
+allprojects {
+    repositories {
+        mavenLocal()
+        jcenter()
+        mavenCentral()
+        maven { url 'https://ci-artifactory.corda.r3cev.com/artifactory/corda' }
+        maven { url 'https://jitpack.io' }
+    }
 }
 
 apply plugin: 'kotlin'
