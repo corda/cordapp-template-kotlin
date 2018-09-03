@@ -24,8 +24,9 @@ repositories {
     mavenLocal()
     jcenter()
     mavenCentral()
-    maven { url 'https://jitpack.io' }
+    maven { url 'https://ci-artifactory.corda.r3cev.com/artifactory/corda-dependencies' }
     maven { url 'https://ci-artifactory.corda.r3cev.com/artifactory/corda-releases' }
+    maven { url 'https://jitpack.io' }
 }
 
 apply plugin: 'kotlin'
