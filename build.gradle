@@ -1,10 +1,9 @@
 buildscript {
-    ext.corda_release_group = 'net.corda'
-    ext.corda_release_version = '3.2-corda'
-    ext.corda_gradle_plugins_version = '3.1.0'
-    ext.kotlin_version = '1.1.60'
+    ext.corda_release_group = 'com.r3.corda'
+    ext.corda_release_version = '3.1'
+    ext.corda_gradle_plugins_version = '4.0.25'
+    ext.kotlin_version = '1.2.50'
     ext.junit_version = '4.12'
-    ext.quasar_version = '0.7.9'
 
     repositories {
         mavenLocal()
@@ -22,10 +21,11 @@ buildscript {
 
 allprojects {
     repositories {
+        // Unpack the Corda Enterprise Developer Pack to your ~/.m2 directory
+        // Contact your sales representative to obtain the Developer Pack.
         mavenLocal()
         jcenter()
         mavenCentral()
-        maven { url 'https://ci-artifactory.corda.r3cev.com/artifactory/corda' }
         maven { url 'https://jitpack.io' }
     }
 }
