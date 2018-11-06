@@ -1,10 +1,14 @@
 package com.template
 
 import net.corda.client.rpc.CordaRPCClient
-import net.corda.core.contracts.StateAndRef
+import net.corda.core.contracts.ContractState
+import net.corda.core.messaging.vaultQueryBy
 import net.corda.core.utilities.NetworkHostAndPort.Companion.parse
 import net.corda.core.utilities.loggerFor
 import org.slf4j.Logger
+
+val RPC_USERNAME = "user1"
+val RPC_PASSWORD = "test"
 
 /**
  * Demonstration of how to use the CordaRPCClient to connect to a Corda Node and
@@ -15,24 +19,20 @@ fun main(args: Array<String>) = TemplateClient().main(args)
 private class TemplateClient {
     companion object {
         val logger: Logger = loggerFor<TemplateClient>()
-        private fun logState(state: StateAndRef<TemplateState>) = logger.info("{}", state.state.data)
     }
 
     fun main(args: Array<String>) {
+        // Create an RPC connection to the node.
         require(args.size == 1) { "Usage: TemplateClient <node address>" }
         val nodeAddress = parse(args[0])
         val client = CordaRPCClient(nodeAddress)
+        val proxy = client.start(RPC_USERNAME, RPC_PASSWORD).proxy
 
-        // Can be amended in the com.template.MainKt file.
-        val proxy = client.start("user1", "test").proxy
-
-        // Grab all existing TemplateStates and all future TemplateStates.
-        val (snapshot, updates) = proxy.vaultTrack(TemplateState::class.java)
-
-        // Log the existing TemplateStates and listen for new ones.
-        snapshot.states.forEach { logState(it) }
-        updates.toBlocking().subscribe { update ->
-            update.produced.forEach { logState(it) }
+        // Interact with the node.
+        // For example, here we grab all existing ContractStates and all future ContractStates.
+        val existingContractStates = proxy.vaultQueryBy<ContractState>().states
+        existingContractStates.forEach { stateAndRef ->
+            logger.info("{}", stateAndRef.state.data)
         }
     }
 }

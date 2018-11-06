@@ -102,13 +102,8 @@ And the static web content is served from:
 ## Using the Example RPC Client
 
 The `ExampleClient.kt` file is a simple utility which uses the client
-RPC library to connect to a node and log its transaction activity.
-It will log any existing states and listen for any future states. To build 
-the client use the following Gradle task:
-
-     ./gradlew runTemplateClient
-
-To run the client:
+RPC library to connect to a node and log its transaction activity. To run the 
+client:
 
 **Via IntelliJ:**
 
