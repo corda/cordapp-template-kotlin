@@ -58,6 +58,7 @@ lib/dokka.jar
 /out/
 cordapp/out/
 cordapp-contracts-states/out/
+clients/out/
 
 # mpeltonen/sbt-idea plugin
 .idea_modules/

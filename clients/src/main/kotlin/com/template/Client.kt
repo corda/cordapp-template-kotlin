@@ -7,8 +7,8 @@ import net.corda.core.utilities.NetworkHostAndPort.Companion.parse
 import net.corda.core.utilities.loggerFor
 import org.slf4j.Logger
 
-val RPC_USERNAME = "user1"
-val RPC_PASSWORD = "test"
+const val RPC_USERNAME = "user1"
+const val RPC_PASSWORD = "test"
 
 /**
  * Demonstration of how to use the CordaRPCClient to connect to a Corda node and

@@ -1,6 +1,7 @@
 apply plugin: 'kotlin'
 apply plugin: 'net.corda.plugins.cordapp'
 apply plugin: 'net.corda.plugins.cordformation'
+apply plugin: 'org.springframework.boot'
 apply plugin: 'net.corda.plugins.quasar-utils'
 
 sourceSets {
@@ -9,23 +10,6 @@ sourceSets {
             srcDir "config/dev"
         }
     }
-    test {
-        resources {
-            srcDir "config/test"
-        }
-    }
-    integrationTest {
-        kotlin {
-            compileClasspath += main.output + test.output
-            runtimeClasspath += main.output + test.output
-            srcDir file('src/integration-test/kotlin')
-        }
-    }
-}
-
-configurations {
-    integrationTestCompile.extendsFrom testCompile
-    integrationTestRuntime.extendsFrom testRuntime
 }
 
 dependencies {
@@ -46,11 +30,11 @@ dependencies {
     // CorDapp dependencies
     // Specify your CorDapp's dependencies below, including dependent CorDapps.
     cordapp project(":cordapp-contracts-states")
-}
+    cordapp project(":cordapp")
 
-task integrationTest(type: Test, dependsOn: []) {
-    testClassesDirs = sourceSets.integrationTest.output.classesDirs
-    classpath = sourceSets.integrationTest.runtimeClasspath
+    compile("org.springframework.boot:spring-boot-starter-websocket:$spring_boot_version") {
+        exclude group: "org.springframework.boot", module: "spring-boot-starter-logging"
+    }
 }
 
 tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
@@ -60,4 +44,20 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
         jvmTarget = "1.8"
         javaParameters = true   // Useful for reflection.
     }
+}
+
+task runTemplateClient(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'com.template.ClientKt'
+    args 'localhost:10006'
+}
+
+task runPartyAServer(type: JavaExec) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'com.template.webserver.ServerKt'
+}
+
+bootJar {
+    baseName = "corda-webserver"
+    version = ""
 }
