@@ -11,8 +11,8 @@ val RPC_USERNAME = "user1"
 val RPC_PASSWORD = "test"
 
 /**
- * Demonstration of how to use the CordaRPCClient to connect to a Corda Node and
- * stream the contents of the node's vault.
+ * Demonstration of how to use the CordaRPCClient to connect to a Corda node and
+ * perform RPC operations on the node.
  */
 fun main(args: Array<String>) = TemplateClient().main(args)
 
