@@ -37,6 +37,10 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
     }
 }
 
+springBoot {
+    mainClassName = "com.template.webserver.ServerKt"
+}
+
 task runTemplateClient(type: JavaExec) {
     classpath = sourceSets.main.runtimeClasspath
     main = 'com.template.ClientKt'
