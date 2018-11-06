@@ -29,7 +29,7 @@ private class TemplateClient {
         val proxy = client.start(RPC_USERNAME, RPC_PASSWORD).proxy
 
         // Interact with the node.
-        // For example, here we grab all existing ContractStates and all future ContractStates.
+        // For example, here we grab all existing ContractStates and log them.
         val existingContractStates = proxy.vaultQueryBy<ContractState>().states
         existingContractStates.forEach { stateAndRef ->
             logger.info("{}", stateAndRef.state.data)
