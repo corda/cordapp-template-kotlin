@@ -117,7 +117,7 @@ Run the following Gradle task:
 
      ./gradlew runTemplateClient
      
-Note that the template rPC client won't output anything to the console as no state 
+Note that the template RPC client won't output anything to the console as no state 
 objects are contained in either PartyA's or PartyB's vault.
 
 ## Running the Nodes Across Multiple Machines
