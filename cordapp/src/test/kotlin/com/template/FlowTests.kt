@@ -6,7 +6,6 @@ import org.junit.Before
 import org.junit.Test
 
 class FlowTests {
-
     private val network = MockNetwork(listOf("com.template"))
     private val a = network.createNode()
     private val b = network.createNode()

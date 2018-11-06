@@ -31,22 +31,6 @@ class DriverBasedTest {
         assertEquals(bankA.name, partyBHandle.resolveName(bankA.name))
     }
 
-    @Test
-    fun `node webserver test`() = withDriver {
-        // This test starts each node's webserver and makes an HTTP call to retrieve the body of a GET endpoint on
-        // the node's webserver, to verify that the nodes' webservers have started and have loaded the API.
-        startWebServers(bankA, bankB).forEach {
-            val request = Request.Builder()
-                .url("http://${it.listenAddress}/api/template/templateGetEndpoint")
-                .build()
-            val response = OkHttpClient().newCall(request).execute()
-
-            assertEquals("Template GET endpoint.", response.body().string())
-        }
-    }
-
-    // region Utility functions
-
     // Runs a test inside the Driver DSL, which provides useful functions for starting nodes, etc.
     private fun withDriver(test: DriverDSL.() -> Unit) = driver(
         DriverParameters(isDebug = true, startNodesInProcess = true)
@@ -62,11 +46,4 @@ class DriverBasedTest {
     private fun DriverDSL.startNodes(vararg identities: TestIdentity) = identities
         .map { startNode(providedName = it.name) }
         .waitForAll()
-
-    // Starts multiple webservers simultaneously, then waits for them all to be ready.
-    private fun DriverDSL.startWebServers(vararg identities: TestIdentity) = startNodes(*identities)
-        .map { startWebserver(it) }
-        .waitForAll()
-
-    // endregion
 }

@@ -1,17 +1,16 @@
-package com.template.webserver.controllers
+package com.template.webserver
 
-import com.template.webserver.NodeRPCConnection
 import org.slf4j.LoggerFactory
 import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
 
 /**
- * Define CorDapp-specific endpoints in a controller such as this.
+ * Define your API endpoints here.
  */
 @RestController
-@RequestMapping("/custom") // The paths for GET and POST requests are relative to this base path.
-class CustomController(
+@RequestMapping("/") // The paths for HTTP requests are relative to this base path.
+class Controller(
         private val rpc: NodeRPCConnection) {
 
     companion object {
@@ -20,6 +19,6 @@ class CustomController(
 
     private val proxy = rpc.proxy
 
-    @GetMapping(value = "/customendpoint", produces = arrayOf("text/plain"))
-    private fun status() = "Modify this."
+    @GetMapping(value = "/templateendpoint", produces = arrayOf("text/plain"))
+    private fun status() = "Define an endpoint here."
 }

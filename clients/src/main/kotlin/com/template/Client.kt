@@ -7,32 +7,30 @@ import net.corda.core.utilities.NetworkHostAndPort.Companion.parse
 import net.corda.core.utilities.loggerFor
 import org.slf4j.Logger
 
-const val RPC_USERNAME = "user1"
-const val RPC_PASSWORD = "test"
-
 /**
- * Demonstration of how to use the CordaRPCClient to connect to a Corda node and
- * perform RPC operations on the node.
+ * Connects to a Corda node via RPC and performs RPC operations on the node.
+ *
+ * The RPC connection is configured using command line arguments.
  */
-fun main(args: Array<String>) = TemplateClient().main(args)
+fun main(args: Array<String>) = Client().main(args)
 
-private class TemplateClient {
+private class Client {
     companion object {
-        val logger: Logger = loggerFor<TemplateClient>()
+        val logger = loggerFor<Client>()
     }
 
     fun main(args: Array<String>) {
         // Create an RPC connection to the node.
-        require(args.size == 1) { "Usage: TemplateClient <node address>" }
+        require(args.size == 3) { "Usage: Client <node address> <rpc username> <rpc password>" }
         val nodeAddress = parse(args[0])
+        val rpcUsername = args[1]
+        val rpcPassword = args[2]
         val client = CordaRPCClient(nodeAddress)
-        val proxy = client.start(RPC_USERNAME, RPC_PASSWORD).proxy
+        val proxy = client.start(rpcUsername, rpcPassword).proxy
 
         // Interact with the node.
-        // For example, here we grab all existing ContractStates and log them.
-        val existingContractStates = proxy.vaultQueryBy<ContractState>().states
-        existingContractStates.forEach { stateAndRef ->
-            logger.info("{}", stateAndRef.state.data)
-        }
+        // For example, here we print the nodes on the network.
+        val nodes = proxy.networkMapSnapshot()
+        logger.info("{}", nodes)
     }
 }
