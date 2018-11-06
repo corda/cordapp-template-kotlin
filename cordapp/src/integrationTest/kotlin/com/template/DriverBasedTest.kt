@@ -7,8 +7,6 @@ import net.corda.testing.driver.DriverDSL
 import net.corda.testing.driver.DriverParameters
 import net.corda.testing.driver.NodeHandle
 import net.corda.testing.driver.driver
-import okhttp3.OkHttpClient
-import okhttp3.Request
 import org.junit.Test
 import java.util.concurrent.Future
 import kotlin.test.assertEquals

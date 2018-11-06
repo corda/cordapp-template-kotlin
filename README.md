@@ -111,8 +111,14 @@ The static webpage is served on:
 While the sole template endpoint is served on:
 
     http://localhost:10050/customendpoint
+    
+# Extending the template
 
-## Next steps
+You should extend this template as follows:
 
-Extend this template by following the Hello, World! tutorial 
+* Add your own state and contract definitions under `cordapp-contracts-states/src/main/kotlin/`
+* Add your own flow definitions under `cordapp/src/main/kotlin/`
+* Extend or replace the client and webserver under `clients/src/main/kotlin/`
+
+For a guided example of how to extend this template, see the Hello, World! tutorial 
 [here](https://docs.corda.net/hello-world-introduction.html).

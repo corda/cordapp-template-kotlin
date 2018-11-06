@@ -1,11 +1,8 @@
 package com.template
 
 import net.corda.client.rpc.CordaRPCClient
-import net.corda.core.contracts.ContractState
-import net.corda.core.messaging.vaultQueryBy
 import net.corda.core.utilities.NetworkHostAndPort.Companion.parse
 import net.corda.core.utilities.loggerFor
-import org.slf4j.Logger
 
 /**
  * Connects to a Corda node via RPC and performs RPC operations on the node.
