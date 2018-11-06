@@ -5,7 +5,7 @@ apply plugin: 'net.corda.plugins.cordformation'
 sourceSets {
     main {
         resources {
-            srcDir "../config/dev"
+            srcDir rootProject.file("config/dev")
         }
     }
 }

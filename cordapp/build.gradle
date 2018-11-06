@@ -6,19 +6,19 @@ apply plugin: 'net.corda.plugins.quasar-utils'
 sourceSets {
     main {
         resources {
-            srcDir "config/dev"
+            srcDir rootProject.file("config/dev")
         }
     }
     test {
         resources {
-            srcDir "config/test"
+            srcDir rootProject.file("config/test")
         }
     }
     integrationTest {
         kotlin {
             compileClasspath += main.output + test.output
             runtimeClasspath += main.output + test.output
-            srcDir file('src/integration-test/kotlin')
+            srcDir file('src/integrationTest/kotlin')
         }
     }
 }
