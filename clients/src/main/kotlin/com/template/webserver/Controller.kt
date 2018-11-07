@@ -20,5 +20,7 @@ class Controller(
     private val proxy = rpc.proxy
 
     @GetMapping(value = "/templateendpoint", produces = arrayOf("text/plain"))
-    private fun status() = "Define an endpoint here."
+    private fun templateendpoint(): String {
+        return "Define an endpoint here."
+    }
 }
