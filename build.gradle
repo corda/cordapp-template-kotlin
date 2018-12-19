@@ -1,11 +1,11 @@
 buildscript {
     ext {
         corda_release_group = 'net.corda'
-        corda_release_version = '3.3-corda'
-        corda_gradle_plugins_version = '3.2.1'
-        kotlin_version = '1.1.60'
+        corda_release_version = '4.0-SNAPSHOT'
+        corda_gradle_plugins_version = '4.0.36'
+        kotlin_version = '1.2.71'
         junit_version = '4.12'
-        quasar_version = '0.7.9'
+        quasar_version = '0.7.10'
         spring_boot_version = '2.0.2.RELEASE'
         spring_boot_gradle_plugin_version = '2.0.2.RELEASE'
         slf4j_version = '1.7.25'
@@ -16,6 +16,7 @@ buildscript {
         mavenLocal()
         mavenCentral()
         jcenter()
+        maven { url 'https://ci-artifactory.corda.r3cev.com/artifactory/corda' }    
     }
 
     dependencies {
@@ -29,11 +30,13 @@ buildscript {
 
 allprojects {
     repositories {
-        mavenLocal()
         jcenter()
         mavenCentral()
         maven { url 'https://ci-artifactory.corda.r3cev.com/artifactory/corda' }
+        // Can be removed post-release - used to get nightly snapshot build.
+        maven { url 'https://ci-artifactory.corda.r3cev.com/artifactory/corda-dev' }
         maven { url 'https://jitpack.io' }
+        mavenLocal()
     }
 }
 
