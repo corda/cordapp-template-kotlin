@@ -1,5 +1,6 @@
 package com.template
 
+import net.corda.core.contracts.BelongsToContract
 import net.corda.core.contracts.CommandData
 import net.corda.core.contracts.Contract
 import net.corda.core.contracts.ContractState
@@ -30,6 +31,5 @@ class TemplateContract : Contract {
 // *********
 // * State *
 // *********
-data class TemplateState(val data: String) : ContractState {
-    override val participants: List<AbstractParty> = listOf()
-}
+@BelongsToContract(TemplateContract::class)
+data class TemplateState(val data: String, override val participants: List<AbstractParty> = listOf()) : ContractState
