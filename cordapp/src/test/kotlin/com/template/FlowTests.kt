@@ -1,5 +1,6 @@
 package com.template
 
+import com.template.flows.Responder
 import net.corda.testing.node.MockNetwork
 import org.junit.After
 import org.junit.Before

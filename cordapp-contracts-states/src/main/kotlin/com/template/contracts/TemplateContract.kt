@@ -1,10 +1,7 @@
-package com.template
+package com.template.contracts
 
-import net.corda.core.contracts.BelongsToContract
 import net.corda.core.contracts.CommandData
 import net.corda.core.contracts.Contract
-import net.corda.core.contracts.ContractState
-import net.corda.core.identity.AbstractParty
 import net.corda.core.transactions.LedgerTransaction
 
 // ************
@@ -13,9 +10,9 @@ import net.corda.core.transactions.LedgerTransaction
 class TemplateContract : Contract {
     companion object {
         // Used to identify our contract when building a transaction.
-        const val ID = "com.template.TemplateContract"
+        const val ID = "com.template.contracts.TemplateContract"
     }
-    
+
     // A transaction is valid if the verify() function of the contract of all the transaction's input and output states
     // does not throw an exception.
     override fun verify(tx: LedgerTransaction) {
@@ -27,9 +24,3 @@ class TemplateContract : Contract {
         class Action : Commands
     }
 }
-
-// *********
-// * State *
-// *********
-@BelongsToContract(TemplateContract::class)
-data class TemplateState(val data: String, override val participants: List<AbstractParty> = listOf()) : ContractState
