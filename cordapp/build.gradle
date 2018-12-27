@@ -3,6 +3,15 @@ apply plugin: 'net.corda.plugins.cordapp'
 apply plugin: 'net.corda.plugins.cordformation'
 apply plugin: 'net.corda.plugins.quasar-utils'
 
+cordapp {
+    info {
+        name "CorDapp Template"
+        vendor "Corda Open Source"
+        targetPlatformVersion 4
+        minimumPlatformVersion 4
+    }
+}
+
 sourceSets {
     main {
         resources {
