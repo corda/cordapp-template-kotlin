@@ -116,8 +116,8 @@ While the sole template endpoint is served on:
 
 You should extend this template as follows:
 
-* Add your own state and contract definitions under `cordapp-contracts-states/src/main/kotlin/`
-* Add your own flow definitions under `cordapp/src/main/kotlin/`
+* Add your own state and contract definitions under `contracts/src/main/kotlin/`
+* Add your own flow definitions under `workflows/src/main/kotlin/`
 * Extend or replace the client and webserver under `clients/src/main/kotlin/`
 
 For a guided example of how to extend this template, see the Hello, World! tutorial 

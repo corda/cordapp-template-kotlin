@@ -16,8 +16,8 @@ dependencies {
     compile "$corda_release_group:corda-rpc:$corda_release_version"
 
     // CorDapp dependencies.
-    compile project(":cordapp-contracts-states")
-    compile project(":cordapp")
+    compile project(":contracts")
+    compile project(":workflows")
 
     compile("org.springframework.boot:spring-boot-starter-websocket:$spring_boot_version") {
         exclude group: "org.springframework.boot", module: "spring-boot-starter-logging"
