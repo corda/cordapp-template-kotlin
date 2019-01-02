@@ -3,11 +3,13 @@ apply plugin: 'net.corda.plugins.cordapp'
 apply plugin: 'net.corda.plugins.cordformation'
 
 cordapp {
-    info {
-        name "CorDapp Template"
+    targetPlatformVersion 4
+    minimumPlatformVersion 4
+    contract {
+        name "Template Contract"
         vendor "Corda Open Source"
-        targetPlatformVersion 4
-        minimumPlatformVersion 4
+        licence "A liberal, open source licence"
+        versionId 1
     }
 }
 

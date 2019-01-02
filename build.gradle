@@ -2,7 +2,7 @@ buildscript {
     ext {
         corda_release_group = 'net.corda'
         corda_release_version = '4.0-SNAPSHOT'
-        corda_gradle_plugins_version = '4.0.36'
+        corda_gradle_plugins_version = '4.0.37'
         kotlin_version = '1.2.71'
         junit_version = '4.12'
         quasar_version = '0.7.10'
@@ -76,15 +76,6 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
         apiVersion = "1.1"
         jvmTarget = "1.8"
         javaParameters = true   // Useful for reflection.
-    }
-}
-
-cordapp {
-    info {
-        name "CorDapp Template"
-        vendor "Corda Open Source"
-        targetPlatformVersion 4
-        minimumPlatformVersion 4
     }
 }
 
