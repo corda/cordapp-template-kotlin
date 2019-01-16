@@ -110,7 +110,7 @@ The static webpage is served on:
 
 While the sole template endpoint is served on:
 
-    http://localhost:10050/customendpoint
+    http://localhost:10050/templateendpoint
     
 # Extending the template
 
