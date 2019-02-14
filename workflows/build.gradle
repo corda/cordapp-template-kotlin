@@ -1,6 +1,5 @@
 apply plugin: 'kotlin'
 apply plugin: 'net.corda.plugins.cordapp'
-apply plugin: 'net.corda.plugins.cordformation'
 apply plugin: 'net.corda.plugins.quasar-utils'
 
 cordapp {
@@ -11,6 +10,9 @@ cordapp {
         vendor "Corda Open Source"
         licence "A liberal, open source licence"
         versionId 1
+    }
+    signing {
+        enabled false
     }
 }
 
