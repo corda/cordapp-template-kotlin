@@ -1,6 +1,5 @@
 apply plugin: 'kotlin'
 apply plugin: 'net.corda.plugins.cordapp'
-apply plugin: 'net.corda.plugins.cordformation'
 
 cordapp {
     targetPlatformVersion 4
@@ -39,3 +38,9 @@ tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
         javaParameters = true   // Useful for reflection.
     }
 }
+
+// We need this because log4j2.xml is pulled in from multiple dependency JARs.
+// JAR signing will fail if there are multiple files with the same name.
+jar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+} 
