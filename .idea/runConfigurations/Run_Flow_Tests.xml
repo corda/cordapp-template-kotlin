@@ -1,6 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Run Flow Tests" type="JUnit" factoryName="JUnit">
-    <module name="com.template.workflows.test" />
+    <module name="workflows_test" />
+    <shortenClasspath name="MANIFEST" />
     <option name="PACKAGE_NAME" value="com.template" />
     <option name="MAIN_CLASS_NAME" value="com.template.FlowTests" />
     <option name="METHOD_NAME" value="" />

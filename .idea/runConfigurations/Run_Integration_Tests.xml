@@ -1,6 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Run Integration Tests" type="JUnit" factoryName="JUnit">
-    <module name="com.template.workflows.integrationTest" />
+    <module name="workflows_integrationTest" />
+    <shortenClasspath name="MANIFEST" />
     <extension name="coverage">
       <pattern>
         <option name="PATTERN" value="com.template.*" />

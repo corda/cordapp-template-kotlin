@@ -1,12 +1,15 @@
 package com.template
 
+import com.template.flows.Initiator
 import net.corda.core.identity.CordaX500Name
+import net.corda.core.internal.packageName
 import net.corda.core.utilities.getOrThrow
 import net.corda.testing.core.TestIdentity
 import net.corda.testing.driver.DriverDSL
 import net.corda.testing.driver.DriverParameters
 import net.corda.testing.driver.NodeHandle
 import net.corda.testing.driver.driver
+import net.corda.testing.node.TestCordapp
 import org.junit.Test
 import java.util.concurrent.Future
 import kotlin.test.assertEquals
@@ -27,11 +30,14 @@ class DriverBasedTest {
         // and other important metrics to ensure that your CorDapp is working as intended.
         assertEquals(bankB.name, partyAHandle.resolveName(bankB.name))
         assertEquals(bankA.name, partyBHandle.resolveName(bankA.name))
+
+        val handle = partyAHandle.rpc.startFlowDynamic(Initiator::class.java, partyBHandle.nodeInfo.legalIdentities.single())
+        handle.returnValue.getOrThrow()
     }
 
     // Runs a test inside the Driver DSL, which provides useful functions for starting nodes, etc.
     private fun withDriver(test: DriverDSL.() -> Unit) = driver(
-        DriverParameters(isDebug = true, startNodesInProcess = true)
+        DriverParameters(isDebug = true, startNodesInProcess = true, extraCordappPackagesToScan = listOf("com.template.flows"))
     ) { test() }
 
     // Makes an RPC call to retrieve another node's name from the network map.

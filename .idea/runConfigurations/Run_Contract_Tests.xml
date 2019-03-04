@@ -1,6 +1,7 @@
 <component name="ProjectRunConfigurationManager">
   <configuration default="false" name="Run Contract Tests" type="JUnit" factoryName="JUnit">
-    <module name="com.template.contracts.test" />
+    <module name="contracts_test" />
+    <shortenClasspath name="MANIFEST" />
     <option name="PACKAGE_NAME" value="com.template" />
     <option name="MAIN_CLASS_NAME" value="com.template.ContractTests" />
     <option name="METHOD_NAME" value="" />
