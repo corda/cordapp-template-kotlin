@@ -2,12 +2,17 @@ package com.template
 
 import com.template.flows.Responder
 import net.corda.testing.node.MockNetwork
+import net.corda.testing.node.MockNetworkParameters
+import net.corda.testing.node.TestCordapp
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
 class FlowTests {
-    private val network = MockNetwork(listOf("com.template"))
+    private val network = MockNetwork(MockNetworkParameters(cordappsForAllNodes = listOf(
+        TestCordapp.findCordapp("com.template.contracts"),
+        TestCordapp.findCordapp("com.template.flows")
+    )))
     private val a = network.createNode()
     private val b = network.createNode()
 

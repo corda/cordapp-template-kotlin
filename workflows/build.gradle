@@ -1,14 +1,13 @@
-apply plugin: 'kotlin'
 apply plugin: 'net.corda.plugins.cordapp'
 apply plugin: 'net.corda.plugins.quasar-utils'
 
 cordapp {
-    targetPlatformVersion 4
-    minimumPlatformVersion 4
+    targetPlatformVersion corda_platform_version.toInteger()
+    minimumPlatformVersion corda_platform_version.toInteger()
     workflow {
         name "Template Flows"
         vendor "Corda Open Source"
-        licence "A liberal, open source licence"
+        licence "Apache License, Version 2.0"
         versionId 1
     }
 }
@@ -56,13 +55,4 @@ dependencies {
 task integrationTest(type: Test, dependsOn: []) {
     testClassesDirs = sourceSets.integrationTest.output.classesDirs
     classpath = sourceSets.integrationTest.runtimeClasspath
-}
-
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
-    kotlinOptions {
-        languageVersion = "1.1"
-        apiVersion = "1.1"
-        jvmTarget = "1.8"
-        javaParameters = true   // Useful for reflection.
-    }
 }
