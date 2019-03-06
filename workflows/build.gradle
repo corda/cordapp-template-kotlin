@@ -12,7 +12,6 @@ cordapp {
     }
 }
 
-
 sourceSets {
     main {
         resources {
