@@ -10,8 +10,6 @@ sourceSets {
 }
 
 dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-
     // Corda dependencies.
     compile "$corda_release_group:corda-rpc:$corda_release_version"
 
@@ -28,26 +26,18 @@ dependencies {
     compile "org.slf4j:jul-to-slf4j:$slf4j_version"
 }
 
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
-    kotlinOptions {
-        languageVersion = "1.1"
-        apiVersion = "1.1"
-        jvmTarget = "1.8"
-        javaParameters = true   // Useful for reflection.
-    }
-}
 
 springBoot {
     mainClassName = "com.template.webserver.ServerKt"
 }
 
-task runTemplateClient(type: JavaExec) {
+task runTemplateClient(type: JavaExec, dependsOn: assemble) {
     classpath = sourceSets.main.runtimeClasspath
     main = 'com.template.ClientKt'
     args 'localhost:10006', 'user1', 'test'
 }
 
-task runTemplateServer(type: JavaExec) {
+task runTemplateServer(type: JavaExec, dependsOn: assemble) {
     classpath = sourceSets.main.runtimeClasspath
     main = 'com.template.webserver.ServerKt'
     args '--server.port=10050', '--config.rpc.host=localhost', '--config.rpc.port=10006', '--config.rpc.username=user1', '--config.rpc.password=test'
