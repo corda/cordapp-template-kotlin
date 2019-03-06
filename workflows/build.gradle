@@ -5,7 +5,7 @@ cordapp {
     targetPlatformVersion corda_platform_version.toInteger()
     minimumPlatformVersion corda_platform_version.toInteger()
     workflow {
-        name "Tempmlate Flows"
+        name "Template Flows"
         vendor "Corda Open Source"
         licence "Apache License, Version 2.0"
         versionId 1
