@@ -1,4 +1,3 @@
-
 apply plugin: 'net.corda.plugins.cordapp'
 
 cordapp {
