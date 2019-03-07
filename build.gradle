@@ -83,15 +83,6 @@ dependencies {
     cordaCompile "org.slf4j:jul-to-slf4j:$slf4j_version"
 }
 
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
-    kotlinOptions {
-        languageVersion = "1.2"
-        apiVersion = "1.2"
-        jvmTarget = "1.8"
-        javaParameters = true   // Useful for reflection.
-    }
-}
-
 cordapp {
     info {
         name "CorDapp Template"
