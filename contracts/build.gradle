@@ -35,21 +35,12 @@ dependencies {
     // Token SDK dependencies.
     // Note: Currently, the token SDK dependencies must be published to Maven local.
     // See http://github.com/corda/token-sdk for further details.
-    compile "com.r3.corda.sdk.token:contract:0.1"
-    compile "com.r3.corda.sdk.token.plugins:money:0.1"
+    // Currently we must create a CorDapp fat-jar containing all CorDapp dependencies, this is because CorDapp
+    // dependencies are not automatically handled in Corda 4.0. This prevents us having to manually upload
+    // depended-upon attachment JARs to the node and manually add them to transactions. When Corda 4.1 is released,
+    // there ii a fix to automatically do this, we then don't need to fat-jar our contracts CorDapp, so we can change
+    // "compile" to "cordaCompile" which doesn't include the token-sdk-contract JAR in the CorDapp jar.
+    cordaCompile "com.r3.corda.sdk.token:token-sdk-contract:0.1"
+    cordaCompile "com.r3.corda.sdk.token.modules:token-sdk-money:0.1"
 }
 
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
-    kotlinOptions {
-        languageVersion = "1.1"
-        apiVersion = "1.1"
-        jvmTarget = "1.8"
-        javaParameters = true   // Useful for reflection.
-    }
-}
-
-// We need this because log4j2.xml is pulled in from multiple dependency JARs.
-// JAR signing will fail if there are multiple files with the same name.
-jar {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-}

@@ -1,8 +1,9 @@
 buildscript {
     ext {
         corda_release_group = 'net.corda'
-        corda_release_version = '4.0-SNAPSHOT'
-        corda_gradle_plugins_version = '4.0.37'
+        // Will revert to Corda 4.1 when it is available.
+        corda_release_version = '5.0-SNAPSHOT'
+        corda_gradle_plugins_version = '4.0.42'
         kotlin_version = '1.2.71'
         junit_version = '4.12'
         quasar_version = '0.7.10'
@@ -29,6 +30,8 @@ buildscript {
 }
 
 allprojects {
+    apply plugin: 'kotlin'
+
     repositories {
         jcenter()
         mavenCentral()
@@ -38,9 +41,25 @@ allprojects {
         maven { url 'https://jitpack.io' }
         mavenLocal()
     }
+
+    tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) {
+        kotlinOptions {
+            languageVersion = "1.2"
+            apiVersion = "1.2"
+            jvmTarget = "1.8"
+            javaParameters = true   // Useful for reflection.
+        }
+    }
+
+    jar {
+        // Don't include log config files.
+        exclude "**/log4j2*.xml"
+        // We need this because log4j2.xml is pulled in from multiple dependency JARs.
+        // JAR signing will fail if there are multiple files with the same name.
+        duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    }
 }
 
-apply plugin: 'kotlin'
 apply plugin: 'net.corda.plugins.cordapp'
 apply plugin: 'net.corda.plugins.cordformation'
 apply plugin: 'net.corda.plugins.quasar-utils'
@@ -54,6 +73,7 @@ sourceSets {
 }
 
 dependencies {
+    // Kotlin.
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
     // Corda dependencies.
@@ -65,31 +85,17 @@ dependencies {
     cordapp project(":workflows")
     cordapp project(":contracts")
 
-    cordaCompile "org.apache.logging.log4j:log4j-slf4j-impl:${log4j_version}"
-    cordaCompile "org.apache.logging.log4j:log4j-web:${log4j_version}"
-    cordaCompile "org.slf4j:jul-to-slf4j:$slf4j_version"
-}
+    // For logging.
+    testCompile "org.apache.logging.log4j:log4j-slf4j-impl:${log4j_version}"
+    testCompile "org.apache.logging.log4j:log4j-web:${log4j_version}"
 
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
-    kotlinOptions {
-        languageVersion = "1.1"
-        apiVersion = "1.1"
-        jvmTarget = "1.8"
-        javaParameters = true   // Useful for reflection.
-    }
-}
-
-cordapp {
-    info {
-        name "CorDapp Template"
-        vendor "Corda Open Source"
-        targetPlatformVersion 4
-        minimumPlatformVersion 4
-    }
+    // Token SDK dependencies.
+    cordapp "com.r3.corda.sdk.token:token-sdk-workflow:0.1"
+    cordapp "com.r3.corda.sdk.token:token-sdk-contract:0.1"
+    cordapp "com.r3.corda.sdk.token.modules:token-sdk-money:0.1"
 }
 
 task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
-    directory "./build/nodes"
     node {
         name "O=Notary,L=London,C=GB"
         notary = [validating : false]
@@ -98,10 +104,7 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
             address("localhost:10003")
             adminAddress("localhost:10043")
         }
-        cordapps = [
-                "$project.group:contracts:$project.version",
-                "$project.group:workflows:$project.version"
-        ]
+        cordapps = []
     }
     node {
         name "O=PartyA,L=London,C=GB"
@@ -111,9 +114,12 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
             adminAddress("localhost:10046")
         }
         cordapps = [
-                "$project.group:contracts:$project.version",
-                "$project.group:workflows:$project.version"
+                "com.r3.corda.sdk.token:token-sdk-workflow:0.1",
+                "com.r3.corda.sdk.token:token-sdk-contract:0.1",
+                "com.r3.corda.sdk.token.modules:token-sdk-money:0.1"
         ]
+        cordapp project(":contracts")
+        cordapp project(":workflows")
         rpcUsers = [[ user: "user1", "password": "test", "permissions": ["ALL"]]]
     }
     node {
@@ -124,9 +130,12 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
             adminAddress("localhost:10049")
         }
         cordapps = [
-                "$project.group:contracts:$project.version",
-                "$project.group:workflows:$project.version"
+                "com.r3.corda.sdk.token:token-sdk-workflow:0.1",
+                "com.r3.corda.sdk.token:token-sdk-contract:0.1",
+                "com.r3.corda.sdk.token.modules:token-sdk-money:0.1"
         ]
+        cordapp project(":contracts")
+        cordapp project(":workflows")
         rpcUsers = [[ user: "user1", "password": "test", "permissions": ["ALL"]]]
     }
 }

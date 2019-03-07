@@ -53,24 +53,15 @@ dependencies {
     testCompile "$corda_release_group:corda-node-driver:$corda_release_version"
 
     // CorDapp dependencies.
-    cordapp project(":contracts")
+    cordaCompile project(":contracts")
 
     // Token SDK dependencies.
     // Note: Currently, the token SDK dependencies must be published to Maven local.
     // See http://github.com/corda/token-sdk for further details.
-    cordapp "com.r3.corda.sdk.token:workflow:0.1"
+    cordaCompile "com.r3.corda.sdk.token:token-sdk-workflow:0.1"
 }
 
 task integrationTest(type: Test, dependsOn: []) {
     testClassesDirs = sourceSets.integrationTest.output.classesDirs
     classpath = sourceSets.integrationTest.runtimeClasspath
-}
-
-tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile).all {
-    kotlinOptions {
-        languageVersion = "1.1"
-        apiVersion = "1.1"
-        jvmTarget = "1.8"
-        javaParameters = true   // Useful for reflection.
-    }
 }
