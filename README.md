@@ -34,7 +34,7 @@ Alternatively, to use the built in IntelliJ JUnit test runner, you can:
  * copy your quasar-core.jar to the `<project root>/lib/` dir
    * this will be the one specified in build.gradle - you can find it in your gradle cache
      * e.g. on mac/linux you can run something similar to: `find ~/.gradle/caches -name quasar-core\*.jar`
- * for each test specify `-javaagent:lib/quasar-core-<version>.jar` and setting the run directory to the project root directory
+ * for each test specify `-javaagent:lib/quasar-core-<version>.jar` and set the run directory to the project root directory
  
 ## Running the nodes
 
