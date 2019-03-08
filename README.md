@@ -19,18 +19,23 @@ See https://docs.corda.net/getting-set-up.html.
 ## Running tests inside IntelliJ
 
 We recommend editing your IntelliJ preferences so that you use the gradle runner - this means that the quasar utils 
-plugin will make sure that these flags are set for you.
+plugin will make sure that some flags (like -javaagent - see "Alternatively..." below) are set for you.
 
-Currently in `Build, Execution, Deployment -> Build Tools -> Gradle -> Runner` (but just search for `runner`)
+To switch to using the gradle runner:
 
+ * Navigate to `Build, Execution, Deployment -> Build Tools -> Gradle -> Runner` (or search for `runner`)
+   * Windows: this is in "Settings"
+   * MacOS: this is in "Preferences"
  * set "Delegate IDE build/run actions to gradle" to true
  * set "Run test using:" to "Gradle Test Runner"
 
-Alternatively, you can:
+Alternatively, to use the built in IntelliJ JUnit test runner, you can:
 
- * copy your quasar.jar to the `<project root>/lib/` dir
- * for each test specify `-javaagent:lib/quasar.jar` and setting the run directory to the project root directory
-
+ * copy your quasar-core.jar to the `<project root>/lib/` dir
+   * this will be the one specified in build.gradle - you can find it in your gradle cache
+     * e.g. on mac/linux you can run something similar to: `find ~/.gradle/caches -name quasar-core\*.jar`
+ * for each test specify `-javaagent:lib/quasar-core-<version>.jar` and setting the run directory to the project root directory
+ 
 ## Running the nodes
 
 See https://docs.corda.net/tutorial-cordapp.html#running-the-example-cordapp.
