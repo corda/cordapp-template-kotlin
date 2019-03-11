@@ -30,24 +30,9 @@ To switch to using the Gradle runner:
 * Set "Delegate IDE build/run actions to gradle" to true
 * Set "Run test using:" to "Gradle Test Runner"
 
-If you would prefer to use the built in IntelliJ JUnit test runner, you can add some code to your ``build.gradle`` file and
-it will copy your quasar JAR file to the lib directory. You will also need to specify ``-javaagent:lib/quasar.jar``
+If you would prefer to use the built in IntelliJ JUnit test runner, you can run ``gradlew installQuasar`` which will
+copy your quasar JAR file to the lib directory. You will then need to specify ``-javaagent:lib/quasar.jar``
 and set the run directory to the project root directory for each test.
-
-Add the following to your ``build.gradle`` file:
-
-```groovy
-    apply plugin: 'net.corda.plugins.quasar-utils'
-
-    task installQuasar(type: Copy) {
-        destinationDir rootProject.file("lib")
-        from(configurations.quasar) {
-            rename 'quasar-core(.*).jar', 'quasar.jar'
-        }
-    }
-```
-
-and then you can run ``gradlew installQuasar``.
 
 ## Running the nodes
 
