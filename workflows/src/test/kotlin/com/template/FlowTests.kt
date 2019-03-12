@@ -1,6 +1,6 @@
 package com.template
 
-import com.template.flows.Responder
+import com.r3.corda.sdk.token.workflow.flows.IssueToken
 import net.corda.testing.node.MockNetwork
 import org.junit.After
 import org.junit.Before
@@ -13,7 +13,7 @@ class FlowTests {
 
     init {
         listOf(a, b).forEach {
-            it.registerInitiatedFlow(Responder::class.java)
+            it.registerInitiatedFlow(IssueToken.Responder::class.java)
         }
     }
 
