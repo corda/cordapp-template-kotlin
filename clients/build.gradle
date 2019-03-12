@@ -30,10 +30,9 @@ dependencies {
     // Token SDK dependencies.
     // Note: Currently, the token SDK dependencies must be published to Maven local.
     // See http://github.com/corda/token-sdk for further details.
-    compile "com.r3.corda.sdk.token:contract:0.1"
-    compile "com.r3.corda.sdk.token:workflow:0.1"
-    compile "com.r3.corda.sdk.token.plugins:money:0.1"
-
+    compile "com.r3.corda.sdk.token:token-sdk-contract:0.1"
+    compile "com.r3.corda.sdk.token:token-sdk-workflow:0.1"
+    compile "com.r3.corda.sdk.token.modules:token-sdk-money:0.1"
 }
 
 springBoot {
