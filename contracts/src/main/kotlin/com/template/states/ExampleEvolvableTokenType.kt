@@ -10,7 +10,7 @@ import java.math.BigDecimal
 @BelongsToContract(ExampleEvolvableTokenTypeContract::class)
 class ExampleEvolvableTokenType(
         val importantInformationThatMayChange: String,
-        override val maintainers: List<Party>,
+        val maintainer: Party,
         override val linearId: UniqueIdentifier = UniqueIdentifier()
 ) : EvolvableTokenType() {
     companion object {
@@ -18,5 +18,6 @@ class ExampleEvolvableTokenType(
         val contractId = this::class.java.enclosingClass.canonicalName
     }
 
+    override val maintainers: List<Party> get() = listOf(maintainer)
     override val displayTokenSize: BigDecimal = BigDecimal.ONE
 }

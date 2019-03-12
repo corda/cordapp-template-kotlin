@@ -11,7 +11,7 @@ import net.corda.core.transactions.SignedTransaction
 import net.corda.core.utilities.ProgressTracker
 
 @StartableByRPC
-class ExampleFlow(val currency: String, val amount: Long, val recipient: Party) : FlowLogic<SignedTransaction>() {
+class ExampleFlowWithFixedToken(val currency: String, val amount: Long, val recipient: Party) : FlowLogic<SignedTransaction>() {
     override val progressTracker = ProgressTracker()
 
     @Suspendable
