@@ -36,8 +36,20 @@ task runTemplateClient(type: JavaExec, dependsOn: assemble) {
     args 'localhost:10006', 'user1', 'test'
 }
 
-task runTemplateServer(type: JavaExec, dependsOn: assemble) {
+task runPublisher(type: JavaExec, dependsOn: assemble) {
     classpath = sourceSets.main.runtimeClasspath
     main = 'com.template.webserver.ServerKt'
     args '--server.port=10050', '--config.rpc.host=localhost', '--config.rpc.port=10006', '--config.rpc.username=user1', '--config.rpc.password=test'
+}
+
+task runFanA(type: JavaExec, dependsOn: assemble) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'com.template.webserver.ServerKt'
+    args '--server.port=10053', '--config.rpc.host=localhost', '--config.rpc.port=10009', '--config.rpc.username=user1', '--config.rpc.password=test'
+}
+
+task runFanB(type: JavaExec, dependsOn: assemble) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'com.template.webserver.ServerKt'
+    args '--server.port=10056', '--config.rpc.host=localhost', '--config.rpc.port=100012', '--config.rpc.username=user1', '--config.rpc.password=test'
 }

@@ -1,6 +1,6 @@
 package com.template
 
-import com.template.flows.Responder
+import com.template.flows.TransferResponder
 import net.corda.testing.node.MockNetwork
 import net.corda.testing.node.MockNetworkParameters
 import net.corda.testing.node.TestCordapp
@@ -18,7 +18,7 @@ class FlowTests {
 
     init {
         listOf(a, b).forEach {
-            it.registerInitiatedFlow(Responder::class.java)
+            it.registerInitiatedFlow(TransferResponder::class.java)
         }
     }
 
