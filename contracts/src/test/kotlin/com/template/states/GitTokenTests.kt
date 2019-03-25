@@ -6,6 +6,7 @@ import com.nhaarman.mockito_kotlin.whenever
 import com.r3.corda.sdk.token.contracts.FungibleTokenContract
 import com.r3.corda.sdk.token.contracts.commands.IssueTokenCommand
 import com.r3.corda.sdk.token.contracts.commands.MoveTokenCommand
+import com.r3.corda.sdk.token.contracts.commands.RedeemTokenCommand
 import com.r3.corda.sdk.token.contracts.utilities.heldBy
 import com.r3.corda.sdk.token.contracts.utilities.issuedBy
 import com.r3.corda.sdk.token.contracts.utilities.of
@@ -123,6 +124,136 @@ class GitTokensTests {
 
             tweak {
                 command(ISSUER.publicKey, IssueTokenCommand(issuedToken))
+                verifies()
+            }
+        }
+    }
+
+
+    @Test
+    fun `test move tokens`() {
+        val issuedToken = GitToken() issuedBy ISSUER.party
+
+        transaction {
+            input(FungibleTokenContract.contractId, 1 of issuedToken heldBy ALICE.party)
+            output(FungibleTokenContract.contractId, 1 of issuedToken heldBy BOB.party)
+
+            // Move command signed by Alice
+            tweak {
+                command(ALICE.publicKey, MoveTokenCommand(issuedToken))
+                verifies()
+            }
+
+            // Issue and move commands within the transaction
+            tweak {
+                output(FungibleTokenContract.contractId, 1 of issuedToken issuedBy BOB.party heldBy ALICE.party)
+                command(BOB.publicKey, IssueTokenCommand(issuedToken issuedBy BOB.party))
+                command(ALICE.publicKey, MoveTokenCommand(issuedToken))
+                verifies()
+            }
+
+            // Missing input
+            tweak {
+                output(FungibleTokenContract.contractId, 1 of issuedToken issuedBy BOB.party heldBy ALICE.party)
+                command(ALICE.publicKey, MoveTokenCommand(issuedToken issuedBy BOB.party))
+                command(ALICE.publicKey, MoveTokenCommand(issuedToken))
+                this.`fails with`("When moving tokens, there must be input states present.")
+            }
+
+            // Missing output
+            tweak {
+                input(FungibleTokenContract.contractId, 1 of issuedToken issuedBy BOB.party heldBy ALICE.party)
+                command(ALICE.publicKey, MoveTokenCommand(issuedToken issuedBy BOB.party))
+                command(ALICE.publicKey, MoveTokenCommand(issuedToken))
+                this.`fails with`("When moving tokens, there must be output states present.")
+            }
+
+            // Zero input sum
+            tweak {
+                input(FungibleTokenContract.contractId, 0 of issuedToken issuedBy BOB.party heldBy ALICE.party)
+                input(FungibleTokenContract.contractId, 0 of issuedToken issuedBy BOB.party heldBy ALICE.party)
+                output(FungibleTokenContract.contractId, 1 of issuedToken issuedBy BOB.party heldBy BOB.party)
+                command(ALICE.publicKey, MoveTokenCommand(issuedToken issuedBy BOB.party))
+                command(ALICE.publicKey, MoveTokenCommand(issuedToken))
+                this.`fails with`("In move groups there must be an amount of input tokens > ZERO.")
+            }
+
+            // Zero output sum
+            tweak {
+                input(FungibleTokenContract.contractId, 1 of issuedToken issuedBy BOB.party heldBy ALICE.party)
+                output(FungibleTokenContract.contractId, 0 of issuedToken issuedBy BOB.party heldBy BOB.party)
+                output(FungibleTokenContract.contractId, 0 of issuedToken issuedBy BOB.party heldBy BOB.party)
+                command(ALICE.publicKey, MoveTokenCommand(issuedToken issuedBy BOB.party))
+                command(ALICE.publicKey, MoveTokenCommand(issuedToken))
+                this.`fails with`("In move groups there must be an amount of output tokens > ZERO.")
+            }
+
+            // Unbalanced move
+            tweak {
+                input(FungibleTokenContract.contractId, 1 of issuedToken issuedBy BOB.party heldBy ALICE.party)
+                output(FungibleTokenContract.contractId, 2 of issuedToken issuedBy BOB.party heldBy BOB.party)
+                command(ALICE.publicKey, MoveTokenCommand(issuedToken issuedBy BOB.party))
+                command(ALICE.publicKey, MoveTokenCommand(issuedToken))
+                this.`fails with`("n move groups the amount of input tokens MUST EQUAL the amount of output tokens. " +
+                        "In other words, you cannot create or destroy value when moving tokens.")
+            }
+
+            tweak {
+                input(FungibleTokenContract.contractId, 10 of issuedToken issuedBy BOB.party heldBy ALICE.party)
+                output(FungibleTokenContract.contractId, 10 of issuedToken issuedBy BOB.party heldBy BOB.party)
+                command(ALICE.publicKey, MoveTokenCommand(issuedToken issuedBy BOB.party))
+                command(ALICE.publicKey, MoveTokenCommand(issuedToken))
+                verifies()
+            }
+
+            // Incorrect signature
+            tweak {
+                command(BOB.publicKey, MoveTokenCommand(issuedToken))
+                this.`fails with`("There are required signers missing or some of the specified signers are not " +
+                        "required. A transaction to move owned token amounts must be signed by ONLY ALL the owners " +
+                        "of ALL the input owned token amounts.")
+            }
+
+            // Incorrect signature supplied with correct one
+            tweak {
+                command(listOf(ALICE.publicKey, BOB.publicKey), MoveTokenCommand(issuedToken))
+                this.`fails with`("There are required signers missing or some of the specified signers are not " +
+                        "required. A transaction to move owned token amounts must be signed by ONLY ALL the owners " +
+                        "of ALL the input owned token amounts.")
+            }
+        }
+    }
+
+    @Test
+    fun `test redeem tokens`() {
+        val issuedToken = GitToken() issuedBy ISSUER.party
+        transaction {
+            input(FungibleTokenContract.contractId, 1 of issuedToken heldBy ALICE.party)
+
+            // Output state present
+            tweak {
+                output(FungibleTokenContract.contractId, 1 of issuedToken heldBy ALICE.party)
+                command(ISSUER.publicKey, RedeemTokenCommand(issuedToken))
+                this.`fails with`("When redeeming tokens, there must be no output states.")
+            }
+
+            // Issuer signature on redeem
+            tweak {
+                command(ISSUER.publicKey, RedeemTokenCommand(issuedToken))
+                verifies()
+            }
+
+            // Non-issuer signature present
+            tweak {
+                command(ALICE.publicKey, RedeemTokenCommand(issuedToken))
+                this.`fails with`("The issuer must be the only signing party when an amount of tokens are redeemed.")
+            }
+
+            // Multiple input states
+            tweak {
+                input(FungibleTokenContract.contractId, 1 of issuedToken heldBy ALICE.party)
+                input(FungibleTokenContract.contractId, 5 of issuedToken heldBy BOB.party)
+                command(ISSUER.publicKey, RedeemTokenCommand(issuedToken))
                 verifies()
             }
         }
