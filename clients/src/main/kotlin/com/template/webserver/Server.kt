@@ -9,13 +9,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication
  * Our Spring Boot application.
  */
 @SpringBootApplication
-private open class Starter
+open class Server
 
 /**
  * Starts our Spring Boot application.
  */
 fun main(args: Array<String>) {
-    val app = SpringApplication(Starter::class.java)
+    val app = SpringApplication(Server::class.java)
     app.setBannerMode(Banner.Mode.OFF)
     app.webApplicationType = SERVLET
     app.run(*args)

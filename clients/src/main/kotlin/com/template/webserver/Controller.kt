@@ -1,9 +1,13 @@
 package com.template.webserver
 
 import org.slf4j.LoggerFactory
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.http.ResponseEntity
+import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
+import org.springframework.web.bind.annotation.*
+import javax.servlet.http.HttpServletRequest
+
+val SERVICE_NAMES = listOf("Notary", "Network Map Service")
 
 /**
  * Define your API endpoints here.
@@ -16,10 +20,35 @@ class Controller(rpc: NodeRPCConnection) {
         private val logger = LoggerFactory.getLogger(RestController::class.java)
     }
 
-    private val proxy = rpc.proxy
+//    private val proxy = rpc.proxy
 
-    @GetMapping(value = "/templateendpoint", produces = arrayOf("text/plain"))
-    private fun templateendpoint(): String {
-        return "Define an endpoint here."
+    @PostMapping(value = [ "/push-event" ])
+    fun initiatePushEval(@RequestBody string : String) : ResponseEntity<String> {
+
+        return try {
+            ResponseEntity.status(HttpStatus.CREATED).body("New push event on the repo.\n")
+            //Initiate issue tokens flow
+        } catch (ex: Throwable) {
+            ResponseEntity.badRequest().body(ex.message!!)
+        }
+    }
+
+
+    @PostMapping(value = [ "/pr-event" ])
+    fun initiatePREval(@RequestBody string : String) : ResponseEntity<String> {
+
+        return try {
+            ResponseEntity.status(HttpStatus.CREATED).body("New PR event on the repo.\n")
+            //Initiate issue tokens flow
+        } catch (ex: Throwable) {
+            ResponseEntity.badRequest().body(ex.message!!)
+        }
+    }
+
+
+    @PostMapping( value = ["/payload"])
+    fun payload(@RequestBody string : String) : String {
+
+        return "Webhook gr8 succsezz."
     }
 }

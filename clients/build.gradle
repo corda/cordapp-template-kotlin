@@ -11,6 +11,7 @@ sourceSets {
 dependencies {
     // Corda dependencies.
     compile "$corda_release_group:corda-rpc:$corda_release_version"
+    compile "net.corda:corda-jackson:$corda_release_version"
 
     // CorDapp dependencies.
     compile project(":contracts")
@@ -23,8 +24,10 @@ dependencies {
     compile "org.apache.logging.log4j:log4j-slf4j-impl:${log4j_version}"
     compile "org.apache.logging.log4j:log4j-web:${log4j_version}"
     compile "org.slf4j:jul-to-slf4j:$slf4j_version"
-}
 
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version: '2.0.2.RELEASE'
+}
 
 springBoot {
     mainClassName = "com.template.webserver.ServerKt"
@@ -36,8 +39,7 @@ task runTemplateClient(type: JavaExec, dependsOn: assemble) {
     args 'localhost:10006', 'user1', 'test'
 }
 
-task runTemplateServer(type: JavaExec, dependsOn: assemble) {
+task runPartyAServer(type: JavaExec, dependsOn: jar) {
     classpath = sourceSets.main.runtimeClasspath
-    main = 'com.template.webserver.ServerKt'
-    args '--server.port=10050', '--config.rpc.host=localhost', '--config.rpc.port=10006', '--config.rpc.username=user1', '--config.rpc.password=test'
+    main = 'net.corda.server.ServerKt'
 }
