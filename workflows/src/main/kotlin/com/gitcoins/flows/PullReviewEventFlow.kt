@@ -1,6 +1,5 @@
 package com.gitcoins.flows
 
-
 import co.paralleluniverse.fibers.Suspendable
 import com.r3.corda.sdk.token.contracts.utilities.of
 import com.r3.corda.sdk.token.workflow.flows.IssueToken

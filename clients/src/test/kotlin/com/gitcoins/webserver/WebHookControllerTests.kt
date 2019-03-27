@@ -31,7 +31,7 @@ class WebHookControllerTests {
         headers.contentType = MediaType.APPLICATION_JSON
         val entity = HttpEntity<String>("{}", headers)
 
-        val result = testRestTemplate.getForEntity("/api/git/push-events", String::class.java)
+        val result = testRestTemplate.getForEntity("/api/git/push-event", String::class.java)
         assertNotNull(result)
         assertEquals(result.statusCode, HttpStatus.OK)
         assertEquals(result.body, "New push event on the repo.")
@@ -43,7 +43,7 @@ class WebHookControllerTests {
         headers.contentType = MediaType.APPLICATION_JSON
         val entity = HttpEntity<String>("{}", headers)
 
-        val result = testRestTemplate.getForEntity("/api/git/pr-events", String::class.java)
+        val result = testRestTemplate.getForEntity("/api/git/pr-event", String::class.java)
         assertNotNull(result)
         assertEquals(result.statusCode, HttpStatus.OK)
         assertEquals(result.body, "New PR event on the repo..")
