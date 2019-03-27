@@ -79,6 +79,8 @@ dependencies {
     // CorDapp dependencies.
     cordapp project(":workflows")
     cordapp project(":contracts")
+    cordapp "com.r3.corda.libs:contract:1.0-SNAPSHOT"
+    cordapp "com.r3.corda.libs:workflow:1.0-SNAPSHOT"
 
     cordaCompile "org.apache.logging.log4j:log4j-slf4j-impl:${log4j_version}"
     cordaCompile "org.apache.logging.log4j:log4j-web:${log4j_version}"
@@ -99,57 +101,44 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
         projectCordapp {
             deploy = false
         }
+        cordapp project(':contracts')
+        cordapp project(':workflows')
+        cordapp "com.r3.corda.libs:contract:1.0-SNAPSHOT"
+        cordapp "com.r3.corda.libs:workflow:1.0-SNAPSHOT"
     }
-    signing {
-        enabled false
+
+    node {
+        name "O=Notary,L=London,C=GB"
+        notary = [validating : false]
+        p2pPort 10002
+        sshdPort 2222
+        rpcSettings {
+            address("localhost:10003")
+            adminAddress("localhost:10043")
+        }
     }
     node {
         name "O=PartyA,L=London,C=GB"
         p2pPort 10005
+        sshdPort 2223
         rpcSettings {
             address("localhost:10006")
             adminAddress("localhost:10046")
         }
         rpcUsers = [[ user: "user1", "password": "test", "permissions": ["ALL"]]]
     }
+    node {
+        name "O=PartyB,L=New York,C=US"
+        p2pPort 10008
+        sshdPort 2224
+        rpcSettings {
+            address("localhost:10009")
+            adminAddress("localhost:10049")
+        }
+        rpcUsers = [[ user: "user1", "password": "test", "permissions": ["ALL"]]]
+    }
 }
 
-//task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
-//    nodeDefaults {
-//        projectCordapp {
-//            deploy = false
-//        }
-//        cordapp project(':contracts')
-//        cordapp project(':workflows')
-//    }
-//    node {
-//        name "O=Notary,L=London,C=GB"
-//        notary = [validating : false]
-//        p2pPort 10002
-//        rpcSettings {
-//            address("localhost:10003")
-//            adminAddress("localhost:10043")
-//        }
-//    }
-//    node {
-//        name "O=PartyA,L=London,C=GB"
-//        p2pPort 10005
-//        rpcSettings {
-//            address("localhost:10006")
-//            adminAddress("localhost:10046")
-//        }
-//        rpcUsers = [[ user: "user1", "password": "test", "permissions": ["ALL"]]]
-//    }
-//    node {
-//        name "O=PartyB,L=New York,C=US"
-//        p2pPort 10008
-//        rpcSettings {
-//            address("localhost:10009")
-//            adminAddress("localhost:10049")
-//        }
-//        rpcUsers = [[ user: "user1", "password": "test", "permissions": ["ALL"]]]
-//    }
-//}
 
 task installQuasar(type: Copy) {
     destinationDir rootProject.file("lib")

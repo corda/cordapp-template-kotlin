@@ -39,7 +39,11 @@ configurations {
 
 dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+    compile group: 'com.google.code.gson', name: 'gson', version: '2.3.1'
+
     cordapp"com.r3.corda.libs:workflow:1.0-SNAPSHOT"
+    cordapp"com.r3.corda.libs:contract:1.0-SNAPSHOT"
+
     testCompile "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
     testCompile "junit:junit:$junit_version"
 

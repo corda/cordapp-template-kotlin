@@ -24,6 +24,7 @@ dependencies {
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 
     cordapp "com.r3.corda.libs:contract:1.0-SNAPSHOT"
+    cordapp "com.r3.corda.libs:workflow:1.0-SNAPSHOT"
     
     // Corda dependencies.
     cordaCompile "$corda_release_group:corda-core:$corda_release_version"
