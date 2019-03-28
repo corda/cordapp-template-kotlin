@@ -12,6 +12,7 @@ import net.corda.testing.common.internal.testNetworkParameters
 import net.corda.testing.core.singleIdentity
 import net.corda.testing.node.StartedMockNode
 import net.corda.testing.node.MockNetwork
+import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import kotlin.test.assertEquals
@@ -38,31 +39,35 @@ class GitEventFlowTests {
         user = b.info.singleIdentity()
     }
 
+    @After
+    fun tearDown() {
+        network.stopNodes()
+    }
+
     @Test
     fun `Issue git token from push event`() {
         val flow = PushEventFlow(user)
-        val future = a.startFlow(flow)
-        val signedTx = future.getOrThrow()
+        val signedTx = a.transaction { a.startFlow(flow) }.getOrThrow()
+
         assertEquals(signedTx, a.services.validatedTransactions.getTransaction(signedTx.id))
+
+        b.transaction { b.services.validatedTransactions.trackTransaction(signedTx.id) }.getOrThrow()
 
         val token = signedTx.tx.outRefsOfType<FungibleToken<GitToken>>().single()
         val vaultToken = b.services.vaultService.queryBy<FungibleToken<GitToken>>().states.single()
         assertEquals(token, vaultToken)
-
         val tokenBalance = b.services.vaultService.tokenBalance(GitToken())
         assertEquals(1, tokenBalance.quantity)
-
-
-
-
     }
+
 
     @Test
     fun `Issue git token from pull request review event`() {
         val flow = PullReviewEventFlow(user)
-        val future = a.startFlow(flow)
-        val signedTx = future.getOrThrow()
+        val signedTx = a.transaction { a.startFlow(flow) }.getOrThrow()
         assertEquals(signedTx, a.services.validatedTransactions.getTransaction(signedTx.id))
+
+        b.transaction { b.services.validatedTransactions.trackTransaction(signedTx.id) }.getOrThrow()
 
         val token = signedTx.tx.outRefsOfType<FungibleToken<GitToken>>().single()
         val vaultToken = b.services.vaultService.queryBy<FungibleToken<GitToken>>().states.single()

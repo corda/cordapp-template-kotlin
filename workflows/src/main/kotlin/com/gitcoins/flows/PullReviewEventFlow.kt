@@ -7,24 +7,21 @@ import com.gitcoins.states.GitToken
 import net.corda.core.flows.*
 import net.corda.core.identity.Party
 import net.corda.core.transactions.SignedTransaction
-import net.corda.core.utilities.ProgressTracker
 
-// *********
-// * Flows *
-// *********
+/**
+ * Flow that delegates the issuing of a [GitToken] to the [IssueToken] subflow. This flow is triggered by a GitHub pull
+ * request review.
+ */
 @StartableByRPC
-class PullReviewEventFlow(val user: Party) : FlowLogic<SignedTransaction>() {
-
-    override val progressTracker = ProgressTracker()
+class PullReviewEventFlow(private val user: Party) : FlowLogic<SignedTransaction>() {
 
     @Suspendable
     @Throws(FlowException::class)
     override fun call() : SignedTransaction {
 
         val notary = serviceHub.networkMapCache.notaryIdentities[0]
-
-        // TODO Evaluation logic to determine the amount of tokens to issue
         val token = GitToken()
+        // TODO Evaluation logic to determine the amount of tokens to issue
 
         // Initiator flow logic goes here.
         return subFlow(IssueToken.Initiator(token, user, notary, 1 of token, anonymous = false))
