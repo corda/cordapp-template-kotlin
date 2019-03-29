@@ -28,8 +28,7 @@ class WebHookControllerTests {
     fun `Push event end point`() {
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_JSON
-        val entity = HttpEntity<String>("{}", headers)
-//        val entity = """""{ "pusher": { "name": "badger" } }"""""
+        val entity = HttpEntity<String>("""{"pusher": { "name": "O=PartyB, L=New York, C=US" } }""", headers)
 
         val result = testRestTemplate.postForEntity("/api/git/push-event", entity, String::class.java)
         assertNotNull(result)
