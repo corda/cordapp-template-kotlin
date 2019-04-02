@@ -54,14 +54,9 @@ object IssueTokenToKey {
         @Suspendable
         override fun call(): SignedTransaction {
             // This is the identity which will be used to issue tokens.
-            // We also need a session for the other side.
             val me: Party = ourIdentity
-//            val ownerSession = initiateFlow(me)
-//
+
             progressTracker.currentStep = ISSUANCE_NOTIFICATION
-            // Notify the recipient that we'll be issuing them a tokens and advise them of anything they must do, e.g.
-            // generate a confidential identity for the issuer or sign up for updates for evolvable tokens.
-//            ownerSession.send(TokenIssuanceNotification(anonymous = anonymous))
 
             // This is the recipient of the tokens identity.
             val owningParty = AnonymousParty(key)

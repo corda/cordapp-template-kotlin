@@ -24,7 +24,7 @@ private const val CREATE_KEY: String = "createKey"
  */
 @RestController
 @RequestMapping("/api/git/")
-class WebHookController(rpc: NodeRPCConnection) {
+class GitWebHookController(rpc: NodeRPCConnection) {
 
     companion object {
         private val logger = LoggerFactory.getLogger(RestController::class.java)
@@ -42,15 +42,14 @@ class WebHookController(rpc: NodeRPCConnection) {
             val pathMatcher = object : PathMatcher {
                 override fun pathMatches(path: String) = Pattern.matches(".*comment.*body.*", path)
                 override fun onMatch(path: String, value: Any) {
-                    //FIXME
                     if (value.toString() != CREATE_KEY)
-                        logger.debug("pr comment is '${value.toString()}")
-//                        throw IllegalArgumentException("Invalid pr comment. Please comment 'createKey'.")
+                        throw IllegalArgumentException("Invalid pr comment. Please comment 'createKey'.")
                 }
             }
             Klaxon().pathMatcher(pathMatcher).parseJsonObject(StringReader(msg))
         } catch (e: IllegalArgumentException) {
             e.printStackTrace()
+            return ResponseEntity.badRequest().body(e.message)
         }
 
         try {
@@ -79,6 +78,8 @@ class WebHookController(rpc: NodeRPCConnection) {
     @PostMapping(value = [ "/push-event" ])
     fun initPushFlow(@RequestBody msg : String) : ResponseEntity<String> {
 
+        // Test push
+
         var gitUserName: String?=null
         try {
             val pathMatcher = object : PathMatcher {
@@ -106,6 +107,7 @@ class WebHookController(rpc: NodeRPCConnection) {
     fun initPRFlow(@RequestBody msg : String) : ResponseEntity<String> {
 
         var gitUserName: String?=null
+
         try {
             val pathMatcher = object : PathMatcher {
                 override fun pathMatches(path: String) = Pattern.matches(".*review.*user.*login.*", path)
@@ -121,7 +123,7 @@ class WebHookController(rpc: NodeRPCConnection) {
 
         return try {
             proxy.startTrackedFlow(:: PullReviewEventFlow, gitUserName.toString()).returnValue.getOrThrow()
-            ResponseEntity.status(HttpStatus.CREATED).body("New pull request review event on the repo by $gitUserName\n")
+            ResponseEntity.status(HttpStatus.CREATED).body("New pull request review event on the repo by: $gitUserName\n")
             //Initiate issue tokens flow
         } catch (ex: Throwable) {
             ResponseEntity.badRequest().body(ex.message!!)
