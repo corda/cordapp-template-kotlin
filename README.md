@@ -22,6 +22,28 @@ Once built, start the spring boot web server [Server.kt](https://github.com/will
 Navigate to your ngrok installation and run the following command 
 * `./ngrok http 8080`
 
+Copy the forwarding address.
 
-## Interacting with the nodes:
+## GitHub Webhook Configuration
+
+Navigate to the repository that you would like GitCoins to be rewarded for contributions. Configure the following webhooks via `Settings > Webhooks > Add webhook`:
+* `pull_request_review_comments`
+
+  * payload URL: <ngrok forwarding address>/api/git/create-key
+  
+  * content type: JSON
+
+* `push`
+  
+  * payload URL: <ngrok forwarding address>/api/git/push-event
+
+  * content type: JSON
+  
+* `pull_request`
+  
+  * payload URL: <ngrok forwarding address>/api/git/pr-event
+  
+  * content type: JSON
+
+## Issuing GitCoins
 
