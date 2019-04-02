@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="https://ibb.co/5jMDpRd" width="500">
+  <a href="https://ibb.co/5jMDpRd"><img src="https://i.ibb.co/2Mn2Vkw/GitCoins.png" alt="GitCoins" border="0" /></a>
 </p>
 
 # GitCoins CorDapp
