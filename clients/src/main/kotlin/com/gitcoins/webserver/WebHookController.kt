@@ -6,7 +6,6 @@ import com.gitcoins.flows.CreateKeyFlow
 import com.gitcoins.flows.PullReviewEventFlow
 import com.gitcoins.flows.PushEventFlow
 import com.google.gson.stream.MalformedJsonException
-import net.corda.core.identity.CordaX500Name
 import net.corda.core.messaging.startTrackedFlow
 import net.corda.core.utilities.getOrThrow
 import org.slf4j.LoggerFactory
@@ -14,7 +13,6 @@ import org.springframework.http.ResponseEntity
 import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import java.io.StringReader
-import java.lang.Exception
 import java.lang.IllegalArgumentException
 import java.util.regex.Pattern
 
