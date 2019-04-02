@@ -39,7 +39,7 @@ Navigate to the repository that you would like GitCoins to be rewarded for contr
 
   * content type: JSON
   
-* `pull_request`
+* `pull_request_review`
   
   * payload URL: <ngrok forwarding address>/api/git/pr-event
   
@@ -47,6 +47,13 @@ Navigate to the repository that you would like GitCoins to be rewarded for contr
 
 ## Issuing GitCoins
 
-To generate a key for a GitHub user you will need first open a pull request on the repo. Once open, the user must comment 'createKey' on a portion of the unified diff. (The GitHub Review Comments API is desribed [here](https://developer.github.com/v3/pulls/comments/#list-comments-on-a-pull-request))
+To generate a key for a GitHub user you will need first open a pull request review on the repo. Once open, the user must comment 'createKey' on a portion of the unified diff. (The GitHub Review Comments API is desribed [here](https://developer.github.com/v3/pulls/comments/#list-comments-on-a-pull-request))
 
-Now the user is linked to an `AnonymousParty` they will be issued 1 GitCoin for each push, or pull request on the repo. 
+Now the user is linked to an `AnonymousParty` they will be issued 1 GitCoin for each push, or pull request review on the repo. 
+
+Alternatively, you can load up on GitCoins for free: 
+* `curl -d '{ "comment": { "user": { "login": "yourUserName" }, "body": "createKey" } }' -H "Content-Type: application/json" -X POST <ngrok forwarding address>/api/git/create-key`
+* `curl -d '{"pusher": { "name": “yourUserName” } }' -H "Content-Type: application/json" -X POST <ngrok forwarding address>/api/git/push-event`
+* `curl -d '{ "review": { "user": { "login": "yourUserName" } } }' -H "Content-Type: application/json" -X POST <ngrok forwarding address>/api/git/pr-event`
+
+## Future work
