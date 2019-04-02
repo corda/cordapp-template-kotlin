@@ -47,3 +47,6 @@ Navigate to the repository that you would like GitCoins to be rewarded for contr
 
 ## Issuing GitCoins
 
+To generate a key for a GitHub user you will need first open a pull request on the repo. Once open, the user must comment 'createKey' on a portion of the unified diff. (The GitHub Review Comments API is desribed [here](https://developer.github.com/v3/pulls/comments/#list-comments-on-a-pull-request).
+
+Now the user is linked to an `AnonymousParty` they will be issued 1 GitCoin for each push, or pull request on the repo. 
