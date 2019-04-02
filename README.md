@@ -14,8 +14,10 @@ See https://docs.corda.net/getting-set-up.html.
 # Usage
 
 From the root directory run the following commands:
-`./gradlew clean deployNodes`
-`build/nodes/runnodes`
+
+* `./gradlew clean deployNodes`
+* `build/nodes/runnodes`
+
 Once built, start the spring boot web server [Server.kt](https://github.com/willhr3/review-tokens-cordapp/blob/release-V4/clients/src/main/kotlin/com/gitcoins/webserver/Server.kt)
 
 
