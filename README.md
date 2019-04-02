@@ -57,3 +57,7 @@ Alternatively, you can load up on GitCoins for free:
 * `curl -d '{ "review": { "user": { "login": "yourUserName" } } }' -H "Content-Type: application/json" -X POST <ngrok forwarding address>/api/git/pr-event`
 
 ## Future work
+* Implement movement of tokens between parties
+* Implement redeem flows
+* Add security around the endpoints so you cannot do the above
+* Implement commit/ review evaluation logic to issue more tokens for a greater contribution
