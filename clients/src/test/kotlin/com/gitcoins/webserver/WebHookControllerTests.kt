@@ -21,7 +21,7 @@ class WebHookControllerTests {
     @Test
     fun `No endpoint`() {
         val result = testRestTemplate.postForEntity("/blah", HttpEntity<String>(""), String::class.java)
-        assertEquals(result.statusCode, HttpStatus.NOT_FOUND)
+        assertEquals(HttpStatus.NOT_FOUND, result.statusCode)
     }
 
     @Test
@@ -32,19 +32,41 @@ class WebHookControllerTests {
 
         val result = testRestTemplate.postForEntity("/api/git/push-event", entity, String::class.java)
         assertNotNull(result)
-        assertEquals(result.statusCode, HttpStatus.OK)
-        assertEquals(result.body, "New push event on the repo.")
+        assertEquals(HttpStatus.CREATED, result.statusCode)
+        assertEquals("New push event on the repo by O=PartyB, L=New York, C=US", result.body)
     }
 
     @Test
     fun `Pull request event end point`() {
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_JSON
-        val entity = HttpEntity<String>("{}", headers)
+        val entity = HttpEntity<String>("""{ "review": { "user": { "login": "O=PartyB, L=New York, C=US" } } }""", headers)
 
         val result = testRestTemplate.postForEntity("/api/git/pr-event", entity, String::class.java)
         assertNotNull(result)
-        assertEquals(result.statusCode, HttpStatus.OK)
-        assertEquals(result.body, "New PR event on the repo..")
+        assertEquals(HttpStatus.CREATED, result.statusCode)
+        assertEquals("New pull request review event on the repo by O=PartyB, L=New York, C=US", result.body.trim())
+    }
+
+    @Test
+    fun `No username in json push event`() {
+        val headers = HttpHeaders()
+        headers.contentType = MediaType.APPLICATION_JSON
+        val entity = HttpEntity<String>("""{ "I have no idea what I'm doing" }""", headers)
+
+        val result = testRestTemplate.postForEntity("/api/git/push-event", entity, String::class.java)
+        assertNotNull(result)
+        assertEquals(HttpStatus.BAD_REQUEST, result.statusCode)
+    }
+
+    @Test
+    fun `No username in json pr event`() {
+        val headers = HttpHeaders()
+        headers.contentType = MediaType.APPLICATION_JSON
+        val entity = HttpEntity<String>("""{ "I have no idea what I'm doing" }""", headers)
+
+        val result = testRestTemplate.postForEntity("/api/git/pr-event", entity, String::class.java)
+        assertNotNull(result)
+        assertEquals(HttpStatus.BAD_REQUEST, result.statusCode)
     }
 }

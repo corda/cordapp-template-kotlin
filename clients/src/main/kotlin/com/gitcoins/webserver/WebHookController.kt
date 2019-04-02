@@ -2,6 +2,7 @@ package com.gitcoins.webserver
 
 import com.beust.klaxon.Klaxon
 import com.beust.klaxon.PathMatcher
+import com.gitcoins.flows.CreateKeyFlow
 import com.gitcoins.flows.PullReviewEventFlow
 import com.gitcoins.flows.PushEventFlow
 import com.google.gson.stream.MalformedJsonException
@@ -14,7 +15,11 @@ import org.springframework.http.HttpStatus
 import org.springframework.web.bind.annotation.*
 import java.io.StringReader
 import java.lang.Exception
+import java.lang.IllegalArgumentException
 import java.util.regex.Pattern
+
+private const val CREATE_KEY: String = "createKey"
+
 
 /**
  * Define your API endpoints here.
@@ -28,6 +33,50 @@ class WebHookController(rpc: NodeRPCConnection) {
     }
 
     private val proxy = rpc.proxy
+
+
+    @PostMapping(value = [ "/create-key" ])
+    fun createKey(@RequestBody msg : String) : ResponseEntity<String> {
+
+        var gitUserName: String?=null
+
+        try {
+            val pathMatcher = object : PathMatcher {
+                override fun pathMatches(path: String) = Pattern.matches(".*comment.*body.*", path)
+                override fun onMatch(path: String, value: Any) {
+                    //FIXME
+                    if (value.toString() != CREATE_KEY)
+                        logger.debug("pr comment is '${value.toString()}")
+//                        throw IllegalArgumentException("Invalid pr comment. Please comment 'createKey'.")
+                }
+            }
+            Klaxon().pathMatcher(pathMatcher).parseJsonObject(StringReader(msg))
+        } catch (e: IllegalArgumentException) {
+            e.printStackTrace()
+        }
+
+        try {
+            val pathMatcher = object : PathMatcher {
+                override fun pathMatches(path: String) = Pattern.matches(".*comment.*user.*login.*", path)
+                override fun onMatch(path: String, value: Any) {
+                    logger.debug("Github user: $value")
+                    gitUserName = value.toString()
+                }
+            }
+            Klaxon().pathMatcher(pathMatcher).parseJsonObject(StringReader(msg))
+        } catch (e: MalformedJsonException) {
+            e.printStackTrace()
+            return ResponseEntity.badRequest().body("Github username must not be null.\n")
+        }
+
+        return try {
+            proxy.startTrackedFlow(:: CreateKeyFlow, gitUserName.toString()).returnValue.getOrThrow()
+            ResponseEntity.status(HttpStatus.CREATED).body("New public key generated for github user: $gitUserName")
+        } catch (ex: Throwable) {
+            ResponseEntity.badRequest().body(ex.message!!)
+        }
+    }
+
 
     @PostMapping(value = [ "/push-event" ])
     fun initPushFlow(@RequestBody msg : String) : ResponseEntity<String> {
@@ -44,17 +93,12 @@ class WebHookController(rpc: NodeRPCConnection) {
             Klaxon().pathMatcher(pathMatcher).parseJsonObject(StringReader(msg))
         } catch (e: MalformedJsonException) {
             e.printStackTrace()
+            return ResponseEntity.badRequest().body("Github username must not be null.\n")
         }
 
-        if (gitUserName.isNullOrBlank())
-            throw MalformedJsonException("The reviewer's user name was not found in the request body.")
-        val partyX50Name = CordaX500Name.parse(gitUserName.toString())
-        val otherParty = proxy.wellKnownPartyFromX500Name(partyX50Name) ?: return ResponseEntity.badRequest().body(
-                "Party named $gitUserName cannot be found.\n")
-
         return try {
-            proxy.startTrackedFlow(:: PushEventFlow, otherParty).returnValue.getOrThrow()
-            ResponseEntity.status(HttpStatus.CREATED).body("New push event on the repo by $gitUserName\n")
+            proxy.startTrackedFlow(:: PushEventFlow, gitUserName.toString()).returnValue.getOrThrow()
+            ResponseEntity.status(HttpStatus.CREATED).body("New push event on the repo by: $gitUserName")
         } catch (ex: Throwable) {
             ResponseEntity.badRequest().body(ex.message!!)
         }
@@ -77,13 +121,8 @@ class WebHookController(rpc: NodeRPCConnection) {
             e.printStackTrace()
         }
 
-        if (gitUserName.isNullOrBlank())
-            throw MalformedJsonException("The reviewer's user name was not found in the request body.")
-        val partyX50Name = CordaX500Name.parse(gitUserName.toString())
-        val otherParty = proxy.wellKnownPartyFromX500Name(partyX50Name) ?: return ResponseEntity.badRequest().body(
-                "Party named $gitUserName cannot be found.\n")
         return try {
-            proxy.startTrackedFlow(:: PullReviewEventFlow, otherParty).returnValue.getOrThrow()
+            proxy.startTrackedFlow(:: PullReviewEventFlow, gitUserName.toString()).returnValue.getOrThrow()
             ResponseEntity.status(HttpStatus.CREATED).body("New pull request review event on the repo by $gitUserName\n")
             //Initiate issue tokens flow
         } catch (ex: Throwable) {
