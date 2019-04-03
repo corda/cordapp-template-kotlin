@@ -39,35 +39,34 @@ class GitWebHookControllerTests {
     fun `PR comment createKey`() {
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_JSON
-        val entity = HttpEntity<String>("""{ "comment": { "user": { "login": "testUser5" }, "body": "createKey" } }""")
+        val entity = HttpEntity<String>("""{ "comment": { "user": { "login": "testUser1" }, "body": "createKey" } }""")
         val result = testRestTemplate.postForEntity("/api/git/create-key", entity, String::class.java)
         assertNotNull(result)
         assertEquals(HttpStatus.CREATED, result.statusCode)
-        assertEquals("New public key generated for github user: testUser5", result.body.trim())
+        assertEquals("New public key generated for github user: testUser1", result.body.trim())
     }
-
 
     @Test
     fun `Push event end point`() {
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_JSON
-        val entity = HttpEntity<String>("""{"pusher": { "name": "testUser" } }""", headers)
+        val entity = HttpEntity<String>("""{"pusher": { "name": "testUser1" } }""", headers)
 
         val result = testRestTemplate.postForEntity("/api/git/push-event", entity, String::class.java)
         assertNotNull(result)
         assertEquals(HttpStatus.CREATED, result.statusCode)
-        assertEquals("New push event on the repo by: testUser", result.body)
+        assertEquals("New push event on the repo by: testUser1", result.body)
     }
 
     @Test
     fun `Pull request event end point`() {
         val headers = HttpHeaders()
         headers.contentType = MediaType.APPLICATION_JSON
-        val entity = HttpEntity<String>("""{ "review": { "user": { "login": "testUser" } } }""", headers)
+        val entity = HttpEntity<String>("""{ "review": { "user": { "login": "testUser1" } } }""", headers)
 
         val result = testRestTemplate.postForEntity("/api/git/pr-event", entity, String::class.java)
         assertNotNull(result)
         assertEquals(HttpStatus.CREATED, result.statusCode)
-        assertEquals("New pull request review event on the repo by: testUser", result.body.trim())
+        assertEquals("New pull request event on the repo by: testUser1", result.body.trim())
     }
 }

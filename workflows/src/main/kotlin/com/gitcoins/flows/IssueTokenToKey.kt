@@ -22,6 +22,10 @@ import net.corda.core.utilities.ProgressTracker
 import net.corda.core.utilities.unwrap
 import java.security.PublicKey
 
+/**
+ * Temporary flow to issue a token to an [AnonymousParty] when provided it's [PublicKey]. This can be deleted when the
+ * bug around being unable to issue tokens to yourself is fixed.
+ */
 object IssueTokenToKey {
 
     @CordaSerializable
@@ -30,11 +34,11 @@ object IssueTokenToKey {
     @InitiatingFlow
     @StartableByRPC
     class Initiator<T : TokenType>(
-            val token: T,
-            val key: PublicKey,
-            val notary: Party,
-            val amount: Amount<T>? = null,
-            val anonymous: Boolean = true
+            private val token: T,
+            private val key: PublicKey,
+            private val notary: Party,
+            private val amount: Amount<T>? = null,
+            private val anonymous: Boolean = true
     ) : FlowLogic<SignedTransaction>() {
 
         companion object {

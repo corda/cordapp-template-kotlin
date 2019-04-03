@@ -25,20 +25,19 @@ class PushEventFlow(private val gitUserName: String) : FlowLogic<SignedTransacti
     @Throws(FlowException::class)
     override fun call() : SignedTransaction {
 
-        val result: MutableList<GitUserMappingSchemaV1.GitUserMapping> = serviceHub.withEntityManager {
-            val query = criteriaBuilder.createQuery(GitUserMappingSchemaV1.GitUserMapping::class.java)
-            val gitUserMapping = query.from(GitUserMappingSchemaV1.GitUserMapping::class.java)
-            query.where(criteriaBuilder.equal(gitUserMapping.get<String>("gitUserName"), gitUserName))
-            createQuery(query).resultList
-        }
-
-        if(result.isEmpty()) {
-            throw FlowException("No public key for git username $gitUserName.")
+        val result = subFlow(QueryGitUserDatabaseFlow(gitUserName))
+        if (result.isEmpty()) {
+            throw FlowException("No entry exists for git user '$gitUserName'.\n" +
+                    "Please comment 'createKey' on the a PR to generate a public key for '$gitUserName'.")
         }
 
         val token = GitToken()
         val notary = serviceHub.networkMapCache.notaryIdentities.first()
         val key = Crypto.decodePublicKey(result.first().userKey)
+
+        // TODO Use IssueToken.Initiator once the fix that allows a node to issue to itself has gone in
+        // val anon = AnonymousParty(key)
+        // val party = serviceHub.identityService.wellKnownPartyFromAnonymous(anon)
 
         //TODO Implement evaluation logic based on the commit
 

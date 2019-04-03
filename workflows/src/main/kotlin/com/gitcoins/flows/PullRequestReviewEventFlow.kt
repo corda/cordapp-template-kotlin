@@ -12,39 +12,30 @@ import net.corda.core.utilities.base58ToByteArray
 
 /**
  * Flow that delegates the issuing of a [GitToken] to the [IssueToken] subflow. This flow is triggered by a GitHub pull
- * request review.
- *
- * P
- * R
- *
- * T
- * E
- * S
- * T
+ * request.
  */
 @StartableByRPC
-class PullReviewEventFlow(private val gitUserName: String) : FlowLogic<SignedTransaction>() {
+class PullRequestReviewEventFlow(private val gitUserName: String) : FlowLogic<SignedTransaction>() {
 
     @Suspendable
     @Throws(FlowException::class)
     override fun call() : SignedTransaction {
 
-        val result: MutableList<GitUserMappingSchemaV1.GitUserMapping> = serviceHub.withEntityManager {
-            val query = criteriaBuilder.createQuery(GitUserMappingSchemaV1.GitUserMapping::class.java)
-            val gitUserMapping = query.from(GitUserMappingSchemaV1.GitUserMapping::class.java)
-            query.where(criteriaBuilder.equal(gitUserMapping.get<String>("gitUserName"), gitUserName))
-            createQuery(query).resultList
-        }
-
+        val result = subFlow(QueryGitUserDatabaseFlow(gitUserName))
         if(result.isEmpty()) {
-            throw FlowException("No public key for git username $gitUserName.")
+            throw FlowException("No public key for git username '$gitUserName'. \n " +
+                    "Please comment 'createKey' on a PR to generate a public key for '$gitUserName'.")
         }
 
         val token = GitToken()
         val notary = serviceHub.networkMapCache.notaryIdentities.first()
         val key = Crypto.decodePublicKey(result.first().userKey)
 
-        //TODO Implement evaluation logic based on the commit
+        // TODO Use IssueToken.Initiator once the fix that allows a node to issue to itself has gone in
+        // val anon = AnonymousParty(key)
+        // val party = serviceHub.identityService.wellKnownPartyFromAnonymous(anon)
+
+        // TODO Implement evaluation logic based on the commit
 
         // Initiator flow logic goes here.
         return subFlow(IssueTokenToKey.Initiator(token, key, notary, 1 of token, anonymous = false))
