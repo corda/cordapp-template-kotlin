@@ -37,6 +37,8 @@ object IssueTokenToKey {
             private val token: T,
             private val key: PublicKey,
             private val notary: Party,
+
+
             private val amount: Amount<T>? = null,
             private val anonymous: Boolean = true
     ) : FlowLogic<SignedTransaction>() {

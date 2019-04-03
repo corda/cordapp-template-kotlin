@@ -17,7 +17,7 @@ class ResponseParser {
          * Extracts the GitHub username from a JSON response when provided with the path the username should be
          * provided from.
          */
-        fun extractGitHubUsername(jsonPath: String, msg: String) : String {
+        fun extractGitHubUsername(jsonPath: String, msg: String) : String? {
             var username: String?=null
             try {
                 val pathMatcher = object: PathMatcher {
@@ -30,7 +30,7 @@ class ResponseParser {
             } catch (e: IllegalArgumentException){
                 e.printStackTrace()
             }
-            return username.orEmpty()
+            return username
         }
 
         /**

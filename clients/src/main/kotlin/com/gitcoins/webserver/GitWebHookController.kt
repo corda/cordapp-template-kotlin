@@ -39,7 +39,7 @@ class GitWebHookController(rpc: NodeRPCConnection) {
         }
 
         val gitUserName =  ResponseParser.extractGitHubUsername(".*comment.*user.*login.*", msg)
-        if (gitUserName != null) {
+        if (gitUserName == null) {
             return ResponseEntity.badRequest().body("Github username must not be null.\n")
         }
 
@@ -59,7 +59,7 @@ class GitWebHookController(rpc: NodeRPCConnection) {
     fun initPushFlow(@RequestBody msg : String) : ResponseEntity<String> {
 
         val gitUserName =  ResponseParser.extractGitHubUsername(".*pusher.*name.*", msg)
-        if (gitUserName != null) {
+        if (gitUserName == null) {
             return ResponseEntity.badRequest().body("Github username must not be null.\n")
         }
 
@@ -79,7 +79,7 @@ class GitWebHookController(rpc: NodeRPCConnection) {
     fun initPRFlow(@RequestBody msg : String) : ResponseEntity<String> {
 
         val gitUserName =  ResponseParser.extractGitHubUsername(".*review.*user.*login.*", msg)
-        if (gitUserName != null) {
+        if (gitUserName == null) {
             return ResponseEntity.badRequest().body("Github username must not be null.\n")
         }
 
