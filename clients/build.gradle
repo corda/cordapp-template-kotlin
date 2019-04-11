@@ -19,20 +19,20 @@ dependencies {
     compile project(":contracts")
     compile project(":workflows")
 
+    // Spring boot.
     compile("org.springframework.boot:spring-boot-starter-websocket:$spring_boot_version") {
         exclude group: "org.springframework.boot", module: "spring-boot-starter-logging"
     }
 
+    // Logging.
     compile "org.apache.logging.log4j:log4j-slf4j-impl:${log4j_version}"
     compile "org.apache.logging.log4j:log4j-web:${log4j_version}"
     compile "org.slf4j:jul-to-slf4j:$slf4j_version"
 
     // Token SDK dependencies.
-    // Note: Currently, the token SDK dependencies must be published to Maven local.
-    // See http://github.com/corda/token-sdk for further details.
-    compile "com.r3.corda.sdk.token:token-sdk-contract:0.1"
-    compile "com.r3.corda.sdk.token:token-sdk-workflow:0.1"
-    compile "com.r3.corda.sdk.token.modules:token-sdk-money:0.1"
+    compile "com.r3.tokens-sdk:contract:1.0-SNAPSHOT"
+    compile "com.r3.tokens-sdk:workflow:1.0-SNAPSHOT"
+    compile "com.r3.tokens-sdk:money:1.0-SNAPSHOT"
 }
 
 springBoot {

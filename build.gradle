@@ -33,13 +33,13 @@ allprojects {
     apply plugin: 'kotlin'
 
     repositories {
+        mavenLocal()
         jcenter()
         mavenCentral()
         maven { url 'https://ci-artifactory.corda.r3cev.com/artifactory/corda' }
         // Can be removed post-release - used to get nightly snapshot build.
         maven { url 'https://ci-artifactory.corda.r3cev.com/artifactory/corda-dev' }
         maven { url 'https://jitpack.io' }
-        mavenLocal()
     }
 
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) {
@@ -90,9 +90,9 @@ dependencies {
     testCompile "org.apache.logging.log4j:log4j-web:${log4j_version}"
 
     // Token SDK dependencies.
-    cordapp "com.r3.corda.sdk.token:token-sdk-workflow:0.1"
-    cordapp "com.r3.corda.sdk.token:token-sdk-contract:0.1"
-    cordapp "com.r3.corda.sdk.token.modules:token-sdk-money:0.1"
+    cordapp "com.r3.tokens-sdk:contract:1.0-SNAPSHOT"
+    cordapp "com.r3.tokens-sdk:workflow:1.0-SNAPSHOT"
+    cordapp "com.r3.tokens-sdk:money:1.0-SNAPSHOT"
 }
 
 task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
@@ -113,11 +113,9 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
             address("localhost:10006")
             adminAddress("localhost:10046")
         }
-        cordapps = [
-                "com.r3.corda.sdk.token:token-sdk-workflow:0.1",
-                "com.r3.corda.sdk.token:token-sdk-contract:0.1",
-                "com.r3.corda.sdk.token.modules:token-sdk-money:0.1"
-        ]
+        cordapp("com.r3.tokens-sdk:contract:1.0-SNAPSHOT")
+        cordapp("com.r3.tokens-sdk:workflow:1.0-SNAPSHOT")
+        cordapp("com.r3.tokens-sdk:money:1.0-SNAPSHOT")
         cordapp project(":contracts")
         cordapp project(":workflows")
         rpcUsers = [[ user: "user1", "password": "test", "permissions": ["ALL"]]]
@@ -129,11 +127,9 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
             address("localhost:10009")
             adminAddress("localhost:10049")
         }
-        cordapps = [
-                "com.r3.corda.sdk.token:token-sdk-workflow:0.1",
-                "com.r3.corda.sdk.token:token-sdk-contract:0.1",
-                "com.r3.corda.sdk.token.modules:token-sdk-money:0.1"
-        ]
+        cordapp("com.r3.tokens-sdk:contract:1.0-SNAPSHOT")
+        cordapp("com.r3.tokens-sdk:workflow:1.0-SNAPSHOT")
+        cordapp("com.r3.tokens-sdk:money:1.0-SNAPSHOT")
         cordapp project(":contracts")
         cordapp project(":workflows")
         rpcUsers = [[ user: "user1", "password": "test", "permissions": ["ALL"]]]
