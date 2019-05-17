@@ -2,7 +2,7 @@ buildscript {
     ext {
         corda_release_group = 'net.corda'
         // Will revert to Corda 4.1 when it is available.
-        corda_release_version = '5.0-SNAPSHOT'
+        corda_release_version = '4.1-RC03'
         corda_gradle_plugins_version = '4.0.42'
         kotlin_version = '1.2.71'
         junit_version = '4.12'
