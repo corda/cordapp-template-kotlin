@@ -42,22 +42,23 @@ configurations {
 }
 
 dependencies {
-    // Kotlin and JUnit.
+    // Kotlin.
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
+
+    // For testing.
     testCompile "org.jetbrains.kotlin:kotlin-test:$kotlin_version"
+    testCompile "$corda_release_group:corda-node-driver:$corda_release_version"
     testCompile "junit:junit:$junit_version"
 
     // Corda dependencies.
     cordaCompile "$corda_release_group:corda-core:$corda_release_version"
-    cordaRuntime "$corda_release_group:corda:$corda_release_version"
-    testCompile "$corda_release_group:corda-node-driver:$corda_release_version"
 
     // CorDapp dependencies.
     cordaCompile project(":contracts")
 
     // Token SDK dependencies.
-    cordaCompile "com.r3.tokens-sdk:money:1.0-SNAPSHOT"
-    cordaCompile "com.r3.tokens-sdk:workflow:1.0-SNAPSHOT"
+    cordaCompile "com.r3.tokens-sdk:money:$tokens_sdk_version"
+    cordaCompile "com.r3.tokens-sdk:workflow:$tokens_sdk_version"
 }
 
 task integrationTest(type: Test, dependsOn: []) {
