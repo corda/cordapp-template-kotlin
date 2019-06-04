@@ -1,18 +1,17 @@
 package com.template.contracts
 
+import junit.framework.Assert.assertEquals
 import junit.framework.Assert.assertTrue
 import net.corda.testing.node.MockServices
 import org.junit.Test
-import khttp.get
 import khttp.responses.Response
-import net.corda.core.identity.Party
 import org.json.JSONObject
 
 class ContractTests {
     private val ledgerServices = MockServices()
 
     @Test
-    fun `verify claim library main method`() {
+    fun `verify claim`() {
         val claim : JSONObject = queryDID()
         assertTrue(verifyOwnerKey(getOwnerKey(claim)))
         assertTrue(verifyClaimSigner(getSignerKey(claim)))
@@ -24,7 +23,7 @@ class ContractTests {
     val request: String = "http://" + host + "/1.0/identifiers/" + claimID
 
     //TODO: make this a list of parties - update add and remove method
-    var approvedSigners = mutableListOf("me")
+    var approvedSigners = mutableListOf("sample")
 
     //adds party toAdd to the list of trusted signers
     fun addApprovedSigner(toAdd: String) {
@@ -40,6 +39,7 @@ class ContractTests {
     //returns: claim as JSON Object
     private fun queryDID() : JSONObject {
         val response: Response = khttp.get(request)
+        assertEquals(response.toString(), "<Response [200]>")
         val claim : JSONObject = response.jsonObject
         print(claim)
         return claim
@@ -77,8 +77,10 @@ class ContractTests {
     private fun verifyClaimSigner(signerKey : String) : Boolean {
         //TODO: verify that the signer key is in my list of trusted signers
         for(party in approvedSigners) {
-
+            if (party == signerKey) {
+                return true
+            }
         }
-        return true
+        return false
     }
 }
