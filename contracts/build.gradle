@@ -18,4 +18,7 @@ dependencies {
     cordaCompile "$corda_release_group:corda-core:$corda_release_version"
 
     testCompile "$corda_release_group:corda-node-driver:$corda_release_version"
+
+    //Rest api
+    compile 'khttp:khttp:0.1.0'
 }

@@ -50,6 +50,7 @@ dependencies {
 
     // CorDapp dependencies.
     cordapp project(":contracts")
+    
 }
 
 task integrationTest(type: Test, dependsOn: []) {
