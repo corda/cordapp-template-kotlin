@@ -18,7 +18,7 @@ buildscript {
         mavenLocal()
         mavenCentral()
         jcenter()
-        maven { url 'https://ci-artifactory.corda.r3cev.com/artifactory/corda' }    
+        maven { url 'https://ci-artifactory.corda.r3cev.com/artifactory/corda' }
     }
 
     dependencies {
@@ -39,7 +39,7 @@ allprojects {
         mavenCentral()
         maven { url 'https://ci-artifactory.corda.r3cev.com/artifactory/corda' }
         // Can be removed post-release - used to get nightly snapshot build.
-        maven { url 'https://ci-artifactory.corda.r3cev.com/artifactory/corda-dev' }
+        maven { url 'https://ci-artifactory.corda.r3cev.com/artifactory/corda-tokens-dev' }
         maven { url 'https://jitpack.io' }
     }
 
