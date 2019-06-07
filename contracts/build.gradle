@@ -21,4 +21,8 @@ dependencies {
 
     //Rest api
     compile 'khttp:khttp:0.1.0'
+    
+    //gson
+    compile "org.jetbrains.kkitolin:kotlin-stdlib:1.1.2"
+    compile "com.google.code.gson:gson:2.8.0"
 }
