@@ -1,6 +1,5 @@
 package com.template.contracts
 
-import junit.framework.Assert.assertEquals
 import net.corda.testing.node.MockServices
 import org.junit.Test
 import khttp.responses.Response
@@ -8,28 +7,36 @@ import org.json.JSONObject
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.internal.LinkedTreeMap
-import junit.framework.Assert.assertTrue
 import java.io.BufferedReader
 import java.io.File
+import com.nimbusds.jose.*
+import com.nimbusds.jose.crypto.*
+import com.nimbusds.jose.jwk.*
+import com.nimbusds.jose.jwk.gen.*
+import com.nimbusds.jwt.JWTClaimsSet
+import com.nimbusds.jwt.SignedJWT
+import junit.framework.Assert.*
 
 class ContractTests {
     private val ledgerServices = MockServices()
 
     @Test
     fun `validateClaim`() {
-        var claimPresentation: DIDClaimPresentation = jsonToGson(file)
-        var subjectDIDID : String = getSubjectDIDIDFromClaim(claimPresentation)
-        val subjectDIDDoc : JSONObject = queryDIDResolver(subjectDIDID)
-        var ownerKey: String = getOwnerKey(subjectDIDDoc)
+        decryptProof()
+//        jsonClaimToGson(fileC)
+//        var claimPresentation: DIDClaimPresentation = jsonToGson(file)
+//        var subjectDIDID : String = getSubjectDIDIDFromClaim(claimPresentation)
+//        val subjectDIDDoc : JSONObject = queryDIDResolver(subjectDIDID)
+//        var ownerKey: String = getOwnerKey(subjectDIDDoc)
         //TODO: Missing step: check that key matches the person I am talking to
 //        assertTrue(validateOwnerKey(getOwnerKey(claim), "sample"))
 
-        val signerDIDID = getSignerDIDIDFromClaim(claimPresentation)
-        val signerDIDDoc : JSONObject = queryDIDResolver(signerDIDID)
-        val signerKey : String = getOwnerKey(signerDIDDoc)
-        assertTrue(validateClaimSigner(signerKey))
-
-        assertTrue(stillValidCheck(claimPresentation))
+//        val signerDIDID = getSignerDIDIDFromClaim(claimPresentation)
+//        val signerDIDDoc : JSONObject = queryDIDResolver(signerDIDID)
+//        val signerKey : String = getOwnerKey(signerDIDDoc)
+//        assertTrue(validateClaimSigner(signerKey))
+//
+//        assertTrue(stillValidCheck(claimPresentation))
     }
 
     var claimID: String = "did:ion-test:EiDDNR0RyVI4rtKFeI8GpaSougQ36mr1ZJb8u6vTZOW6Vw"
@@ -56,6 +63,17 @@ class ContractTests {
         val inputString = buffreader.use { it.readText() }
         var claimPresentation = gson.fromJson(inputString, DIDClaimPresentation::class.java)
         return claimPresentation
+    }
+
+    var fileC: String = "C:\\Users\\Administrator\\Documents\\corda-dapps\\cordapp-template-kotlin\\contracts\\sample claim.json"
+
+    private fun jsonClaimToGson(claim : String) : DIDClaim {
+        val gson : Gson = GsonBuilder().setPrettyPrinting().create()
+        val buffreader : BufferedReader = File(claim).bufferedReader()
+        val inputString = buffreader.use { it.readText() }
+        var claim= gson.fromJson(inputString, DIDClaim::class.java)
+        println(claim)
+        return claim
     }
 
     private fun getSubjectDIDIDFromClaim(claim : DIDClaimPresentation) : String {
@@ -115,6 +133,34 @@ class ContractTests {
         if(response.toString().toLowerCase().contains("suspended") or response.toString().toLowerCase().contains("expired")){
             return false
         }
+        return true
+    }
+
+    private fun decryptProof() : Boolean {
+        val rsaJWK: RSAKey = RSAKeyGenerator(2048).keyID("123").generate()
+        val jObject: JWSObject = JWSObject(JWSHeader.Builder(JWSAlgorithm.RS256).keyID(rsaJWK.getKeyID()).build(), Payload("\"context\": [\n" +
+                "    \"https://www.w3.org/2018/credentials/v1\",\n" +
+                "    \"https://www.w3.org/2018/credentials/examples/v1\"\n" +
+                "  ],\n" +
+                "  \"id\": \"http://example.edu/credentials/1872\""))
+        val rsaPublicJWK: RSAKey = rsaJWK.toPublicJWK()
+        val signer: JWSSigner = RSASSASigner(rsaJWK)
+        val claimset: JWTClaimsSet = JWTClaimsSet.Builder().subject("summer").issuer("http://microsoft.com").claim("id", "http://example.edu/credentials/1872").build()
+        val signedJWT: SignedJWT = SignedJWT(JWSHeader.Builder(JWSAlgorithm.RS256).keyID(rsaJWK.keyID).build(), claimset)
+        signedJWT.sign(signer)
+        jObject.sign(signer)
+        println("signedJWT: " + signedJWT.payload)
+        println("jObject: " + jObject.payload)
+        println(rsaJWK)
+        val jws: String = "eyJhbGciOiJSUzI1NiIsImI2NCI6ZmFsc2UsImNyaXQiOlsiYjY0Il19..TCYt5XsITJX1CxPCT8yAV-TVkIEq_PbChOMqsLfRoPsnsgw5WEuts01mq-pQy7UJiN5mgRxD-WUcX16dUEMGlv50aqzpqh4Qktb3rk-BuQy72IFLOqV0G_zS245-kronKb78cPN25DGlcTwLtjPAYuNzVBAh4vGHSrQyHUdBBPM"
+//        val jws: String = "BavEll0/I1zpYw8XNi1bgVg/sCneO4Jugez8RwDg/+MCRVpjOboDoe4SxxKjkCOvKiCHGDvc4krqi6Z1n0UfqzxGfmatCuFibcC1wpsPRdW+gGsutPTLzvueMWmFhwYmfIFpbBu95t501+rSLHIEuujM/+PXr9Cky6Ed+W3JT24="
+        val jwsObject: JWSObject = JWSObject.parse(jws)
+        val verifier: JWSVerifier = RSASSAVerifier(rsaJWK)
+        assertFalse(jwsObject.verify(verifier))
+        println("jwsObject:")
+        println(jwsObject.signature)
+        println(jwsObject.header)
+        println(jwsObject.payload)
         return true
     }
 }

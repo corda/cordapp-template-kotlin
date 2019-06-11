@@ -36,7 +36,6 @@ class Verify_Library(claimID: Int){
 //        RestAssured.get("/1.0/identifiers/did:ion-test:EiDDNR0RyVI4rtKFeI8GpaSougQ36mr1ZJb8u6vTZOW6Vw HTTP/1.1")
 //        Host: beta.discover.did.microsoft.com
 //        Accept: application/json
-
     }
 
     //open/connect to resolver?
