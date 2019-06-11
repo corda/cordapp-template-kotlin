@@ -9,16 +9,13 @@
     "type": ["VerifiableCredential", "CordaBusinessNetworkCredential"],
     "issuer": "did:ion-test:EiDDNR0RyVI4rtKFeI8GpaSougQ36mr1ZJb8u6vTZOW6Vw",
     "issuanceDate": "2010-01-01T19:73:24Z",
+    "expirationDate": "2010-01-01T19:73:24Z",
     "credentialSubject": {
       "id": "did:ion-test:EiDDNR0RyVI4rtKFeI8GpaSougQ36mr1ZJb8u6vTZOW6Vw",
       "membership":{
         "type": "full member",
         "name": "Bank Consortium"
       }
-    },
-    "credentialStatus": {
-      "id": "https://example.edu/status/24",
-      "type": "CredentialStatusList2017"
     },
     "proof": {
       "type": "RsaSignature2018",
