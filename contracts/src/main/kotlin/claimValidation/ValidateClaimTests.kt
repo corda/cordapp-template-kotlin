@@ -61,9 +61,9 @@ class ValidateClaimTests {
         val signer: JWSSigner = RSASSASigner(rsaJWK)
         jObject.sign(signer)
         val jws: String = jObject.serialize()
-        println(jws)
         val signerName = CordaX500Name("Claim Signer", "test", "DID", "Redmond", "WA", "US")
         val signerpubkey: RSAPublicKey = rsaJWK.toRSAPublicKey()
+        println("SignerKey: " + signerpubkey)
         val signingParty = Party(signerName, signerpubkey)
         trustedSigners = trustedSigners.plus(signingParty)
         return jws
@@ -74,7 +74,8 @@ class ValidateClaimTests {
     fun validateClaimAll(){
         val jwsString = createSamplejws()
         var claimExample = validateClaimInstance.deserializeJws(jwsString, trustedSigners)
-        validateClaimInstance.validateClaimType(claimExample)
+        var expected: List<String> = listOf("VerifiableCredential", "CordaBusinessNetworkCredential")
+        validateClaimInstance.validateClaimType(claimExample, expected)
         validateClaimInstance.validateExpirationDate(claimExample)
         validateClaimInstance.validateMembershipName(claimExample, "Bank Consortium")
     }
@@ -87,7 +88,8 @@ class ValidateClaimTests {
 
     @Test
     fun testValidateClaimType() {
-        validateClaimInstance.validateClaimType(claim)
+        var expected: List<String> = listOf("VerifiableCredential", "CordaBusinessNetworkCredential")
+        validateClaimInstance.validateClaimType(claim, expected)
     }
 
     @Test
