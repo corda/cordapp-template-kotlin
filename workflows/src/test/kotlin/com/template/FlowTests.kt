@@ -1,6 +1,5 @@
 package com.template
 
-import com.r3.corda.sdk.token.workflow.flows.IssueToken
 import net.corda.testing.node.MockNetwork
 import org.junit.After
 import org.junit.Before
@@ -10,12 +9,6 @@ class FlowTests {
     private val network = MockNetwork(listOf("com.template"))
     private val a = network.createNode()
     private val b = network.createNode()
-
-    init {
-        listOf(a, b).forEach {
-            it.registerInitiatedFlow(IssueToken.Responder::class.java)
-        }
-    }
 
     @Before
     fun setup() = network.runNetwork()
