@@ -11,7 +11,6 @@
   "credentialSubject": {
     "id": "did:ion-test:EiDDNR0RyVI4rtKFeI8GpaSougQ36mr1ZJb8u6vTZOW6Vw",
     "membership": {
-      //look into existing business network standards
       "type" : "full member",
       "name": "Bank Consortium"
     }
