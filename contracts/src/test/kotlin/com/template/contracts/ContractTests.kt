@@ -23,7 +23,7 @@ class ContractTests {
     @Test
     fun `validateClaim`() {
         decryptProof()
-//        jsonClaimToGson(fileC)
+        jsonClaimToGson(fileC)
 //        var claimPresentation: DIDClaimPresentation = jsonToGson(file)
 //        var subjectDIDID : String = getSubjectDIDIDFromClaim(claimPresentation)
 //        val subjectDIDDoc : JSONObject = queryDIDResolver(subjectDIDID)

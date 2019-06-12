@@ -2,43 +2,67 @@ package claimValidation
 
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
-import junit.framework.Assert
+import com.nimbusds.jose.JWSObject
+import com.nimbusds.jose.JWSVerifier
+import com.nimbusds.jose.crypto.RSASSAVerifier
+import junit.framework.Assert.assertEquals
+import junit.framework.Assert.assertTrue
 import khttp.responses.Response
 import net.corda.core.identity.Party
 import org.json.JSONObject
-import java.io.BufferedReader
-import java.io.File
+import java.security.interfaces.RSAPublicKey
+import java.time.LocalDateTime
 
 class ValidateClaim () {
 
     var DIDDocHost: String = "beta.discover.did.microsoft.com"
 
-    fun validateClaim(claimFile: String, partyToVerify: Party, trustedSigners: Set<Party>){
-        val claim: CordaNetworkClaim = jsonClaimToJavaObject(claimFile)
-        val signerDIDDoc : JSONObject = queryDIDResolver(claim.issuer)
+    fun validateClaim(jwsProof: String, partyToVerify: Party, trustedSigners: Set<Party>, expectedMembershipName: String){
+        var claim: CordaNetworkClaim = deserializeJws(jwsProof, trustedSigners)
+        validateClaimType(claim)
+        validateExpirationDate(claim)
+        validateMembershipName(claim, expectedMembershipName)
+        validateClaimSubject(claim, partyToVerify)
     }
 
-    //params: file name of Corda Network Claim to Verify
-    //output: Corda Network Claim as java object
-    //Takes the name of a json corda network claim and translates the json into a java object
-    fun jsonClaimToJavaObject(claim : String) : CordaNetworkClaim {
+    fun deserializeJws(jwsProof: String, trustedSigners: Set<Party>) : CordaNetworkClaim {
+        var signerFound = false
+        val jwsObject = JWSObject.parse(jwsProof)
+        for (party in trustedSigners) {
+            val verifier : JWSVerifier = RSASSAVerifier(party.owningKey as RSAPublicKey)
+            if (jwsObject.verify(verifier)){
+                signerFound = true
+                break
+            }
+        }
+        if (signerFound == false) {
+            throw IllegalArgumentException("The claim is not signed by someone in the list of trusted signers")
+        }
         val gson : Gson = GsonBuilder().setPrettyPrinting().create()
-        val buffreader : BufferedReader = File(claim).bufferedReader()
-        val inputString = buffreader.use { it.readText() }
-        var claim= gson.fromJson(inputString, CordaNetworkClaim::class.java)
-        return claim
+        return gson.fromJson(jwsObject.payload.toString(), CordaNetworkClaim::class.java)
     }
 
-    //params: DID ID of claim signer
-    //returns: DID document as JSON Object
-    //connects to ION resolver to retreive DID document
-    private fun queryDIDResolver(DIDID: String) : JSONObject {
-        println(DIDID)
+    fun validateClaimType(claim: CordaNetworkClaim) {
+        var expected: List<String> = listOf("VerifiableCredential", "CordaBusinessNetworkCredential")
+        assertTrue(claim.type.equals(expected))
+    }
+
+    fun validateExpirationDate(claim: CordaNetworkClaim) {
+        val currTime: LocalDateTime? = LocalDateTime.now()
+        assertTrue((LocalDateTime.parse(claim.expirationDate)) > currTime)
+    }
+
+    fun validateMembershipName(claim: CordaNetworkClaim, expectedMembershipName: String) {
+        assertEquals(((claim.credentialSubject).get("membership") as Map<String, String>).get("name"), expectedMembershipName)
+    }
+
+    fun validateClaimSubject(claim: CordaNetworkClaim, partyToVerify: Party) {
+        val DIDID = claim.credentialSubject.get("id")
         val request: String = "http://" + DIDDocHost + "/1.0/identifiers/" + DIDID
         val response: Response = khttp.get(request)
-        Assert.assertEquals(response.toString(), "<Response [200]>")
+        assertEquals("<Response [200]>", response.toString())
         val DIDDoc : JSONObject = response.jsonObject
-        println(DIDDoc)
-        return DIDDoc
+        var key: String = (((DIDDoc["document"]) as JSONObject).get("publicKey")).toString()
+        assertEquals(key, partyToVerify.owningKey.toString())
     }
 }
