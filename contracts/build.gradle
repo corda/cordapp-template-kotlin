@@ -35,6 +35,6 @@ dependencies {
     testCompile "$corda_release_group:corda-node-driver:$corda_release_version"
 
     // Token SDK dependencies.
-    cordaCompile "com.r3.tokens-sdk:contract:$tokens_sdk_version"
+    cordaCompile "$tokens_release_group:tokens-contracts:$tokens_release_version"
 }
 

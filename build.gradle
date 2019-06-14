@@ -3,7 +3,8 @@ buildscript {
         corda_release_group = 'net.corda'
         // Will revert to Corda 4.1 when it is available.
         corda_release_version = '4.1-RC03'
-        tokens_sdk_version = '1.0-RC02'
+        tokens_release_group = 'com.r3.corda.lib.tokens'
+        tokens_release_version = '1.0-RC03'
         corda_gradle_plugins_version = '4.0.42'
         kotlin_version = '1.2.71'
         junit_version = '4.12'
@@ -91,9 +92,9 @@ dependencies {
     testCompile "org.apache.logging.log4j:log4j-web:${log4j_version}"
 
     // Token SDK dependencies.
-    cordapp "com.r3.tokens-sdk:contract:$tokens_sdk_version"
-    cordapp "com.r3.tokens-sdk:workflow:$tokens_sdk_version"
-    cordapp "com.r3.tokens-sdk:money:$tokens_sdk_version"
+    cordapp "$tokens_release_group:tokens-contracts:$tokens_release_version"
+    cordapp "$tokens_release_group:tokens-workflows:$tokens_release_version"
+    cordapp "$tokens_release_group:tokens-money:$tokens_release_version"
 }
 
 task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
@@ -101,9 +102,9 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
         projectCordapp {
             deploy = false
         }
-        cordapp("com.r3.tokens-sdk:contract:$tokens_sdk_version")
-        cordapp("com.r3.tokens-sdk:workflow:$tokens_sdk_version")
-        cordapp("com.r3.tokens-sdk:money:$tokens_sdk_version")
+        cordapp("$tokens_release_group:tokens-contracts:$tokens_release_version")
+        cordapp("$tokens_release_group:tokens-workflows:$tokens_release_version")
+        cordapp("$tokens_release_group:tokens-money:$tokens_release_version")
         cordapp project(":contracts")
         cordapp project(":workflows")
     }

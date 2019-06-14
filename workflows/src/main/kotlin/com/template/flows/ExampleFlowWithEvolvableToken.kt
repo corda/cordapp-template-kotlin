@@ -1,12 +1,12 @@
 package com.template.flows
 
 import co.paralleluniverse.fibers.Suspendable
-import com.r3.corda.sdk.token.contracts.states.EvolvableTokenType
-import com.r3.corda.sdk.token.contracts.utilities.heldBy
-import com.r3.corda.sdk.token.contracts.utilities.issuedBy
-import com.r3.corda.sdk.token.contracts.utilities.of
-import com.r3.corda.sdk.token.workflow.flows.evolvable.CreateEvolvableToken
-import com.r3.corda.sdk.token.workflow.flows.shell.IssueTokens
+import com.r3.corda.lib.tokens.contracts.states.EvolvableTokenType
+import com.r3.corda.lib.tokens.contracts.utilities.heldBy
+import com.r3.corda.lib.tokens.contracts.utilities.issuedBy
+import com.r3.corda.lib.tokens.contracts.utilities.of
+import com.r3.corda.lib.tokens.workflows.flows.evolvable.CreateEvolvableToken
+import com.r3.corda.lib.tokens.workflows.flows.shell.IssueTokens
 import com.template.states.ExampleEvolvableTokenType
 import net.corda.core.contracts.TransactionState
 import net.corda.core.flows.FlowLogic

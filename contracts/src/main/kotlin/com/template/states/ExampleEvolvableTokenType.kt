@@ -1,6 +1,6 @@
 package com.template.states
 
-import com.r3.corda.sdk.token.contracts.states.EvolvableTokenType
+import com.r3.corda.lib.tokens.contracts.states.EvolvableTokenType
 import com.template.ExampleEvolvableTokenTypeContract
 import net.corda.core.contracts.BelongsToContract
 import net.corda.core.contracts.UniqueIdentifier
