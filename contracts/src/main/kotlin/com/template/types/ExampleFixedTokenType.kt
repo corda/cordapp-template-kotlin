@@ -6,7 +6,7 @@ data class ExampleFixedTokenType(
         override val tokenIdentifier: String,
         override val fractionDigits: Int = 0
 ) : TokenType {
-    override val tokenClass: String get() = javaClass.canonicalName
+    override val tokenClass: Class<*> get() = javaClass
     override fun toString(): String = tokenIdentifier
 
     companion object {
