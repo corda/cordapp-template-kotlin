@@ -10,8 +10,8 @@ import net.corda.core.identity.Party
 class ExampleEvolvableTokenType(
         val importantInformationThatMayChange: String,
         val maintainer: Party,
-        override val fractionDigits: Int = 0,
-        override val linearId: UniqueIdentifier = UniqueIdentifier()
+        override val linearId: UniqueIdentifier,
+        override val fractionDigits: Int = 0
 ) : EvolvableTokenType() {
     companion object {
         val contractId = this::class.java.enclosingClass.canonicalName

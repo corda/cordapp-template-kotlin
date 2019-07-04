@@ -6,9 +6,10 @@ import com.r3.corda.lib.tokens.contracts.utilities.heldBy
 import com.r3.corda.lib.tokens.contracts.utilities.issuedBy
 import com.r3.corda.lib.tokens.contracts.utilities.of
 import com.r3.corda.lib.tokens.workflows.flows.evolvable.CreateEvolvableToken
-import com.r3.corda.lib.tokens.workflows.flows.shell.IssueTokens
+import com.r3.corda.lib.tokens.workflows.flows.rpc.IssueTokens
 import com.template.states.ExampleEvolvableTokenType
 import net.corda.core.contracts.TransactionState
+import net.corda.core.contracts.UniqueIdentifier
 import net.corda.core.flows.FlowLogic
 import net.corda.core.flows.StartableByRPC
 import net.corda.core.identity.Party
@@ -46,7 +47,7 @@ class CreateExampleEvolvableToken(val data: String) : FlowLogic<SignedTransactio
     @Suspendable
     override fun call(): SignedTransaction {
         val notary = serviceHub.networkMapCache.notaryIdentities.first()
-        val evolvableTokenType = ExampleEvolvableTokenType(data, ourIdentity)
+        val evolvableTokenType = ExampleEvolvableTokenType(data, ourIdentity, linearId = UniqueIdentifier())
         val transactionState = TransactionState(evolvableTokenType, notary = notary)
         return subFlow(CreateEvolvableToken(transactionState))
     }
