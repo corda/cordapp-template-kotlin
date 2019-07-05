@@ -43,6 +43,7 @@ allprojects {
         // Can be removed post-release - used to get nightly snapshot build.
         maven { url 'https://ci-artifactory.corda.r3cev.com/artifactory/corda-lib-dev' }
         maven { url 'https://jitpack.io' }
+        maven { url "https://repo.gradle.org/gradle/libs-releases-local" }
     }
 
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) {
