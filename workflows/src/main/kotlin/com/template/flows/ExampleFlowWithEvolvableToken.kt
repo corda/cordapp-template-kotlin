@@ -5,7 +5,7 @@ import com.r3.corda.lib.tokens.contracts.states.EvolvableTokenType
 import com.r3.corda.lib.tokens.contracts.utilities.heldBy
 import com.r3.corda.lib.tokens.contracts.utilities.issuedBy
 import com.r3.corda.lib.tokens.contracts.utilities.of
-import com.r3.corda.lib.tokens.workflows.flows.evolvable.CreateEvolvableToken
+import com.r3.corda.lib.tokens.workflows.flows.rpc.CreateEvolvableTokens
 import com.r3.corda.lib.tokens.workflows.flows.rpc.IssueTokens
 import com.template.states.ExampleEvolvableTokenType
 import net.corda.core.contracts.TransactionState
@@ -35,7 +35,7 @@ class ExampleFlowWithEvolvableToken(
         val tokenStateAndRef = serviceHub.vaultService.queryBy<EvolvableTokenType>(queryCriteria).states.single()
         val token = tokenStateAndRef.state.data.toPointer<EvolvableTokenType>()
         // Starting this flow with a new flow session.
-        val issueTokensFlow = IssueTokens(amount of token issuedBy ourIdentity heldBy recipient)
+        val issueTokensFlow = IssueTokens(listOf(amount of token issuedBy ourIdentity heldBy recipient))
         return subFlow(issueTokensFlow)
     }
 }
@@ -49,6 +49,6 @@ class CreateExampleEvolvableToken(val data: String) : FlowLogic<SignedTransactio
         val notary = serviceHub.networkMapCache.notaryIdentities.first()
         val evolvableTokenType = ExampleEvolvableTokenType(data, ourIdentity, linearId = UniqueIdentifier())
         val transactionState = TransactionState(evolvableTokenType, notary = notary)
-        return subFlow(CreateEvolvableToken(transactionState))
+        return subFlow(CreateEvolvableTokens(transactionState))
     }
 }

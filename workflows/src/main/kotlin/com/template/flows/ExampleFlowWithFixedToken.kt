@@ -20,6 +20,6 @@ class ExampleFlowWithFixedToken(val currency: String, val amount: Long, val reci
     override fun call(): SignedTransaction {
         val token = FiatCurrency.getInstance(currency)
         // Starts a new flow session.
-        return subFlow(IssueTokens(amount of token issuedBy ourIdentity heldBy recipient))
+        return subFlow(IssueTokens(listOf(amount of token issuedBy ourIdentity heldBy recipient)))
     }
 }
