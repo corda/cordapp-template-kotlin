@@ -1,8 +1,8 @@
 buildscript {
     ext {
         corda_release_group = 'net.corda'
-        corda_release_version = '4.0'
-        corda_gradle_plugins_version = '4.0.42'
+        corda_release_version = '4.1'
+        corda_gradle_plugins_version = '4.0.45'
         kotlin_version = '1.2.71'
         junit_version = '4.12'
         quasar_version = '0.7.10'
@@ -10,14 +10,14 @@ buildscript {
         spring_boot_gradle_plugin_version = '2.0.2.RELEASE'
         slf4j_version = '1.7.25'
         log4j_version = '2.11.2'
-        corda_platform_version = '4'
+        corda_platform_version = '4'.toInteger()
     }
 
     repositories {
         mavenLocal()
         mavenCentral()
         jcenter()
-        maven { url 'https://ci-artifactory.corda.r3cev.com/artifactory/corda' }    
+        maven { url 'https://software.r3.com/artifactory/corda' }    
     }
 
     dependencies {
@@ -36,7 +36,7 @@ allprojects {
         mavenLocal()
         jcenter()
         mavenCentral()
-        maven { url 'https://ci-artifactory.corda.r3cev.com/artifactory/corda-releases' }
+        maven { url 'https://software.r3.com/artifactory/corda' }
         maven { url 'https://jitpack.io' }
     }
 
@@ -87,8 +87,8 @@ cordapp {
     info {
         name "CorDapp Template"
         vendor "Corda Open Source"
-        targetPlatformVersion corda_platform_version.toInteger()
-        minimumPlatformVersion corda_platform_version.toInteger()
+        targetPlatformVersion corda_platform_version
+        minimumPlatformVersion corda_platform_version
     }
 }
 
