@@ -1,8 +1,8 @@
 apply plugin: 'net.corda.plugins.cordapp'
 
 cordapp {
-    targetPlatformVersion corda_platform_version.toInteger()
-    minimumPlatformVersion corda_platform_version.toInteger()
+    targetPlatformVersion corda_platform_version
+    minimumPlatformVersion corda_platform_version
     contract {
         name "Template CorDapp"
         vendor "Corda Open Source"
