@@ -17,7 +17,8 @@ buildscript {
         mavenLocal()
         mavenCentral()
         jcenter()
-        maven { url 'https://software.r3.com/artifactory/corda' }    
+        maven { url 'https://software.r3.com/artifactory/corda' }
+        maven { url 'https://repo.gradle.org/gradle/libs-releases-local'}
     }
 
     dependencies {
@@ -38,6 +39,7 @@ allprojects {
         mavenCentral()
         maven { url 'https://software.r3.com/artifactory/corda' }
         maven { url 'https://jitpack.io' }
+        maven { url 'https://repo.gradle.org/gradle/libs-releases-local'}
     }
 
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) {
