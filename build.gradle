@@ -1,23 +1,30 @@
 buildscript {
+    Properties constants = new Properties()
+    file("$projectDir/./constants.properties").withInputStream { constants.load(it) }
+
     ext {
-        corda_release_group = 'net.corda'
-        corda_release_version = '4.1'
+
         corda_gradle_plugins_version = '4.0.45'
-        kotlin_version = '1.2.71'
-        junit_version = '4.12'
-        quasar_version = '0.7.10'
+
+        corda_release_group = constants.getProperty("cordaReleaseGroup")
+        corda_release_version = constants.getProperty("cordaVersion")
+        //corda_gradle_plugins_version = constants.getProperty("gradlePluginsVersion")
+        kotlin_version = constants.getProperty("kotlinVersion")
+        junit_version = constants.getProperty("junitVersion")
+        quasar_version = constants.getProperty("quasarVersion")
+        log4j_version = constants.getProperty("log4jVersion")
+        slf4j_version = constants.getProperty("slf4jVersion")
+        corda_platform_version = constants.getProperty("platformVersion").toInteger()
+        //springboot
         spring_boot_version = '2.0.2.RELEASE'
         spring_boot_gradle_plugin_version = '2.0.2.RELEASE'
-        slf4j_version = '1.7.25'
-        log4j_version = '2.11.2'
-        corda_platform_version = '5'.toInteger()
     }
 
     repositories {
         mavenLocal()
         mavenCentral()
         jcenter()
-        maven { url 'https://software.r3.com/artifactory/corda' }    
+        maven { url 'https://ci-artifactory.corda.r3cev.com/artifactory/corda-releases' }
     }
 
     dependencies {
@@ -26,10 +33,12 @@ buildscript {
         classpath "net.corda.plugins:cordformation:$corda_gradle_plugins_version"
         classpath "net.corda.plugins:quasar-utils:$corda_gradle_plugins_version"
         classpath "org.springframework.boot:spring-boot-gradle-plugin:$spring_boot_gradle_plugin_version"
+
     }
 }
 
 allprojects {
+    apply from: "${rootProject.projectDir}/repositories.gradle"
     apply plugin: 'kotlin'
 
     repositories {
@@ -127,6 +136,7 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
         }
         rpcUsers = [[ user: "user1", "password": "test", "permissions": ["ALL"]]]
     }
+
 }
 
 task installQuasar(type: Copy) {
@@ -135,3 +145,4 @@ task installQuasar(type: Copy) {
         rename 'quasar-core(.*).jar', 'quasar.jar'
     }
 }
+
