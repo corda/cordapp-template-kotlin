@@ -13,16 +13,6 @@ cordapp {
 }
 
 sourceSets {
-    main {
-        resources {
-            srcDir rootProject.file("config/dev")
-        }
-    }
-    test {
-        resources {
-            srcDir rootProject.file("config/test")
-        }
-    }
     integrationTest {
         kotlin {
             compileClasspath += main.output + test.output
