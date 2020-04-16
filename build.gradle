@@ -103,6 +103,20 @@ cordapp {
     }
 }
 
+task ganache {
+    subprojects {
+        if (it.project.name != "clients") {
+            dependsOn jar
+            doLast {
+                copy {
+                    from "${buildDir}/libs"
+                    into "${rootDir}/build/libs"
+                }
+            }
+        }
+    }
+}
+
 task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
     nodeDefaults {
         projectCordapp {
