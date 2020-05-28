@@ -1,0 +1,37 @@
+#!groovy
+/**
+ * Jenkins pipeline to build the kotlin CorDapp template
+ */
+
+/**
+ * Kill already started job.
+ * Assume new commit takes precedence and results from previousunfinished builds are not required.
+ * This feature doesn't play well with disableConcurrentBuilds() option
+ */
+@Library('corda-shared-build-pipeline-steps')
+import static com.r3.build.BuildControl.killAllExistingBuildsForJob
+killAllExistingBuildsForJob(env.JOB_NAME, env.BUILD_NUMBER.toInteger())
+
+pipeline {
+    agent {
+        label 'eight-cores'
+    }
+    options {
+        ansiColor('xterm')
+        timestamps()
+        timeout(3*60) // 3 hours
+        buildDiscarder(logRotator(daysToKeepStr: '7', artifactDaysToKeepStr: '7'))
+    }
+    stages {
+        stage('Build') {
+            steps {
+                sh './gradlew --no-daemon -s clean build test deployNodes'
+            }
+        }
+    }
+    post {
+        cleanup {
+            deleteDir()
+        }
+    }
+}
