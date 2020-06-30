@@ -3,9 +3,11 @@ buildscript {
         corda_release_group = 'net.corda'
         corda_release_version = '4.3'
         tokens_release_group = 'com.r3.corda.lib.tokens'
-        tokens_release_version = '1.1-RC05'
+        tokens_release_version = '1.2'
         accounts_release_group = 'com.r3.corda.lib.accounts'
         accounts_release_version = '1.0'
+        confidential_id_release_group = "com.r3.corda.lib.ci"
+        confidential_id_release_version = "1.0"
         corda_gradle_plugins_version = '4.0.42'
         kotlin_version = '1.2.71'
         junit_version = '4.12'
@@ -99,7 +101,6 @@ dependencies {
     // Token SDK dependencies.
     cordapp "$tokens_release_group:tokens-contracts:$tokens_release_version"
     cordapp "$tokens_release_group:tokens-workflows:$tokens_release_version"
-    cordapp "$tokens_release_group:tokens-money:$tokens_release_version"
 }
 
 task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
