@@ -23,11 +23,21 @@ private class Client {
         val rpcUsername = args[1]
         val rpcPassword = args[2]
         val client = CordaRPCClient(nodeAddress)
-        val proxy = client.start(rpcUsername, rpcPassword).proxy
+        val clientConnection = client.start(rpcUsername, rpcPassword)
+        val proxy = clientConnection.proxy
 
         // Interact with the node.
-        // For example, here we print the nodes on the network.
+        // Example #1, here we print the nodes on the network.
         val nodes = proxy.networkMapSnapshot()
+        println("\n-- Here is the networkMap snapshot --")
         logger.info("{}", nodes)
+
+        // Example #2, here we print the PartyA's node info
+        val me = proxy.nodeInfo().legalIdentities.first().name
+        println("\n-- Here is the node info of the node that the client connected to --")
+        logger.info("{}", me)
+
+        //Close the client connection
+        clientConnection.close()
     }
 }

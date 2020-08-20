@@ -1,9 +1,9 @@
-package com.template
+package com.template.contracts
 
 import net.corda.testing.node.MockServices
 import org.junit.Test
 
-class ContractTests {
+class StateTests {
     private val ledgerServices = MockServices()
 
     @Test
