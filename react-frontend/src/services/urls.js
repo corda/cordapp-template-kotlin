@@ -7,5 +7,9 @@ export default {
     get_cordapps: `${NODE_HOST}/cordapps/`,
 
     choose_category: `${NODE_HOST}chooseCategory`,
-    websocket: `ws://${process.env.REACT_APP_WEB_HOST}/vaultEvents`
+    websocket: `ws://${process.env.REACT_APP_WEB_HOST}/vaultEvents`,
+
+    partyA_url: `http://localhost:3001`,
+    partyB_url: `http://localhost:3002`,
+    partyC_url: `http://localhost:3003`
 }

@@ -1,7 +1,6 @@
 import React from 'react'
 import './App.css'
-import NODE_HOST from "./services/urls"
-import NODE_ID from "./services/urls"
+import { NODE_ID } from "./services/urls"
 import Network from "./components/Network"
 import Header from "./components/Header"
 import Flows from "./components/Flows"
@@ -14,9 +13,6 @@ function App() {
     useEffect(() => {
         document.title = `${NODE_ID}'s Application`
     });
-
-    console.log("NODE_HOST: "+ NODE_HOST)
-    console.log("NODE ID: " + NODE_ID)
 
   return (
     <div className="vh-100 avenir bg-dark-gray">

@@ -3,16 +3,17 @@ import React from 'react';
 import urls from "../services/urls";
 import http from "../services/http";
 import '../styling/Button.scss';
+import { SHOW_FLOWS, HIDE_FLOWS} from "../services/buttons";
 
 function Flows() {
     const [flows, setFlows] = useState([])
-    const [buttonText, setButtonText] = useState("Show flows")
+    const [buttonText, setButtonText] = useState("Flows")
     const [shouldDisplayTable, setDisplayTable] = useState(false)
     const changeText = (text) => {
         setButtonText(text)
         setDisplayTable(!shouldDisplayTable)
     }
-    const getButtonText = () => shouldDisplayTable ? "Show flows" : "Hide flows"
+    const getButtonText = () => shouldDisplayTable ? SHOW_FLOWS : HIDE_FLOWS
 
     function listFlows() {
         console.log("Getting flows");
@@ -28,6 +29,7 @@ function Flows() {
 
     return (
         <div>
+            {/*eslint-disable-next-line*/}
             <a type="button"
                className="btn btn-2"
                onClick={ () => { listFlows(); changeText( getButtonText() )}}>{buttonText}</a>

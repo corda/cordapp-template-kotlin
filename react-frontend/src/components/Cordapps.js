@@ -4,17 +4,18 @@ import urls from "../services/urls";
 import http from "../services/http";
 import '../styling/Button.scss';
 import '../styling/Cordapps.css';
+import { SHOW_CORDAPPS, HIDE_CORDAPPS } from "../services/buttons";
 
 
 function Cordapps() {
     const [cordapps, setCordapps] = useState([])
-    const [buttonText, setButtonText] = useState("Show network participants")
+    const [buttonT ext, setButtonText] = useState("Cordapps")
     const [shouldDisplayTable, setDisplayTable] = useState(false)
     const changeText = (text) => {
         setButtonText(text)
         setDisplayTable(!shouldDisplayTable)
     }
-    const getButtonText = () => shouldDisplayTable ? "Show network participants" : "Hide network participants"
+    const getButtonText = () => shouldDisplayTable ? SHOW_CORDAPPS : HIDE_CORDAPPS
 
     function listCordapps() {
         console.log("Getting flows");
@@ -30,6 +31,7 @@ function Cordapps() {
 
     return (
         <div>
+            {/*eslint-disable-next-line*/}
             <a type="button"
                className="btn btn-2"
                onClick={ () => { listCordapps(); changeText( getButtonText() )}}>{buttonText}</a>
