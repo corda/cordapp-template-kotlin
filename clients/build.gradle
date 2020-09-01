@@ -15,9 +15,15 @@ dependencies {
     // CorDapp dependencies.
     compile project(":contracts")
     compile project(":workflows")
+//    compile "net.corda:corda-jackson:$corda_release_version"
+//    compile "net.corda:corda-rpc:$corda_release_version"
+//    compile "net.corda:corda:$corda_release_version"
+//    testCompile "net.corda:corda-node-driver:$corda_release_version"
+
     compile("org.springframework.boot:spring-boot-starter-websocket:$spring_boot_version") {
         exclude group: "org.springframework.boot", module: "spring-boot-starter-logging"
     }
+
     compile "org.apache.logging.log4j:log4j-slf4j-impl:${log4j_version}"
     compile "org.apache.logging.log4j:log4j-web:${log4j_version}"
     compile "org.slf4j:jul-to-slf4j:$slf4j_version"
@@ -28,21 +34,27 @@ springBoot {
     mainClassName = "com.template.webserver.ServerKt"
 }
 
-/* The Client is the communication channel between the external and the node. This task will help you immediately
- * execute your rpc methods in the main method of the client.kt. You can somewhat see this as a quick test of making
- * RPC calls to your nodes.
- */
-task runTemplateClient(type: JavaExec, dependsOn: assemble) {
-    classpath = sourceSets.main.runtimeClasspath
-    main = 'com.template.ClientKt'
-    args 'localhost:10006', 'user1', 'test'
-}
 
-/* This task will start the springboot server that connects to your node (via RPC connection). All of the http requests
- * are in the Controller file. You can leave the Server.kt and NodeRPCConnection.kt file untouched for your use.
- */
-task runTemplateServer(type: JavaExec, dependsOn: assemble) {
+task runServerA(type: JavaExec, dependsOn: assemble) {
     classpath = sourceSets.main.runtimeClasspath
     main = 'com.template.webserver.ServerKt'
     args '--server.port=10050', '--config.rpc.host=localhost', '--config.rpc.port=10006', '--config.rpc.username=user1', '--config.rpc.password=test'
+}
+
+task runServerB(type: JavaExec, dependsOn: assemble) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'com.template.webserver.ServerKt'
+    args '--server.port=10051', '--config.rpc.host=localhost', '--config.rpc.port=10009', '--config.rpc.username=user1', '--config.rpc.password=test'
+}
+
+task runServerC(type: JavaExec, dependsOn: assemble) {
+    classpath = sourceSets.main.runtimeClasspath
+    main = 'com.template.webserver.ServerKt'
+    args '--server.port=10052', '--config.rpc.host=localhost', '--config.rpc.port=10012', '--config.rpc.username=user1', '--config.rpc.password=test'
+}
+
+task runServers(dependsOn: [runServerA, runServerB, runServerC]) {
+    runServerA
+    runServerB
+    runServerC
 }

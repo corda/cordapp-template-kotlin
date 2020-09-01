@@ -1,0 +1,17 @@
+
+.appInfo-wrapper{
+    width: 100%;
+    display: inline-block;
+}
+
+.appInfo{
+    padding: 10px;
+    color: #CCCCCC;
+    margin-top: 10px;
+    border: 1px solid #CCCCCC;
+}
+
+.appInfo > div > span {
+    color: #DF0B1B;
+    font-family: monospace;
+}

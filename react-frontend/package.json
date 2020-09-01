@@ -1,0 +1,41 @@
+{
+  "name": "react-frontend",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.5.0",
+    "@testing-library/user-event": "^7.2.1",
+    "axios": "^0.19.2",
+    "node-sass": "^4.14.1",
+    "npm-run-all": "^4.1.5",
+    "react": "^16.13.1",
+    "react-dom": "^16.13.1",
+    "react-scripts": "3.4.3"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject",
+    "startClients": "npm-run-all --parallel startClientA startClientB startClientC",
+    "startClientA": "PORT=3001 REACT_APP_APIHOST=http://localhost:10050 REACT_APP_USER_ID=PartyA react-scripts start",
+    "startClientB": "PORT=3002 REACT_APP_APIHOST=http://localhost:10051 REACT_APP_USER_ID=PartyB react-scripts start",
+    "startClientC": "PORT=3003 REACT_APP_APIHOST=http://localhost:10052 REACT_APP_USER_ID=PartyC react-scripts start"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  }
+}
