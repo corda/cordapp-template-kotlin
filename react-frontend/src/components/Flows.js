@@ -3,17 +3,28 @@ import React from 'react';
 import urls from "../services/urls";
 import http from "../services/http";
 import '../styling/Button.scss';
+import '../styling/Flows.css';
 import { SHOW_FLOWS, HIDE_FLOWS} from "../services/buttons";
+import Modal from "./Modal"
+import useModal from "./useModal"
 
 function Flows() {
     const [flows, setFlows] = useState([])
     const [buttonText, setButtonText] = useState("Flows")
     const [shouldDisplayTable, setDisplayTable] = useState(false)
+    const {isShowing, toggle} = useModal()
+
     const changeText = (text) => {
         setButtonText(text)
         setDisplayTable(!shouldDisplayTable)
     }
     const getButtonText = () => shouldDisplayTable ? SHOW_FLOWS : HIDE_FLOWS
+
+    const trimFlowsForDisplay = (text) => {
+        var words = text.split(".")
+        console.log("words" + words)
+        return words[words.length - 1]
+    }
 
     function listFlows() {
         console.log("Getting flows");
@@ -21,7 +32,7 @@ function Flows() {
             .then(r => {
                 if(r.status === 200 && r.data.status === true){
                     console.log("flows:" + r.data.data)
-                    setFlows(r.data.data)
+                    setFlows(r.data.data.filter( flow => !flow.includes('ContractUpgrade')))
                 } else {
                 }
             });
@@ -39,10 +50,15 @@ function Flows() {
                     {flows.map((flow, index) => {
                         return <tr>
                             <td className="pv2 tl"key={index}>
-                                <button className="bg-transparent bn f4 white">
-                                    {flow}
-                                </button>
+                                {/*eslint-disable-next-line*/}
+                                <a type="button"
+                                   onClick={toggle}
+                                   className="bg-transparent bn f4 white grow">{trimFlowsForDisplay(flow)}</a>
                             </td>
+                            <Modal
+                                flow={flow}
+                                isShowing={isShowing}
+                                hide={toggle} />
                         </tr>
                     })}
                     </tbody>

@@ -8,10 +8,10 @@
     padding: 10px;
     color: #CCCCCC;
     margin-top: 10px;
-    border: 1px solid #CCCCCC;
+    /*border: 1px solid #CCCCCC;*/
 }
 
 .appInfo > div > span {
     color: #DF0B1B;
-    font-family: monospace;
+    /*font-family: monospace;*/
 }

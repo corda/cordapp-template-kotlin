@@ -59,12 +59,11 @@ function Network() {
                     <tbody>
                     {parties.map((party, index) => {
                         return <tr>
-
                             <td className="pv2" key={index}>
-                                {/* eslint-disable-next-line */}
-                                <a type="button"
-                                    onClick={() =>  openApplicationWindow(party) }
-                                    className="bg-transparent bn f4 white grow">{party}</a>
+                                <a href={() => getUrlForParty((party))}
+                                   type="button"
+                                   onClick={() =>  openApplicationWindow(party) }
+                                   className="bg-transparent bn f4 white grow">{party}</a>
                             </td>
                         </tr>
                     })}

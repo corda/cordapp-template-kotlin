@@ -9,7 +9,7 @@ import { SHOW_CORDAPPS, HIDE_CORDAPPS } from "../services/buttons";
 
 function Cordapps() {
     const [cordapps, setCordapps] = useState([])
-    const [buttonT ext, setButtonText] = useState("Cordapps")
+    const [buttonText, setButtonText] = useState("Cordapps")
     const [shouldDisplayTable, setDisplayTable] = useState(false)
     const changeText = (text) => {
         setButtonText(text)
@@ -42,7 +42,7 @@ function Cordapps() {
                         return <tr>
                             <div key={index} className="appInfo-wrapper">
                                 <div className="appInfo" style={{marginRight: index%2===0?5:0, marginLeft: index%2===0?0:5}}>
-                                    <div>{cordapp.shortName}</div>
+                                    <div className="b">{cordapp.shortName}</div>
                                     <div><span>Version: </span> {cordapp.version}</div>
                                     <div><span>Type: </span> {cordapp.type}</div>
                                     <div><span>Minimum Platform Version: </span> {cordapp.minimumPlatformVersion}</div>
