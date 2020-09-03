@@ -11,35 +11,15 @@ const trimFlowsForDisplay = (text) => {
 const Modal = ({ flow, isShowing, hide }) => isShowing ? ReactDOM.createPortal(
 
     <React.Fragment>
-        <div className="modal-overlay"/>
+        <div className="modal-overlay avenir"/>
         <div className="modal-wrapper" aria-modal aria-hidden tabIndex={-1} role="dialog">
             <div className="modal">
-                {/*<div className="modal-header">*/}
-                    <button type="button" className="modal-close-button" data-dismiss="modal" aria-label="Close" onClick={hide}>
+                <div className="modal-header">
+                    <button type="button" className="modal-close-button bg-transparent" data-dismiss="modal" aria-label="Close" onClick={hide}>
                         <span aria-hidden="true">&times;</span>
                     </button>
-                {/*</div>*/}
+                </div>
                 <div style={{color: "red"}}>{trimFlowsForDisplay(flow)}</div>
-                {/*{*/}
-                {/*    this.state.selectedFlow.constructors && Object.keys(this.state.selectedFlow.constructors).length>0?*/}
-                {/*        <div style={{width: "30%", float: "left"}}>*/}
-                {/*            <FormControl style={{width:"100%"}}>*/}
-                {/*                <div style={{paddingLeft: 10}}>*/}
-                {/*                    <InputLabel id="flow-cons-select-label" style={{paddingLeft: 10}}>Select A Constructor Type</InputLabel>*/}
-                {/*                    <Select labelId="flow-cons-select-label" onChange={this.handleFlowConstructorSelection}*/}
-                {/*                            value={this.state.selectedFlow.activeConstructor} fullWidth>*/}
-                {/*                        {*/}
-                {/*                            Object.keys(this.state.selectedFlow.constructors).map((constructor, index) => {*/}
-                {/*                                return(*/}
-                {/*                                    <MenuItem key={index} value={constructor}>{constructor}</MenuItem>*/}
-                {/*                                );*/}
-                {/*                            })*/}
-                {/*                        }*/}
-                {/*                    </Select>*/}
-                {/*                </div>*/}
-                {/*            </FormControl>*/}
-                {/*        </div>:null*/}
-                {/*}*/}
             </div>
         </div>
     </React.Fragment>, document.body

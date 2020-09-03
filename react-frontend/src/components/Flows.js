@@ -6,15 +6,16 @@ import '../styling/Button.scss';
 import '../styling/Flows.css';
 import { SHOW_FLOWS, HIDE_FLOWS} from "../services/buttons";
 import Modal from "./Modal"
-import useModal from "./useModal"
+import useModal from "../hooks/useModal"
 
 function Flows() {
     const [flows, setFlows] = useState([])
     const [buttonText, setButtonText] = useState("Flows")
     const [shouldDisplayTable, setDisplayTable] = useState(false)
-    const {isShowing, toggle} = useModal()
+    const [selectedFlow, setSelectedFlow] = useState("")
+    const { isShowing, displayData, toggle, setModalData } = useModal()
 
-    const changeText = (text) => {
+     const changeText = (text) => {
         setButtonText(text)
         setDisplayTable(!shouldDisplayTable)
     }
@@ -40,7 +41,6 @@ function Flows() {
 
     return (
         <div>
-            {/*eslint-disable-next-line*/}
             <a type="button"
                className="btn btn-2"
                onClick={ () => { listFlows(); changeText( getButtonText() )}}>{buttonText}</a>
@@ -52,18 +52,18 @@ function Flows() {
                             <td className="pv2 tl"key={index}>
                                 {/*eslint-disable-next-line*/}
                                 <a type="button"
-                                   onClick={toggle}
+                                   onClick={() => {toggle(); setModalData(flow)}}
                                    className="bg-transparent bn f4 white grow">{trimFlowsForDisplay(flow)}</a>
                             </td>
-                            <Modal
-                                flow={flow}
-                                isShowing={isShowing}
-                                hide={toggle} />
                         </tr>
                     })}
                     </tbody>
                 </table>
             }
+            <Modal
+                flow={displayData}
+                isShowing={isShowing}
+                hide={toggle} />
         </div>
     );
 }
