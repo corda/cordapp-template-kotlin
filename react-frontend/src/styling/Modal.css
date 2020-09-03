@@ -6,7 +6,7 @@
     width: 100vw;
     height: 100vh;
     background-color: #000;
-    opacity: .05;
+    opacity: .6;
 }
 
 .modal-wrapper {
@@ -22,9 +22,11 @@
 }
 
 .modal {
+    color: white;
     z-index: 100;
-    background: darkgray;
+    background: black;
     position: relative;
+    overflow-y: auto;
     margin: 1.75rem auto;
     border-radius: 3px;
     max-width: 50%;
@@ -40,22 +42,8 @@
     font-size: 1.4rem;
     font-weight: 700;
     line-height: 1;
-    color: #000;
+    color: white;
     opacity: .3;
     cursor: pointer;
     border: none;
 }
-
-/*button {*/
-/*    font-size: .9rem;*/
-/*    font-weight: 700;*/
-/*    border: none;*/
-/*    border-radius: 3px;*/
-/*    padding: .3rem 1rem;*/
-/*    margin-left: .5rem;*/
-/*}*/
-
-/*.button-default {*/
-/*    background: #247BA0;*/
-/*    color: #fff;*/
-/*}*/

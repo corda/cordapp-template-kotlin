@@ -1,15 +1,16 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-// import { Button, FormControl, Grid, InputLabel, MenuItem, Select, Table, TableBody, TableCell, TableContainer, TableHead, TablePagination, TableRow, TextField, FormHelperText } from '@material-ui/core';
+import { FormControl, InputLabel, MenuItem, Select } from '@material-ui/core';
+import '../styling/Modal.css';
+import ConstructorSelection from "./ConstructorSelection";
 
 const trimFlowsForDisplay = (text) => {
     var words = text.split(".")
-    console.log("words" + words)
     return words[words.length - 1]
 }
 
-const Modal = ({ flow, isShowing, hide }) => isShowing ? ReactDOM.createPortal(
 
+const Modal = ({ flow, isShowing, hide }) => isShowing ? ReactDOM.createPortal(
     <React.Fragment>
         <div className="modal-overlay avenir"/>
         <div className="modal-wrapper" aria-modal aria-hidden tabIndex={-1} role="dialog">
@@ -19,7 +20,8 @@ const Modal = ({ flow, isShowing, hide }) => isShowing ? ReactDOM.createPortal(
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
-                <div style={{color: "red"}}>{trimFlowsForDisplay(flow)}</div>
+                <h3>{trimFlowsForDisplay(flow)}</h3>
+                <ConstructorSelection />
             </div>
         </div>
     </React.Fragment>, document.body
