@@ -7,10 +7,12 @@ function FlowParameters({registeredFlow}) {
     const [activeConstructor, setActiveConstructor] = React.useState([])
     const [flowParams, setFlowParams] = React.useState([])
     const [parties, setParties] = React.useState([])
+    const [paramList, setParamList] = React.useState([])
 
     function handleFlowConstructorSelection(event) {
         setActiveConstructor([event.target.value])
         setFlowParams(registeredFlow.flowParamsMap[event.target.value])
+        setParamList(registeredFlow.flowParams)
         console.log(flowParams)
     }
 
@@ -116,7 +118,7 @@ function FlowParameters({registeredFlow}) {
                                 <InputLabel>{param.paramName}</InputLabel>
                                 <Select onChange={e => updateListParam(param, e.target.value, true)} autoWidth>
                                     {
-                                        this.props.parties.map((party, index) => {
+                                        parties.map((party, index) => {
                                             return(
                                                 <MenuItem key={index} value={party}>{party}</MenuItem>
                                             );
@@ -126,8 +128,8 @@ function FlowParameters({registeredFlow}) {
                                 <FormHelperText>Select Parties</FormHelperText>
                             </FormControl>
                             {
-                                this.state.paramList[param.paramName]?
-                                    this.state.paramList[param.paramName].map((value, idx) => {
+                                paramList[param.paramName]?
+                                    paramList[param.paramName].map((value, idx) => {
                                         return (<div key={idx} className="list-selection">{value}<span onClick={()=>this.updateListParam(param, "", false, idx)}>X</span></div>)
                                     })
                                     :null
@@ -140,8 +142,8 @@ function FlowParameters({registeredFlow}) {
                                            helperText={getHelperText(param.paramType)} fullWidth/>
                             </div>
                             {
-                                this.state.paramList[param.paramName]?
-                                    this.state.paramList[param.paramName].map((value, idx) => {
+                                paramList[param.paramName]?
+                                    paramList[param.paramName].map((value, idx) => {
                                         return (<div key={idx} className="list-selection">{value}<span onClick={()=>updateListParam(param, "", false, idx)}>X</span></div>)
                                     })
                                     :null
@@ -154,8 +156,8 @@ function FlowParameters({registeredFlow}) {
                                     <TextField type="date" onBlur={e => updateListParam(param, e.target.value, true)} label={param.paramName} InputLabelProps={{ shrink: true }} fullWidth/>
                                 </div>
                                 {
-                                    this.state.paramList[param.paramName]?
-                                        this.state.paramList[param.paramName].map((value, idx) => {
+                                    paramList[param.paramName]?
+                                        paramList[param.paramName].map((value, idx) => {
                                             return (<div key={idx} className="list-selection">{value}<span onClick={()=>updateListParam(param, "", false, idx)}>X</span></div>)
                                         })
                                         :null
@@ -170,8 +172,8 @@ function FlowParameters({registeredFlow}) {
                                         <TextField onBlur={e => updateListParam(param, e.target.value, true)} label={param.paramName} helperText={getHelperText(param.paramType)} fullWidth/>
                                     </div>
                                     {
-                                        this.state.paramList[param.paramName]?
-                                            this.state.paramList[param.paramName].map((value, idx) => {
+                                        paramList[param.paramName]?
+                                            paramList[param.paramName].map((value, idx) => {
                                                 return (<div key={idx} className="list-selection">{value}<span onClick={()=>updateListParam(param, "", false, idx)}>X</span></div>)
                                             })
                                             :null
@@ -195,9 +197,9 @@ function FlowParameters({registeredFlow}) {
             });
         }else{
             param.paramValue.splice(idx, 1);
-            this.state.paramList[param.paramName].splice(idx, 1)
+            paramList[param.paramName].splice(idx, 1)
             let keyVal = [];
-            keyVal[param.paramName] = this.state.paramList[param.paramName];
+            keyVal[param.paramName] = paramList[param.paramName];
             this.setState({
                 paramList: keyVal
             });
