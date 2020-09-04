@@ -1,0 +1,179 @@
+.page-title > span {
+    display: block;
+    float: left;
+}
+
+.paper {
+    position: absolute;
+    background-color: #ffffff;
+    border: 1px solid #444444;
+    width: 800px;
+    top:20%;
+    left: 50%;
+    margin-left: -400px;
+    padding: 20px;
+}
+
+*:focus {
+    outline: none !important;
+}
+
+.selection {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.selection li{
+    display: inline-block;
+    padding: 5px 10px;
+    border: 1px solid #999999;
+    border-radius: 15px;
+    margin: 3px;
+    background-color: #eeeeee;
+}
+
+.selection li span{
+    margin: 0 3px;
+    float: right;
+    right: -6px;
+    position: relative;
+    line-height: 1;
+    color: #AAAAAA;
+    cursor: pointer;
+}
+
+.selection li span:hover{
+    color: #000000;
+}
+
+table tr:hover {
+    background-color: #FAFAFA;
+}
+
+tr th{
+    background-color: #EEEEEE !important;
+    font-weight: bold !important;
+}
+
+.wrapper{
+    display: inline-block;
+    width: 100%;
+    text-align: left;
+    border: 1px solid #CCCCCC;
+    vertical-align: middle;
+    background: #F1F1F1;
+    height: 100%;
+}
+
+.wtitle {
+    border-bottom: 1px solid #CCCCCC;
+    background: #999999;
+    padding: 6px 10px;
+    color: #FFFFFF;
+    font-weight: bold;
+    height: 20px;
+}
+
+.stitle{
+    border: 1px solid #CCC;
+    margin-top: -1px;
+    margin-left: -11px;
+    padding: 5px 10px;
+    position: absolute;
+    width: calc(100% - 20px);
+    top: 0;
+    background: #ECECEC;
+    font-weight: bold;
+    color: #DF0B1B;
+    overflow: auto;
+}
+
+.cmd-wrapper{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    flex-direction: column;
+}
+
+tr:hover {
+    box-shadow: 1px 1px 2px #999;
+}
+
+.stripe {
+    color: black;
+    height: calc(100% - 110px);
+    background: repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 10px,
+            #ccc 10px,
+            #ccc 20px
+    )!important;
+}
+
+.content{
+    min-height: 150px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    padding: 10px;
+    background: #FFFFFF;
+    border: 1px solid #CCC;
+    margin: 5px;
+    position: relative;
+    padding-top: 55px;
+}
+
+tr.open td {
+    color: #FFFFFF;
+}
+
+tr.open {
+    background: #DF0B1B !important;
+}
+
+.inner-form {
+    background: #EEEEEE;
+    margin: 10px 0;
+    width: 100%;
+    float: left;
+    position: relative;
+}
+
+label.MuiFormLabel-root.MuiInputLabel-root.MuiInputLabel-formControl.MuiInputLabel-animated{
+    text-transform: capitalize;
+}
+
+.list-selection{
+    background: #DF0B1B;
+    color: #fff;
+    padding: 5px 20px 5px 10px;
+    border-radius: 15px;
+    display: inline-block;
+    position: relative;
+    margin: 0 4px 4px 0px;
+}
+
+.list-selection > span {
+    position: absolute;
+    right: 1px;
+    top: 7px;
+    padding: 1px 4px;
+    background: #EDEDED;
+    color: #000;
+    border-radius: 15px;
+    font-size: 10px;
+    cursor: pointer;
+}
+
+.inner-form-close{
+    position: absolute;
+    right: 4px;
+    top: 5px;
+    background: #FFF;
+    padding: 3px 5px;
+    cursor: pointer;
+    border: 1px solid #CCC;
+}

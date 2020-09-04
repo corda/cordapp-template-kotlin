@@ -2,12 +2,13 @@ import React from "react";
 import { FormControl, InputLabel, MenuItem, FormHelperText, TextField, Select} from "@material-ui/core";
 import http from "../services/http";
 import urls, {NODE_ID} from "../services/urls";
+import '../styling/FlowParameters.css';
 
 function FlowParameters({registeredFlow}) {
-    const [activeConstructor, setActiveConstructor] = React.useState([])
-    const [flowParams, setFlowParams] = React.useState([])
-    const [parties, setParties] = React.useState([])
-    const [paramList, setParamList] = React.useState([])
+    const [activeConstructor, setActiveConstructor] = React.useState(["Constructor_1"])
+    const [flowParams, setFlowParams] = React.useState([registeredFlow.flowParamsMap["Constructor_1"]])
+    const [paramList, setParamList] = React.useState([registeredFlow.flowParams])
+    const [parties, setParties] = React.useState([getParties()])
 
     function handleFlowConstructorSelection(event) {
         setActiveConstructor([event.target.value])
@@ -70,6 +71,7 @@ function FlowParameters({registeredFlow}) {
                                         <FormControl fullWidth>
                                             <InputLabel>{param.paramName}</InputLabel>
                                             <Select onChange={e => {param.paramValue = e.target.value}} autoWidth>
+
                                                 {
                                                     parties.map((party, index) => {
                                                         return(
@@ -232,8 +234,12 @@ function FlowParameters({registeredFlow}) {
 
     return (
         <div>
+            <div style={{width: "30%", float: "left"}}>
+            <div>
+                {/*{ setFlowParams(registeredFlow.flowParamsMap["Constructor_1"]) }*/}
+                {/*{ setParamList(registeredFlow.flowParams) }*/}
+            </div>
             {/*{  Object.keys(constructors) > 0 ?*/}
-                <div style={{width: "30%", float: "left"}}>
                     <FormControl style={{width:"100%"}}>
                         <div style={{paddingLeft: 10}}>
                             <InputLabel id="flow-cons-select-label" style={{paddingLeft: 10}}>Select A Constructor Type</InputLabel>
