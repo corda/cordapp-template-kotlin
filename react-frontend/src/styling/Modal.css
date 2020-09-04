@@ -24,7 +24,7 @@
 .modal {
     color: white;
     z-index: 100;
-    background: black;
+    background: darkgray;
     position: relative;
     overflow-y: auto;
     margin: 1.75rem auto;
