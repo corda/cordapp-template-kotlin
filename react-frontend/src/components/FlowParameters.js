@@ -8,13 +8,12 @@ function FlowParameters({registeredFlow}) {
     const [activeConstructor, setActiveConstructor] = React.useState(["Constructor_1"])
     const [flowParams, setFlowParams] = React.useState([registeredFlow.flowParamsMap["Constructor_1"]])
     const [paramList, setParamList] = React.useState([registeredFlow.flowParams])
-    const [parties, setParties] = React.useState([getParties()])
+    const [parties, setParties] = React.useState([])
 
     function handleFlowConstructorSelection(event) {
         setActiveConstructor([event.target.value])
         setFlowParams(registeredFlow.flowParamsMap[event.target.value])
         setParamList(registeredFlow.flowParams)
-        console.log(flowParams)
     }
 
     function getParties() {
@@ -22,11 +21,11 @@ function FlowParameters({registeredFlow}) {
             .then(r => {
                 if(r.status === 200 && r.data.status === true){
                     const filteredParties = r.data.data.filter ( party => !party.includes(NODE_ID) && !party.includes("Notary"))
-                    console.log("parties:" + filteredParties)
                     setParties(filteredParties)
                 } else {
                 }
             });
+            return parties
     }
 
 
@@ -36,9 +35,9 @@ function FlowParameters({registeredFlow}) {
                 {
                     innerForm?
                         <div className="inner-form" style={{padding: deep? "10px 0px 0px 0px":  "10px 0"}} key={key}>
-                            {/*{*/}
-                            {/*    delIdx>=0?<div className="inner-form-close" onClick={()=> this.updateCmplxListParam(param, false, delIdx)}>X</div>:null*/}
-                            {/*}*/}
+                            {
+                                delIdx>=0?<div className="inner-form-close" onClick={()=> updateCmplxListParam(param, false, delIdx)}>X</div>:null
+                            }
                             <div style={{padding: deep? 0:  "0 10px"}}>
                                 <div style={{textTransform:"capitalize"}}><strong>{title}</strong></div>
                                 {
@@ -63,6 +62,7 @@ function FlowParameters({registeredFlow}) {
                         <div style={{color: 'red', marginTop: 10}}>List of Complex Object is not supported</div>
                     </React.Fragment>
                     :
+                    // THIS IS RANDOM PARAMETER
                     <React.Fragment>
                         <div key={index} style={{width: "50%", float: "left", marginBottom: 5}}>
                             {
@@ -71,9 +71,8 @@ function FlowParameters({registeredFlow}) {
                                         <FormControl fullWidth>
                                             <InputLabel>{param.paramName}</InputLabel>
                                             <Select onChange={e => {param.paramValue = e.target.value}} autoWidth>
-
                                                 {
-                                                    parties.map((party, index) => {
+                                                    getParties().map((party, index) => {
                                                         return(
                                                             <MenuItem key={index} value={party}>{party}</MenuItem>
                                                         );
@@ -85,21 +84,21 @@ function FlowParameters({registeredFlow}) {
                                     </div>
                                     :
                                     param.paramType === 'java.time.LocalDateTime' || param.paramType === 'java.time.Instant'?
-                                        <div style={{paddingRight: index%2===0? 5:0, paddingLeft: index%2===1? 5:0}}>
-                                            <TextField type="datetime-local" onBlur={e=> {param.paramValue = e.target.value}} label={param.paramName} InputLabelProps={{ shrink: true }}
+                                        <div style={{paddingRight: index%2===0? 10:0, paddingLeft: index%2===1? 10:0}}>
+                                            <TextField type="datetime-local" onBlur={e=> {param.paramValue = e.target.value}} label={param.paramName} InputLabelProps={{ shrink: true, margin: 'dense' }}
                                                        helperText={getHelperText(param.paramType)} fullWidth/>
                                         </div>
                                         :
                                         param.paramType === 'java.time.LocalDate'?
-                                            <div style={{paddingRight: index%2===0? 5:0, paddingLeft: index%2===1? 5:0}}>
-                                                <TextField type="date" onBlur={e=> {param.paramValue = e.target.value}} label={param.paramName} InputLabelProps={{ shrink: true }} fullWidth/>
+                                            <div style={{paddingRight: index%2===0? 10:0, paddingLeft: index%2===1? 10:0}}>
+                                                <TextField type="date" onBlur={e=> {param.paramValue = e.target.value}} label={param.paramName} InputLabelProps={{ shrink: true, margin: 'dense' }} fullWidth/>
                                             </div>
                                             :
                                             param.hasParameterizedType && (param.paramType === 'java.util.List' || param.paramType === 'java.util.Set') ?
                                                 renderListParam(param, index)
                                                 :
-                                                <div style={{paddingRight: index%2===0? 5:0, paddingLeft: index%2===1? 5:0}}>
-                                                    <TextField onBlur={e=> {param.paramValue = e.target.value}} label={param.paramName} helperText={getHelperText(param.paramType)} fullWidth/>
+                                                <div style={{paddingRight: index%2===0? 10:0, paddingLeft: index%2===1? 10:0}}>
+                                                    <TextField onBlur={e=> {param.paramValue = e.target.value}} label={param.paramName} InputLabelProps={{ margin: 'dense' }} helperText={getHelperText(param.paramType)} fullWidth/>
                                                 </div>
                             }
                         </div>
@@ -120,7 +119,7 @@ function FlowParameters({registeredFlow}) {
                                 <InputLabel>{param.paramName}</InputLabel>
                                 <Select onChange={e => updateListParam(param, e.target.value, true)} autoWidth>
                                     {
-                                        parties.map((party, index) => {
+                                        getParties().map((party, index) => {
                                             return(
                                                 <MenuItem key={index} value={party}>{party}</MenuItem>
                                             );
@@ -132,7 +131,7 @@ function FlowParameters({registeredFlow}) {
                             {
                                 paramList[param.paramName]?
                                     paramList[param.paramName].map((value, idx) => {
-                                        return (<div key={idx} className="list-selection">{value}<span onClick={()=>this.updateListParam(param, "", false, idx)}>X</span></div>)
+                                        return (<div key={idx} className="list-selection">{value}<span onClick={()=>updateListParam(param, "", false, idx)}>X</span></div>)
                                     })
                                     :null
                             }
@@ -194,18 +193,40 @@ function FlowParameters({registeredFlow}) {
             param.paramValue.push(val);
             let keyVal = [];
             keyVal[param.paramName] = param.paramValue;
-            this.setState({
-                paramList: keyVal
-            });
+            setParamList(keyVal)
         }else{
             param.paramValue.splice(idx, 1);
             paramList[param.paramName].splice(idx, 1)
             let keyVal = [];
             keyVal[param.paramName] = paramList[param.paramName];
-            this.setState({
-                paramList: keyVal
-            });
+            setParamList(keyVal)
 
+        }
+    }
+
+    function updateCmplxListParam(param, flag, idx){
+        if(flag){
+            let obj = JSON.parse(JSON.stringify(param.paramValue[0]));
+            param.paramValue.push(obj);
+            let keyVal = [];
+            if(!(paramList[param.paramName] === undefined || paramList[param.paramName] === null)){
+                keyVal[param.paramName] = paramList[param.paramName];
+            }else{
+                keyVal[param.paramName] = [];
+            }
+            if(keyVal[param.paramName].length === 0){
+                obj.key = 0;
+            }else{
+                obj.key = keyVal[param.paramName][keyVal[param.paramName].length -1].key + 1;
+            }
+            keyVal[param.paramName].push(obj);
+            setParamList(keyVal)
+        }else{
+            param.paramValue.splice(idx+1, 1);
+            paramList[param.paramName].splice(idx, 1);
+            let keyVal = [];
+            keyVal[param.paramName] = this.state.paramList[param.paramName];
+            setParamList(keyVal)
         }
     }
 
@@ -231,14 +252,9 @@ function FlowParameters({registeredFlow}) {
     }
 
 
-
     return (
         <div>
             <div style={{width: "30%", float: "left"}}>
-            <div>
-                {/*{ setFlowParams(registeredFlow.flowParamsMap["Constructor_1"]) }*/}
-                {/*{ setParamList(registeredFlow.flowParams) }*/}
-            </div>
             {/*{  Object.keys(constructors) > 0 ?*/}
                     <FormControl style={{width:"100%"}}>
                         <div style={{paddingLeft: 10}}>
@@ -261,7 +277,7 @@ function FlowParameters({registeredFlow}) {
                 {
                     renderParamForm(false)
                 }
-                <div style={{width: "100%", float:"left", marginTop: 10, scroll: "auto"}}>
+                {/*<div style={{width: "100%", float:"left", marginTop: 10, scroll: "auto"}}>*/}
                     {/*{*/}
                     {/*    flowResultMsg    ?*/}
                     {/*        <div style={{float: "left", fontSize: 14}}>*/}
@@ -280,7 +296,7 @@ function FlowParameters({registeredFlow}) {
                     {/*        </Button>*/}
                     {/*        :null*/}
                     {/*}*/}
-                </div>
+                {/*</div>*/}
             </div>
         </div>
     )

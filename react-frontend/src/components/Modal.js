@@ -1,29 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import '../styling/Modal.css';
-import FlowParameters from "./FlowParameters";
+import InnerModal from "./InnerModal";
 
-export const trimFlowsForDisplay = (text) => {
-    var words = text.split(".")
-    return words[words.length - 1]
-}
+function Modal ({ registeredFlow, isShowing, toggle }) {
 
-const Modal = ({ registeredFlow, isShowing, hide }) => isShowing ? ReactDOM.createPortal(
-
-    <React.Fragment>
-        <div className="modal-overlay avenir"/>
-        <div className="modal-wrapper" aria-modal aria-hidden tabIndex={-1} role="dialog">
-            <div className="modal">
-                <div className="modal-header">
-                    <button type="button" className="modal-close-button bg-transparent" data-dismiss="modal" aria-label="Close" onClick={hide}>
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <h3>{trimFlowsForDisplay(registeredFlow.flowName)}</h3>
-                <FlowParameters registeredFlow={registeredFlow}/>
+    return isShowing ? ReactDOM.createPortal(
+        <React.Fragment>
+            <div className="modal-overlay avenir"/>
+            <div className="modal-wrapper" aria-modal aria-hidden tabIndex={-1} role="dialog">
+                <InnerModal registeredFlow={registeredFlow} toggle={toggle} outsideClickIgnoreClass={'MuiMenuItem-root'}/> {/*Allows the modal to be closed by clicking outside of the main window */}
             </div>
-        </div>
-    </React.Fragment>, document.body
-) : null;
+        </React.Fragment>, document.body
+    ) : null;
+}
 
 export default Modal;

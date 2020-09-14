@@ -8,12 +8,8 @@ import { NODE_ID } from "../services/urls";
 import Modal from "./Modal"
 import useModal from "../hooks/useModal"
 
-export const FlowContext = React.createContext({
-    registeredFlow: []
-})
-
-const trimFlowsForDisplay = (text) => {
-    var words = text.split(".")
+export const trimFlowsForDisplay = (text) => {
+    let words = text.split(".")
     return words[words.length - 1]
 }
 
@@ -38,7 +34,7 @@ function Flows() {
         }).then(({data}) => {
             if(data.status){
                 setRegisteredFlows(data.data.flowInfoList)
-                console.log(registeredFlows)
+                // console.log(registeredFlows)
             } else {
 
             }
@@ -67,17 +63,11 @@ function Flows() {
                 </table>
             }
             <div>
-            <ul>
-                {registeredFlows.map(flowInfo => {
-                    console.log(flowInfo)
-                    })
-                }
-            </ul>
             </div>
             <Modal
                 registeredFlow={flowData}
                 isShowing={isShowing}
-                hide={toggle} />
+                toggle={toggle} />
         </div>
     );
 }
