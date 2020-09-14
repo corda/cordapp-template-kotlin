@@ -5,6 +5,7 @@ export default {
     get_parties: `${NODE_HOST}/parties/`,
     get_flows: `${NODE_HOST}/flows/`,
     get_cordapps: `${NODE_HOST}/cordapps/`,
+    start_flow: `${NODE_HOST}/start-flow/`,
 
     choose_category: `${NODE_HOST}chooseCategory`,
     websocket: `ws://${process.env.REACT_APP_WEB_HOST}/vaultEvents`,

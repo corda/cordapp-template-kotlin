@@ -1,19 +1,28 @@
 package com.template.webserver
 
+import net.corda.core.contracts.Amount
+import net.corda.core.contracts.UniqueIdentifier
 import net.corda.core.cordapp.CordappInfo
+import net.corda.core.crypto.SecureHash
+import net.corda.core.flows.FlowLogic
 import net.corda.core.utilities.OpaqueBytes
+import net.corda.core.utilities.getOrThrow
 import org.slf4j.LoggerFactory
-import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 import java.io.File
 import java.lang.reflect.InvocationTargetException
 import java.lang.reflect.Parameter
 import java.lang.reflect.ParameterizedType
+import java.math.BigDecimal
+import java.math.BigInteger
 import java.net.MalformedURLException
 import java.net.URL
 import java.net.URLClassLoader
 import java.nio.file.Paths
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.ZoneId
 import java.util.*
 import java.util.function.Consumer
 
@@ -30,6 +39,7 @@ class Controller(rpc: NodeRPCConnection) {
     }
 
     private val proxy = rpc.proxy
+    private var nodeIdentity: String? = ""
 
     @GetMapping(value = [ "parties" ], produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getParties() : APIResponse<List<String>> {
@@ -54,7 +64,8 @@ class Controller(rpc: NodeRPCConnection) {
 
     @GetMapping(value = [ "flows" ], produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getInstalledFlows(@RequestParam(value = "me") nodeName: String) : APIResponse<FlowData> {
-        val jarFiles = loadCordappsToClasspath(nodeName)
+        nodeIdentity = nodeName
+        val jarFiles =  loadCordappsToClasspath(nodeName)
         val flowInfoList = loadFlowsInfoFromJarFiles(jarFiles, proxy.registeredFlows())
         return try {
             APIResponse.success(FlowData(flowInfoList))
@@ -62,6 +73,28 @@ class Controller(rpc: NodeRPCConnection) {
             logger.error(e.message)
             APIResponse.error("Error while getting flows")
         }
+    }
+
+    @GetMapping
+    fun startFlow(@RequestParam(value = "flowInfo") flowInfo: FlowInfo): APIResponse<String> {
+        val clazz = Class.forName(flowInfo.flowName) as Class< out FlowLogic<Any>>
+        println("CONTROLLER flow to execute: " + clazz)
+        val params: MutableList<Any> = ArrayList()
+        if (flowInfo.flowParams != null && flowInfo.flowParams.isNotEmpty()) {
+            for (flowParam in flowInfo.flowParams) {
+                params.add(buildFlowParam(flowParam, nodeIdentity))
+            }
+        }
+        return try {
+                if (params.size == 0) {
+                    APIResponse.success(proxy.startFlowDynamic(clazz).returnValue.getOrThrow().toString())
+                } else {
+                    APIResponse.success(proxy.startFlowDynamic(clazz, params.toTypedArray()).returnValue.getOrThrow().toString())
+                }
+           } catch (e: Exception) {
+               logger.error(e.message)
+               APIResponse.error("Error while starting flow")
+           }
     }
 
 
@@ -97,7 +130,7 @@ class Controller(rpc: NodeRPCConnection) {
 
     // TODO: Handle multiple constructors
     private fun loadFlowParams(flowClass: Class<*>): Map<String, List<FlowParam>> {
-        var flowParamList: List<FlowParam?> = ArrayList()
+        var flowParamList: List<FlowParam?>
         val conMap: MutableMap<String, List<FlowParam>> = LinkedHashMap()
         var counter = 1
 
@@ -116,6 +149,87 @@ class Controller(rpc: NodeRPCConnection) {
             }
         }
         return conMap
+    }
+
+    private fun buildFlowParam(flowParam: FlowParam, nodeName: String?): Any {
+        if (flowParam.flowParams != null && flowParam.flowParams.isNotEmpty()) {
+            val params: MutableList<Any> = ArrayList()
+            var clazz: Class<*>?
+            try {
+                clazz = Class.forName(flowParam.paramType.canonicalName)
+            } catch (e: ClassNotFoundException) {
+                val jarFiles = loadCordappsToClasspath(nodeName!!)
+                clazz = loadClassFromCordappJar(flowParam.paramType, jarFiles)
+                if (clazz == null) {
+                    throw IllegalArgumentException("Cannot load flow class " + flowParam.paramType.toString())
+                }
+            }
+            try {
+                for (param in flowParam.flowParams) {
+                    params.add(buildFlowParam(param, nodeName))
+                }
+                for (ctor in clazz!!.constructors) {
+                    if (ctor.parameters.size == params.size) return ctor.newInstance(*params.toTypedArray())
+                }
+            } catch (e: Exception) {
+                throw IllegalArgumentException(e.message)
+            }
+        }
+        return when (flowParam.paramType.canonicalName) {
+            "net.corda.core.identity.Party" -> proxy.partiesFromName(flowParam.paramValue as String, false).iterator().next()
+            "java.lang.String", "java.lang.StringBuilder", "java.lang.StringBuffer" -> flowParam.paramValue.toString()
+            "java.lang.Long", "long" -> java.lang.Long.valueOf(flowParam.paramValue.toString())
+            "java.lang.Integer", "int" -> Integer.valueOf(flowParam.paramValue.toString())
+            "java.land.Double", "double" -> java.lang.Double.valueOf(flowParam.paramValue.toString())
+            "java.lang.Float", "float" -> java.lang.Float.valueOf(flowParam.paramValue.toString())
+            "java.math.BigDecimal" -> BigDecimal(flowParam.paramValue.toString())
+            "java.math.BigInteger" -> BigInteger(flowParam.paramValue.toString())
+            "java.lang.Boolean", "boolean" -> java.lang.Boolean.valueOf(flowParam.paramValue.toString())
+            "java.util.UUID" -> UUID.fromString(flowParam.paramValue.toString())
+            "net.corda.core.contracts.UniqueIdentifier" -> UniqueIdentifier(null, UUID.fromString(flowParam.paramValue.toString()))
+            "net.corda.core.contracts.Amount" -> Amount.parseCurrency(flowParam.paramValue.toString())
+            "java.time.LocalDateTime" -> LocalDateTime.parse(flowParam.paramValue.toString())
+            "java.time.Instant" -> LocalDateTime.parse(flowParam.paramValue.toString()).atZone(ZoneId.systemDefault())
+            "java.time.LocalDate" -> LocalDate.parse(flowParam.paramValue.toString())
+            "net.corda.core.crypto.SecureHash" -> SecureHash.parse(flowParam.paramValue.toString())
+            "net.corda.core.utilities.OpaqueBytes" -> OpaqueBytes(flowParam.paramValue.toString().toByteArray())
+            "java.util.List", "java.util.Set" -> buildListParam(flowParam)
+            else -> throw IllegalArgumentException("Type " + flowParam.paramType.toString() + " in Flow Parameter not " +
+                    "supported by current version of Node Explorer")
+        }
+    }
+
+    private fun buildListParam(flowParam: FlowParam): Any {
+        val paramVal: MutableList<Any> = ArrayList()
+        val paramValArr = flowParam.paramValue as ArrayList<Object>
+        for (paramObj in paramValArr) {
+            val param = FlowParam(paramType = flowParam.parameterizedType, paramValue = paramObj, flowParams = flowParam.flowParams)
+            val `val` = buildFlowParam(param, nodeIdentity)
+            paramVal.add(`val`)
+        }
+        return paramVal
+    }
+
+    private fun loadClassFromCordappJar(clazz: Class<*>, jarFiles: List<File>): Class<*>? {
+        var clazz = clazz
+        for (jarFile in jarFiles) {
+            try {
+                val url = jarFile.toURI().toURL()
+                val classLoader = URLClassLoader(arrayOf(url), javaClass.classLoader)
+                try {
+                    clazz = Class.forName(clazz.name, false, classLoader)
+                    break
+                } catch (e: ClassNotFoundException) {
+                    try {
+                        clazz = Class.forName(clazz.canonicalName, false, classLoader)
+                        break
+                    } catch (ce: ClassNotFoundException) {
+                    }
+                }
+            } catch (e: MalformedURLException) {
+            }
+        }
+        return clazz
     }
 
     @Throws(ClassNotFoundException::class)
@@ -239,11 +353,35 @@ data class FlowInfo(
 )
 
 data class FlowParam(
-        var paramName: String,
+        var paramName: String = "",
         var paramType: Class<*>,
         var flowParams: List<FlowParam> = emptyList(),
         var parameterizedType: Class<*> = Any::class.java,
-        var hasParameterizedType: Boolean = false
-//        var paramValue: Object = 0
-    ) {
-}
+        var hasParameterizedType: Boolean = false,
+        var paramValue: Any? = null
+)
+//class FlowParam private constructor (
+//    val paramName: String,
+//    val paramType: Class<*>,
+//    val flowParams: List<FlowParam>,
+//    val parameterizedType: Class<*>,
+//    val hasParameterizedType: Boolean,
+//    val paramValue: Object) {
+//
+//    data class Builder(
+//            var paramName: String = "",
+//            var paramType: Class<*> =  Any::class.java,
+//            var flowParams: List<FlowParam> = emptyList(),
+//            var parameterizedType: Class<*> = Any::class.java,
+//            var hasParameterizedType: Boolean = false,
+//            var paramValue: Object) {
+//
+//            fun paramName(paramName: String) = apply { this.paramName = paramName }
+//            fun paramType(paramType: Class<*>) = apply { this.paramType = paramType}
+//            fun flowParams(flowParams: List<FlowParam>) = apply { this.flowParams = flowParams }
+//            fun parameterizedType(parameterizedType: Class<*>) = apply { this.parameterizedType = parameterizedType }
+//            fun hasParameterizedType(hasParameterizedType: Boolean) = apply { this.hasParameterizedType = hasParameterizedType }
+//            fun paramValue(paramValue: Object) = apply{ this.paramValue = paramValue }
+//            fun build() = FlowParam(paramName, paramType, flowParams, parameterizedType, hasParameterizedType, paramValue)
+//    }
+//}

@@ -1,14 +1,18 @@
 import React from "react";
-import { FormControl, InputLabel, MenuItem, FormHelperText, TextField, Select} from "@material-ui/core";
+import { FormControl, InputLabel, MenuItem, FormHelperText, TextField, Select, Button, Grid} from "@material-ui/core";
 import http from "../services/http";
 import urls, {NODE_ID} from "../services/urls";
 import '../styling/FlowParameters.css';
+import {register} from "../serviceWorker";
 
 function FlowParameters({registeredFlow}) {
-    const [activeConstructor, setActiveConstructor] = React.useState(["Constructor_1"])
-    const [flowParams, setFlowParams] = React.useState([registeredFlow.flowParamsMap["Constructor_1"]])
+    const [activeConstructor, setActiveConstructor] = React.useState("")
+    const [flowParams, setFlowParams] = React.useState([])
     const [paramList, setParamList] = React.useState([registeredFlow.flowParams])
     const [parties, setParties] = React.useState([])
+    const [flowResultMsg, setFlowResultMsg] = React.useState("")
+    const [flowResultMsgType, setFlowResultMsgType] = React.useState("")
+    const [isFlowInProgress, setFlowInProgress] = React.useState(false)
 
     function handleFlowConstructorSelection(event) {
         setActiveConstructor([event.target.value])
@@ -36,7 +40,7 @@ function FlowParameters({registeredFlow}) {
                     innerForm?
                         <div className="inner-form" style={{padding: deep? "10px 0px 0px 0px":  "10px 0"}} key={key}>
                             {
-                                delIdx>=0?<div className="inner-form-close" onClick={()=> updateCmplxListParam(param, false, delIdx)}>X</div>:null
+                                // delIdx>=0?<div className="inner-form-close" onClick={()=> updateCmplxListParam(param, false, delIdx)}>X</div>:null
                             }
                             <div style={{padding: deep? 0:  "0 10px"}}>
                                 <div style={{textTransform:"capitalize"}}><strong>{title}</strong></div>
@@ -62,8 +66,11 @@ function FlowParameters({registeredFlow}) {
                         <div style={{color: 'red', marginTop: 10}}>List of Complex Object is not supported</div>
                     </React.Fragment>
                     :
-                    // THIS IS RANDOM PARAMETER
                     <React.Fragment>
+                        {
+                            console.log("THIS IS THE PARAM CAUSING ISSUES" + " param " + param + " paramValue " + param.paramValue + " paramType " + param.paramType )
+
+                        }
                         <div key={index} style={{width: "50%", float: "left", marginBottom: 5}}>
                             {
                                 param.paramType === 'net.corda.core.identity.Party'?
@@ -98,7 +105,7 @@ function FlowParameters({registeredFlow}) {
                                                 renderListParam(param, index)
                                                 :
                                                 <div style={{paddingRight: index%2===0? 10:0, paddingLeft: index%2===1? 10:0}}>
-                                                    <TextField onBlur={e=> {param.paramValue = e.target.value}} label={param.paramName} InputLabelProps={{ margin: 'dense' }} helperText={getHelperText(param.paramType)} fullWidth/>
+                                                    <TextField onBlur={e=> {param.paramValue = e.target.value}} label={param.paramName} InputLabelProps={{ shrink: true, margin: 'dense' }} helperText={getHelperText(param.paramType)} fullWidth/>
                                                 </div>
                             }
                         </div>
@@ -185,6 +192,86 @@ function FlowParameters({registeredFlow}) {
         );
     }
 
+    return (
+        <div>
+            <Grid container spacing={3}>
+                <Grid item xs={12}>
+                <div style={{width: "30%", float: "left"}}>
+                        <FormControl style={{width:"100%"}}>
+                            <div style={{paddingLeft: 10}}>
+                                <InputLabel id="flow-cons-select-label" style={{paddingLeft: 10}}>Select A Constructor Type</InputLabel>
+                                <Select labelId="flow-cons-select-label" onChange={event => handleFlowConstructorSelection(event)}
+                                        value={activeConstructor} fullWidth>
+                                    {
+                                        Object.keys(registeredFlow.flowParamsMap).map((constructor, index) => {
+                                            return(
+                                                <MenuItem key={index} value={constructor}>{constructor}</MenuItem>
+                                            );
+                                        })
+                                    }
+                                </Select>
+                            </div>
+                        </FormControl>
+                    </div>
+                </Grid>
+            </Grid>
+            <div>
+                {
+                    renderParamForm(false)
+                }
+                <div style={{width: "100%", float:"left", marginTop: 10, scroll: "auto"}}>
+                    {
+                        flowResultMsg    ?
+                            <div style={{float: "left", fontSize: 14}}>
+                                <p style={{color: flowResultMsgType?"green":"red"}}>
+                                    <span>{flowResultMsgType?'Flow Successful :': 'Flow Errored :'}</span>
+                                    {flowResultMsg}
+                                </p>
+                            </div>
+                            :null
+                    }
+                    {
+                        activeConstructor?
+                            <Button onClick={() => prepareFlowDataToStart()} style={{float: "right", marginTop: 10}}
+                                    variant="contained" color="primary" disabled={isFlowInProgress}>
+                                {isFlowInProgress?'Please Wait...':'Execute'}
+                            </Button>
+                            :null
+                    }
+                </div>
+            </div>
+        </div>
+    )
+
+    function prepareFlowDataToStart(){
+        setFlowInProgress(true)
+        let flowInfo = {
+            flowName: registeredFlow.name,
+            flowParams: flowParams
+        }
+
+        http.get(urls.get_flows, {
+            params: {
+                flowInfo: flowInfo
+            }
+        }).then(({data}) => {
+            if(data.status){
+                console.log(data)
+            } else {
+
+            }
+        }).catch(error => {
+            console.log(error)
+        });
+        // this.props.inFlightFLow(true);
+        // this.setState({
+        //     flowInfo: {
+        //         flowName: this.state.selectedFlow.name,
+        //         flowParams: this.props.flowParams
+        //     },
+        // }, () => this.props.startFlow(this.state.flowInfo));
+    }
+
     function updateListParam(param, val, flag, idx) {
         if(flag){
             if(param.paramValue === undefined || param.paramValue === null)
@@ -204,31 +291,31 @@ function FlowParameters({registeredFlow}) {
         }
     }
 
-    function updateCmplxListParam(param, flag, idx){
-        if(flag){
-            let obj = JSON.parse(JSON.stringify(param.paramValue[0]));
-            param.paramValue.push(obj);
-            let keyVal = [];
-            if(!(paramList[param.paramName] === undefined || paramList[param.paramName] === null)){
-                keyVal[param.paramName] = paramList[param.paramName];
-            }else{
-                keyVal[param.paramName] = [];
-            }
-            if(keyVal[param.paramName].length === 0){
-                obj.key = 0;
-            }else{
-                obj.key = keyVal[param.paramName][keyVal[param.paramName].length -1].key + 1;
-            }
-            keyVal[param.paramName].push(obj);
-            setParamList(keyVal)
-        }else{
-            param.paramValue.splice(idx+1, 1);
-            paramList[param.paramName].splice(idx, 1);
-            let keyVal = [];
-            keyVal[param.paramName] = this.state.paramList[param.paramName];
-            setParamList(keyVal)
-        }
-    }
+    // function updateCmplxListParam(param, flag, idx){
+    //     if(flag){
+    //         let obj = JSON.parse(JSON.stringify(param.paramValue[0]));
+    //         param.paramValue.push(obj);
+    //         let keyVal = [];
+    //         if(!(paramList[param.paramName] === undefined || paramList[param.paramName] === null)){
+    //             keyVal[param.paramName] = paramList[param.paramName];
+    //         }else{
+    //             keyVal[param.paramName] = [];
+    //         }
+    //         if(keyVal[param.paramName].length === 0){
+    //             obj.key = 0;
+    //         }else{
+    //             obj.key = keyVal[param.paramName][keyVal[param.paramName].length -1].key + 1;
+    //         }
+    //         keyVal[param.paramName].push(obj);
+    //         setParamList(keyVal)
+    //     }else{
+    //         param.paramValue.splice(idx+1, 1);
+    //         paramList[param.paramName].splice(idx, 1);
+    //         let keyVal = [];
+    //         keyVal[param.paramName] = this.state.paramList[param.paramName];
+    //         setParamList(keyVal)
+    //     }
+    // }
 
     function getHelperText(paramType){
         switch(paramType){
@@ -250,56 +337,6 @@ function FlowParameters({registeredFlow}) {
                 return 'Param Type: ' + paramType;
         }
     }
-
-
-    return (
-        <div>
-            <div style={{width: "30%", float: "left"}}>
-            {/*{  Object.keys(constructors) > 0 ?*/}
-                    <FormControl style={{width:"100%"}}>
-                        <div style={{paddingLeft: 10}}>
-                            <InputLabel id="flow-cons-select-label" style={{paddingLeft: 10}}>Select A Constructor Type</InputLabel>
-                            <Select labelId="flow-cons-select-label" onChange={event => handleFlowConstructorSelection(event)}
-                                    value={activeConstructor} fullWidth>
-                                {
-                                    Object.keys(registeredFlow.flowParamsMap).map((constructor, index) => {
-                                        return(
-                                            <MenuItem key={index} value={constructor}>{constructor}</MenuItem>
-                                        );
-                                    })
-                                }
-                            </Select>
-                        </div>
-                    </FormControl>
-                </div>
-
-            <div>
-                {
-                    renderParamForm(false)
-                }
-                {/*<div style={{width: "100%", float:"left", marginTop: 10, scroll: "auto"}}>*/}
-                    {/*{*/}
-                    {/*    flowResultMsg    ?*/}
-                    {/*        <div style={{float: "left", fontSize: 14}}>*/}
-                    {/*            <p style={{color: this.props.flowResultMsgType?"green":"red"}}>*/}
-                    {/*                <span>{this.props.flowResultMsgType?'Flow Successful :': 'Flow Errored :'}</span>*/}
-                    {/*                {this.props.flowResultMsg}*/}
-                    {/*            </p>*/}
-                    {/*        </div>*/}
-                    {/*        :null*/}
-                    {/*}*/}
-                    {/*{*/}
-                    {/*    this.props.flowSelected && Object.keys(this.state.selectedFlow.constructors).length>0?*/}
-                    {/*        <Button onClick={() => this.prepareFlowDataToStart()} style={{float: "right", marginTop: 10}}*/}
-                    {/*                variant="contained" color="primary" disabled={this.props.flowInFlight}>*/}
-                    {/*            {this.props.flowInFlight?'Please Wait...':'Execute'}*/}
-                    {/*        </Button>*/}
-                    {/*        :null*/}
-                    {/*}*/}
-                {/*</div>*/}
-            </div>
-        </div>
-    )
 }
 
 export default FlowParameters

@@ -47,10 +47,6 @@
     color: #000000;
 }
 
-/*table tr:hover {*/
-/*    background-color: #FAFAFA;*/
-/*}*/
-
 tr th{
     background-color: #EEEEEE !important;
     font-weight: bold !important;
@@ -96,10 +92,6 @@ tr th{
     height: 100%;
     flex-direction: column;
 }
-
-/*tr:hover {*/
-/*    box-shadow: 1px 1px 2px #999;*/
-/*}*/
 
 .stripe {
     color: black;

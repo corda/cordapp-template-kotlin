@@ -21,7 +21,7 @@
 }
 
 .modal {
-    color: white;
+    color: black;
     z-index: 100;
     background: darkgray;
     position: relative;
@@ -32,7 +32,12 @@
     padding: 2rem;
 }
 
+modal-inner {
+    color: black;
+}
+
 .modal-header {
+    color: white;
     display: flex;
     justify-content: flex-end;
 }
