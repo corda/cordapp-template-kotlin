@@ -3,7 +3,6 @@ import { FormControl, InputLabel, MenuItem, FormHelperText, TextField, Select, B
 import http from "../services/http";
 import urls, {NODE_ID} from "../services/urls";
 import '../styling/FlowParameters.css';
-import {register} from "../serviceWorker";
 
 function FlowParameters({registeredFlow}) {
     const [activeConstructor, setActiveConstructor] = React.useState("")
@@ -11,7 +10,7 @@ function FlowParameters({registeredFlow}) {
     const [paramList, setParamList] = React.useState([registeredFlow.flowParams])
     const [parties, setParties] = React.useState([])
     const [flowResultMsg, setFlowResultMsg] = React.useState("")
-    const [flowResultMsgType, setFlowResultMsgType] = React.useState("")
+    const [flowResultMsgType, setFlowResultMsgType] = React.useState(false)
     const [isFlowInProgress, setFlowInProgress] = React.useState(false)
 
     function handleFlowConstructorSelection(event) {
@@ -228,7 +227,7 @@ function FlowParameters({registeredFlow}) {
                     }
                     {
                         activeConstructor?
-                            <Button onClick={() => prepareFlowDataToStart()} style={{float: "right", marginTop: 10}}
+                            <Button onClick={() => startFlow()} style={{float: "right", marginTop: 10}}
                                     variant="contained" color="primary" disabled={isFlowInProgress}>
                                 {isFlowInProgress?'Please Wait...':'Execute'}
                             </Button>
@@ -239,7 +238,7 @@ function FlowParameters({registeredFlow}) {
         </div>
     )
 
-    function prepareFlowDataToStart(){
+    function startFlow(){
         setFlowInProgress(true)
         let flowInfo = {
             flowName: registeredFlow.flowName,
@@ -251,19 +250,16 @@ function FlowParameters({registeredFlow}) {
             if(data.status){
                 console.log(data)
                 setFlowInProgress(false)
+                setFlowResultMsgType(true)
+                setFlowResultMsg(data.data)
             } else {
 
             }
         }).catch(error => {
+            setFlowInProgress(false)
+            setFlowResultMsgType(false)
             console.log(error)
         });
-        // this.props.inFlightFLow(true);
-        // this.setState({
-        //     flowInfo: {
-        //         flowName: this.state.selectedFlow.name,
-        //         flowParams: this.props.flowParams
-        //     },
-        // }, () => this.props.startFlow(this.state.flowInfo));
     }
 
     function updateListParam(param, val, flag, idx) {

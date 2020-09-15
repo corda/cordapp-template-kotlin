@@ -135,7 +135,6 @@ class Controller(rpc: NodeRPCConnection) {
         return flowInfoList
     }
 
-    // TODO: Handle multiple constructors
     private fun loadFlowParams(flowClass: Class<*>): Map<String, List<FlowParam>> {
         var flowParamList: List<FlowParam?>
         val conMap: MutableMap<String, List<FlowParam>> = LinkedHashMap()
