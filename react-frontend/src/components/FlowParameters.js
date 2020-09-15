@@ -67,10 +67,6 @@ function FlowParameters({registeredFlow}) {
                     </React.Fragment>
                     :
                     <React.Fragment>
-                        {
-                            console.log("THIS IS THE PARAM CAUSING ISSUES" + " param " + param + " paramValue " + param.paramValue + " paramType " + param.paramType )
-
-                        }
                         <div key={index} style={{width: "50%", float: "left", marginBottom: 5}}>
                             {
                                 param.paramType === 'net.corda.core.identity.Party'?
@@ -246,17 +242,15 @@ function FlowParameters({registeredFlow}) {
     function prepareFlowDataToStart(){
         setFlowInProgress(true)
         let flowInfo = {
-            flowName: registeredFlow.name,
+            flowName: registeredFlow.flowName,
             flowParams: flowParams
         }
 
-        http.get(urls.get_flows, {
-            params: {
-                flowInfo: flowInfo
-            }
-        }).then(({data}) => {
+        http.post(urls.start_flow, flowInfo)
+            .then(({data}) => {
             if(data.status){
                 console.log(data)
+                setFlowInProgress(false)
             } else {
 
             }

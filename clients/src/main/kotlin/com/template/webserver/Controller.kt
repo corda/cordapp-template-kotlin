@@ -1,19 +1,19 @@
 package com.template.webserver
 
+import com.google.common.primitives.Primitives
 import net.corda.core.contracts.Amount
 import net.corda.core.contracts.UniqueIdentifier
 import net.corda.core.cordapp.CordappInfo
 import net.corda.core.crypto.SecureHash
 import net.corda.core.flows.FlowLogic
+import net.corda.core.flows.IllegalFlowLogicException
 import net.corda.core.utilities.OpaqueBytes
 import net.corda.core.utilities.getOrThrow
 import org.slf4j.LoggerFactory
 import org.springframework.http.MediaType
 import org.springframework.web.bind.annotation.*
 import java.io.File
-import java.lang.reflect.InvocationTargetException
-import java.lang.reflect.Parameter
-import java.lang.reflect.ParameterizedType
+import java.lang.reflect.*
 import java.math.BigDecimal
 import java.math.BigInteger
 import java.net.MalformedURLException
@@ -25,6 +25,10 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
 import java.util.function.Consumer
+import kotlin.reflect.KFunction
+import kotlin.reflect.KParameter
+import kotlin.reflect.jvm.javaConstructor
+import kotlin.reflect.jvm.javaType
 
 /**
  * Define your API endpoints here.
@@ -75,29 +79,32 @@ class Controller(rpc: NodeRPCConnection) {
         }
     }
 
-    @GetMapping
-    fun startFlow(@RequestParam(value = "flowInfo") flowInfo: FlowInfo): APIResponse<String> {
-        val clazz = Class.forName(flowInfo.flowName) as Class< out FlowLogic<Any>>
-        println("CONTROLLER flow to execute: " + clazz)
-        val params: MutableList<Any> = ArrayList()
+
+    @PostMapping(value = ["/start-flow/"])
+    fun startFlow(@RequestBody flowInfo: FlowInfo): APIResponse<String> {
+        val clazz = Class.forName(flowInfo.flowName) as Class<out FlowLogic<*>>
+        val params = arrayListOf<Any>()
         if (flowInfo.flowParams != null && flowInfo.flowParams.isNotEmpty()) {
             for (flowParam in flowInfo.flowParams) {
                 params.add(buildFlowParam(flowParam, nodeIdentity))
             }
         }
+
+        val paramArray = params.toTypedArray()
+
         return try {
                 if (params.size == 0) {
                     APIResponse.success(proxy.startFlowDynamic(clazz).returnValue.getOrThrow().toString())
                 } else {
-                    APIResponse.success(proxy.startFlowDynamic(clazz, params.toTypedArray()).returnValue.getOrThrow().toString())
+                    val result = proxy.startFlowDynamic(clazz, *paramArray).returnValue.getOrThrow().toString()
+                    println("SUCCESS: " + result)
+                    APIResponse.success(result)
                 }
            } catch (e: Exception) {
                logger.error(e.message)
                APIResponse.error("Error while starting flow")
            }
     }
-
-
 
 
 
@@ -176,7 +183,10 @@ class Controller(rpc: NodeRPCConnection) {
             }
         }
         return when (flowParam.paramType.canonicalName) {
-            "net.corda.core.identity.Party" -> proxy.partiesFromName(flowParam.paramValue as String, false).iterator().next()
+            "net.corda.core.identity.Party" ->  {
+                // partiesFromName doesn't work .. que?
+                proxy.networkMapSnapshot().flatMap{ it.legalIdentities }.filter { it.name.toString() == flowParam.paramValue as String }.iterator().next()
+            }
             "java.lang.String", "java.lang.StringBuilder", "java.lang.StringBuffer" -> flowParam.paramValue.toString()
             "java.lang.Long", "long" -> java.lang.Long.valueOf(flowParam.paramValue.toString())
             "java.lang.Integer", "int" -> Integer.valueOf(flowParam.paramValue.toString())
