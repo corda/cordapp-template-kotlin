@@ -4,6 +4,7 @@
     justify-content: left;
     padding: 0;
     margin: 0;
+    position: fixed;
     display: inline-block;
 }
 
@@ -25,6 +26,7 @@
     height: 100%;
     width: 200px;
     position: fixed;
+    padding-top: 70px;
 }
 
 .Sidebar li.active{

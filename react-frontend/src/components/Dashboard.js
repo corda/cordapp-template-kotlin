@@ -19,7 +19,7 @@ function Dashboard() {
             <Grid container  direction="row"
                   justify="center"
                   alignItems="stretch"
-                  spacing={3}>
+                  spacing={1}>
                 <Grid item xs={6}>
                     <Network/>
                 </Grid>

@@ -15,6 +15,8 @@ buildscript { //properties that you need to build the project
         log4j_version = constants.getProperty("log4jVersion")
         slf4j_version = constants.getProperty("slf4jVersion")
         corda_platform_version = constants.getProperty("platformVersion").toInteger()
+        tokens_release_group = 'com.r3.corda.lib.tokens'
+        tokens_release_version = '1.1'
         //springboot
         spring_boot_version = '2.0.2.RELEASE'
         spring_boot_gradle_plugin_version = '2.0.2.RELEASE'
@@ -45,6 +47,8 @@ allprojects { //Properties that you need to compile your project (The applicatio
         jcenter()
         mavenCentral()
         maven { url 'https://software.r3.com/artifactory/corda' }
+        maven { url 'https://ci-artifactory.corda.r3cev.com/artifactory/corda-lib' }
+        maven { url 'https://ci-artifactory.corda.r3cev.com/artifactory/corda-lib-dev' }
         maven { url 'https://jitpack.io' }
     }
 
@@ -87,6 +91,11 @@ dependencies {
     cordapp project(":workflows")
     cordapp project(":contracts")
 
+    // Tokens.
+    cordapp "$tokens_release_group:tokens-contracts:$tokens_release_version"
+    cordapp "$tokens_release_group:tokens-workflows:$tokens_release_version"
+    cordapp "$tokens_release_group:tokens-selection:$tokens_release_version"
+
     cordaCompile "org.apache.logging.log4j:log4j-slf4j-impl:${log4j_version}"
     cordaCompile "org.apache.logging.log4j:log4j-web:${log4j_version}"
     cordaCompile "org.slf4j:jul-to-slf4j:$slf4j_version"
@@ -121,6 +130,9 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
         }
         cordapp project(':contracts')
         cordapp project(':workflows')
+        cordapp "$tokens_release_group:tokens-contracts:$tokens_release_version"
+        cordapp "$tokens_release_group:tokens-workflows:$tokens_release_version"
+        cordapp "$tokens_release_group:tokens-selection:$tokens_release_version"
     }
     node {
         name "O=Notary,L=London,C=GB"

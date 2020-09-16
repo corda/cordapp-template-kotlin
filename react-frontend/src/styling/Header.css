@@ -1,0 +1,29 @@
+.Header{
+    color: white;
+    height: 70px;
+    width: 100%;
+    box-shadow: 0 0 4px 3px rgba(0,0,0,.16);
+    position: fixed;
+    top: 0;
+    background-color: #888888;
+    z-index: 999;
+}
+/*w-100 white vh-30 bg-mid-gray shadow-4 flex fixed inlin*/
+.Logo{
+    width: 100px;
+    padding: 15px 20px;
+}
+
+.profile{
+    float: right;
+    margin: 10px 20px;
+}
+
+.profile > div{
+    left: -12px !important;
+    min-width: 120px;
+}
+
+.profile-dtls{
+    padding: 10px;
+}

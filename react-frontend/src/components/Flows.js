@@ -15,6 +15,7 @@ const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
         paddingLeft: "200px",
+        justifyContent: 'left',
     }
 }));
 
@@ -56,19 +57,6 @@ function Flows() {
     }
 
     return (
-        // <div className={classes.root}>
-        //     <Grid container  direction="row"
-        //           justify="center"
-        //           alignItems="stretch"
-        //           spacing={3}>
-        //         <Grid item xs={3}>
-        //             <Network/>
-        //         </Grid>
-        //         <Grid item xs={3}>
-        //             <Cordapps/>
-        //         </Grid>
-        //     </Grid>
-        // </div>
         <div className={classes.root}>
             <Grid
                 container
@@ -76,25 +64,26 @@ function Flows() {
                 justify="center"
                 alignItems="stretch"
                 spacing={3}>
-                <Grid item xs={3}>
 
+                <Grid item xs={12}>
+                    <a type="button"
+                       className="btn btn-2"
+                       onClick={ () => { listFlows(); changeText( getButtonText() )}}>{buttonText}</a>
 
-            <a type="button"
-               className="btn btn-2"
-               onClick={ () => { listFlows(); changeText( getButtonText() )}}>{buttonText}</a>
-            { shouldDisplayTable &&
-                <table className="pa4">
-                    <tbody>
-                    {registeredFlows.map((flow, index) => {
-                        return <tr key={index}>
-                            <td className="pv2 tl">
-                                <a type="button" onClick={() => {toggle(); setModalData(flow)}} className="bg-transparent bn f4 white grow">{trimFlowsForDisplay(flow.flowName)}</a>
-                            </td>
-                        </tr>
-                    })}
-                    </tbody>
-                </table>
-            }
+                       { shouldDisplayTable &&
+
+                        <table className="pa1">
+                            <tbody>
+                            {registeredFlows.map((flow, index) => {
+                                return <tr key={index}>
+                                    <td className="pv2 tl">
+                                        <a type="button" onClick={() => {toggle(); setModalData(flow)}} className="bg-transparent bn f4 white grow">{trimFlowsForDisplay(flow.flowName)}</a>
+                                    </td>
+                                </tr>
+                            })}
+                            </tbody>
+                        </table>
+                        }
             <div>
             </div>
             <Modal

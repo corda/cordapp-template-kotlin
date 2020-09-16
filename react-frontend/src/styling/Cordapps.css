@@ -1,5 +1,15 @@
+.Cordapps {
+    overflow: scroll;
+    height: auto;
+    max-height: 400px;
+    margin: 20px;
+    border-top: 1px solid white;
+    border-bottom: 1px solid white;
+    font-size: 20px;
+    width: 75%;
+}
 
-.appInfo-wrapper{
+.cordapp-wrapper{
     width: 100%;
     display: inline-block;
 }
@@ -7,11 +17,8 @@
 .appInfo{
     padding: 10px;
     color: #CCCCCC;
-    /*margin-top: 10px;*/
-    /*border: 1px solid #CCCCCC;*/
 }
 
 .appInfo > div > span {
     color: #DF0B1B;
-    /*font-family: monospace;*/
 }

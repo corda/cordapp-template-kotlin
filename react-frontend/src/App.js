@@ -19,10 +19,11 @@ function App() {
     });
 
   return (
+    // <div className="vh-100 avenir">
     <div className="vh-100 avenir bg-dark-gray">
         <Header/>
         <Sidebar currentPage={currentPage} setCurrentPage={setCurrentPage} />
-        <div style={{marginLeft: 120}}>
+        <div style={{marginLeft: 120, paddingTop: 70}}>
             <div className="content-pane">
                 {/*{*/}
                 {/*    this.props.spinner?*/}

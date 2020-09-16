@@ -36,11 +36,12 @@ function Cordapps() {
                className="btn btn-2"
                onClick={ () => { listCordapps(); changeText( getButtonText() )}}>{buttonText}</a>
             { shouldDisplayTable &&
+                <div className="Cordapps">
                 <table className="pa4">
                     <tbody>
                     {cordapps.map((cordapp, index) => {
                         return <tr>
-                            <div key={index} className="appInfo-wrapper">
+                            <div key={index} className="cordapp-wrapper">
                                 <div className="appInfo" style={{marginRight: index%2===0?5:0, marginLeft: index%2===0?0:5}}>
                                     <div className="b">{cordapp.shortName}</div>
                                     <div><span>Version: </span> {cordapp.version}</div>
@@ -56,6 +57,7 @@ function Cordapps() {
                     })}
                     </tbody>
                 </table>
+                </div>
             }
         </div>
     );
