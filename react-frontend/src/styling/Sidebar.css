@@ -1,0 +1,33 @@
+.Sidebar ul{
+    list-style: none;
+    display: flex;
+    justify-content: left;
+    padding: 0;
+    margin: 0;
+    display: inline-block;
+}
+
+.Sidebar ul li{
+    display: inline-block;
+    width: 113%;
+    text-align: center;
+    padding: 20px 0;
+    cursor: pointer;
+}
+
+.Sidebar ul li:hover{
+    background-color: #ec908e;
+}
+
+.Sidebar{
+    background-color: #444444;
+    border-right: 20px solid #333333;
+    height: 100%;
+    width: 200px;
+    position: fixed;
+}
+
+.Sidebar li.active{
+    background-color: #DF0A1B;
+    color: #FFFFFF;
+}

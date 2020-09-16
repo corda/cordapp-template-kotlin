@@ -6,7 +6,18 @@ import '../styling/Button.scss';
 import { SHOW_FLOWS, HIDE_FLOWS} from "../services/buttons";
 import { NODE_ID } from "../services/urls";
 import Modal from "./Modal"
-import useModal from "../hooks/useModal"
+import useModal from "../hooks/useModal";
+import { makeStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
+
+
+const useStyles = makeStyles((theme) => ({
+    root: {
+        flexGrow: 1,
+        paddingLeft: "200px",
+    }
+}));
+
 
 export const trimFlowsForDisplay = (text) => {
     let words = text.split(".")
@@ -14,12 +25,13 @@ export const trimFlowsForDisplay = (text) => {
 }
 
 function Flows() {
-    const [buttonText, setButtonText] = useState("Flows")
+    const classes = useStyles();
+    const [buttonText, setButtonText] = useState(SHOW_FLOWS)
     const [shouldDisplayTable, setDisplayTable] = useState(false)
     const { isShowing, flowData, toggle, setModalData } = useModal()
     const [registeredFlows, setRegisteredFlows] = useState([])
 
-     const changeText = (text) => {
+    const changeText = (text) => {
         setButtonText(text)
         setDisplayTable(!shouldDisplayTable)
     }
@@ -44,7 +56,29 @@ function Flows() {
     }
 
     return (
-        <div>
+        // <div className={classes.root}>
+        //     <Grid container  direction="row"
+        //           justify="center"
+        //           alignItems="stretch"
+        //           spacing={3}>
+        //         <Grid item xs={3}>
+        //             <Network/>
+        //         </Grid>
+        //         <Grid item xs={3}>
+        //             <Cordapps/>
+        //         </Grid>
+        //     </Grid>
+        // </div>
+        <div className={classes.root}>
+            <Grid
+                container
+                direction="row"
+                justify="center"
+                alignItems="stretch"
+                spacing={3}>
+                <Grid item xs={3}>
+
+
             <a type="button"
                className="btn btn-2"
                onClick={ () => { listFlows(); changeText( getButtonText() )}}>{buttonText}</a>
@@ -54,7 +88,6 @@ function Flows() {
                     {registeredFlows.map((flow, index) => {
                         return <tr key={index}>
                             <td className="pv2 tl">
-                                {/*eslint-disable-next-line*/}
                                 <a type="button" onClick={() => {toggle(); setModalData(flow)}} className="bg-transparent bn f4 white grow">{trimFlowsForDisplay(flow.flowName)}</a>
                             </td>
                         </tr>
@@ -68,7 +101,10 @@ function Flows() {
                 registeredFlow={flowData}
                 isShowing={isShowing}
                 toggle={toggle} />
+                </Grid>
+            </Grid>
         </div>
     );
 }
+
 export default Flows;
