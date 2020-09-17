@@ -16,6 +16,14 @@ const useStyles = makeStyles((theme) => ({
         flexGrow: 1,
         paddingLeft: "200px",
         justifyContent: 'left',
+    },
+    empty: {
+        height: '300px',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontSize: '20px',
+        color: 'white'
     }
 }));
 
@@ -31,6 +39,7 @@ function Flows() {
     const [shouldDisplayTable, setDisplayTable] = useState(false)
     const { isShowing, flowData, toggle, setModalData } = useModal()
     const [registeredFlows, setRegisteredFlows] = useState([])
+    const [completedFlows, setCompletedFlows] = useState([])
 
     const changeText = (text) => {
         setButtonText(text)
@@ -65,7 +74,7 @@ function Flows() {
                 alignItems="stretch"
                 spacing={3}>
 
-                <Grid item xs={12}>
+                <Grid item xs={3}>
                     <a type="button"
                        className="btn btn-2"
                        onClick={ () => { listFlows(); changeText( getButtonText() )}}>{buttonText}</a>
@@ -90,6 +99,13 @@ function Flows() {
                 registeredFlow={flowData}
                 isShowing={isShowing}
                 toggle={toggle} />
+                </Grid>
+
+                <Grid item xs={9}>
+                    {
+                        completedFlows.length === 0?
+                            <div className={classes.empty}>No flows have been executed</div>:null
+                    }
                 </Grid>
             </Grid>
         </div>

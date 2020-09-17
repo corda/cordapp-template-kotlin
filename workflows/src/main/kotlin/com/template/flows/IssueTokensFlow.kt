@@ -16,7 +16,7 @@ import net.corda.core.utilities.unwrap
 
 @InitiatingFlow
 @StartableByRPC
-class TestFlowWithTx(private val issueTo: Party, private val token: Tokens) : FlowLogic<Tokens>() {
+class IssueTokensFlow(private val issueTo: Party, private val token: Tokens) : FlowLogic<Tokens>() {
     override val progressTracker = ProgressTracker()
 
     @Suspendable
@@ -27,8 +27,8 @@ class TestFlowWithTx(private val issueTo: Party, private val token: Tokens) : Fl
     }
 }
 
-@InitiatedBy(TestFlowWithTx::class)
-class TestFlowWithTxResponder(private val counterpartySession: FlowSession) : FlowLogic<Unit>() {
+@InitiatedBy(IssueTokensFlow::class)
+class IssueTokensFlowResponder(private val counterpartySession: FlowSession) : FlowLogic<Unit>() {
     @Suspendable
     override fun call() {
         subFlow(IssueTokensHandler(counterpartySession))
