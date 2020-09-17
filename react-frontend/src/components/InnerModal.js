@@ -1,9 +1,13 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import onClickOutside from "react-onclickoutside";
 import FlowParameters from "./FlowParameters";
 
 function InnerModal({registeredFlow, toggle}) {
     InnerModal.handleClickOutside = () => toggle()
+
+    useEffect(() => {
+
+    })
 
     return (
         <div className="modal">

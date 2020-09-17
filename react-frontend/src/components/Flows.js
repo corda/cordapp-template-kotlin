@@ -116,8 +116,9 @@ function Flows() {
                     </Grid>
                     <Grid item xs={9}>
                         {
-                            state.completedFlows.length === 0 ?
+                            state.completedFlows.length === 0 || !localStorage.getItem("flows") ?
                                 <div className={classes.empty}>No flows have been executed</div> :
+
                                 <CompletedFlows flows={state.completedFlows}/>
 
                         }

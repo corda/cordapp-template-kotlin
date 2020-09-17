@@ -1,12 +1,10 @@
 package com.template.webserver
 
-import com.google.common.primitives.Primitives
 import net.corda.core.contracts.Amount
 import net.corda.core.contracts.UniqueIdentifier
 import net.corda.core.cordapp.CordappInfo
 import net.corda.core.crypto.SecureHash
 import net.corda.core.flows.FlowLogic
-import net.corda.core.flows.IllegalFlowLogicException
 import net.corda.core.utilities.OpaqueBytes
 import net.corda.core.utilities.getOrThrow
 import org.slf4j.LoggerFactory
@@ -25,10 +23,6 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
 import java.util.function.Consumer
-import kotlin.reflect.KFunction
-import kotlin.reflect.KParameter
-import kotlin.reflect.jvm.javaConstructor
-import kotlin.reflect.jvm.javaType
 
 /**
  * Define your API endpoints here.
@@ -213,8 +207,8 @@ class Controller(rpc: NodeRPCConnection) {
         val paramValArr = flowParam.paramValue as ArrayList<Object>
         for (paramObj in paramValArr) {
             val param = FlowParam(paramType = flowParam.parameterizedType, paramValue = paramObj, flowParams = flowParam.flowParams)
-            val `val` = buildFlowParam(param, nodeIdentity)
-            paramVal.add(`val`)
+            val builtParam = buildFlowParam(param, nodeIdentity)
+            paramVal.add(builtParam)
         }
         return paramVal
     }
