@@ -1,17 +1,20 @@
-import React from "react";
+import React, {useContext} from "react";
 import { FormControl, InputLabel, MenuItem, FormHelperText, TextField, Select, Button, Grid} from "@material-ui/core";
 import http from "../services/http";
 import urls, {NODE_ID} from "../services/urls";
 import '../styling/FlowParameters.css';
+import { useState, useEffect } from 'react';
+import {CompletedFlowContext, trimFlowsForDisplay} from "./Flows";
 
 function FlowParameters({registeredFlow}) {
-    const [activeConstructor, setActiveConstructor] = React.useState("")
-    const [flowParams, setFlowParams] = React.useState([])
-    const [paramList, setParamList] = React.useState([registeredFlow.flowParams])
-    const [parties, setParties] = React.useState([])
-    const [flowResultMsg, setFlowResultMsg] = React.useState("")
-    const [flowResultMsgType, setFlowResultMsgType] = React.useState(false)
-    const [isFlowInProgress, setFlowInProgress] = React.useState(false)
+    const [activeConstructor, setActiveConstructor] = useState("")
+    const [flowParams, setFlowParams] = useState([])
+    const [paramList, setParamList] = useState([registeredFlow.flowParams])
+    const [parties, setParties] = useState([])
+    const [flowResultMsg, setFlowResultMsg] = useState("")
+    const [flowCompletionStatus, setFlowCompletionStatus] = useState(false)
+    const [isFlowInProgress, setFlowInProgress] = useState(false)
+    const { dispatch } = useContext(CompletedFlowContext)
 
     function handleFlowConstructorSelection(event) {
         setActiveConstructor([event.target.value])
@@ -30,7 +33,6 @@ function FlowParameters({registeredFlow}) {
             });
             return parties
     }
-
 
     function renderParamForm(innerForm, paramList, title, deep, delIdx, param, key){
         return(
@@ -61,22 +63,23 @@ function FlowParameters({registeredFlow}) {
                 renderParamForm(true, param.flowParams, param.paramName, deep)
                 : // List of complex object
                 param.flowParams && param.flowParams.length > 1 && (param.hasParameterizedType && (param.paramType === 'java.util.List' || param.paramType === 'java.util.Set'))?
-                    <React.Fragment>
+                    <>
                         <div style={{color: 'red', marginTop: 10}}>List of Complex Object is not supported</div>
-                    </React.Fragment>
+                    </>
                     :
-                    <React.Fragment>
+                    <React.Fragment key={index}>
                         <div key={index} style={{width: "50%", float: "left", marginBottom: 5}}>
                             {
                                 param.paramType === 'net.corda.core.identity.Party'?
                                     <div style={{paddingRight: index%2===0? 5:0, paddingLeft: index%2===1? 5:0}}>
                                         <FormControl fullWidth>
                                             <InputLabel>{param.paramName}</InputLabel>
-                                            <Select onChange={e => {param.paramValue = e.target.value}} autoWidth>
+                                            <Select onChange={e => {param.paramValue = e.target.value}} autoWidth defaultValue={''}>
                                                 {
+
                                                     getParties().map((party, index) => {
                                                         return(
-                                                            <MenuItem key={index} value={party}>{party}</MenuItem>
+                                                            <MenuItem key={index} value={party + ''}>{party}</MenuItem>
                                                         );
                                                     })
                                                 }
@@ -86,20 +89,20 @@ function FlowParameters({registeredFlow}) {
                                     </div>
                                     :
                                     param.paramType === 'java.time.LocalDateTime' || param.paramType === 'java.time.Instant'?
-                                        <div style={{paddingRight: index%2===0? 10:0, paddingLeft: index%2===1? 10:0}}>
+                                        <div style={{paddingRight: index%2===0? 10:0, paddingLeft: index%2===1? 5:0}}>
                                             <TextField type="datetime-local" onBlur={e=> {param.paramValue = e.target.value}} label={param.paramName} InputLabelProps={{ shrink: true, margin: 'dense' }}
                                                        helperText={getHelperText(param.paramType)} fullWidth/>
                                         </div>
                                         :
                                         param.paramType === 'java.time.LocalDate'?
-                                            <div style={{paddingRight: index%2===0? 10:0, paddingLeft: index%2===1? 10:0}}>
+                                            <div style={{paddingRight: index%2===0? 10:0, paddingLeft: index%2===1? 5:0}}>
                                                 <TextField type="date" onBlur={e=> {param.paramValue = e.target.value}} label={param.paramName} InputLabelProps={{ shrink: true, margin: 'dense' }} fullWidth/>
                                             </div>
                                             :
                                             param.hasParameterizedType && (param.paramType === 'java.util.List' || param.paramType === 'java.util.Set') ?
                                                 renderListParam(param, index)
                                                 :
-                                                <div style={{paddingRight: index%2===0? 10:0, paddingLeft: index%2===1? 10:0}}>
+                                                <div style={{paddingRight: index%2===0? 10:0, paddingLeft: index%2===1? 5:0}}>
                                                     <TextField onBlur={e=> {param.paramValue = e.target.value}} label={param.paramName} InputLabelProps={{ shrink: true, margin: 'dense' }} helperText={getHelperText(param.paramType)} fullWidth/>
                                                 </div>
                             }
@@ -119,7 +122,7 @@ function FlowParameters({registeredFlow}) {
                         <React.Fragment>
                             <FormControl fullWidth>
                                 <InputLabel>{param.paramName}</InputLabel>
-                                <Select onChange={e => updateListParam(param, e.target.value, true)} autoWidth>
+                                <Select onChange={e => updateListParam(param, e.target.value, true)} autoWidth defaultValue={''}>
                                     {
                                         getParties().map((party, index) => {
                                             return(
@@ -216,11 +219,10 @@ function FlowParameters({registeredFlow}) {
                 }
                 <div style={{width: "100%", float:"left", marginTop: 10, scroll: "auto"}}>
                     {
-                        flowResultMsg    ?
+                        flowCompletionStatus    ?
                             <div style={{float: "left", fontSize: 14}}>
-                                <p style={{color: flowResultMsgType?"green":"red"}}>
-                                    <span>{flowResultMsgType?'Flow Successful :': 'Flow Errored :'}</span>
-                                    {flowResultMsg}
+                                <p style={{color: flowCompletionStatus?"green":"red"}}>
+                                    <span>{flowCompletionStatus?'Flow Successful': 'Flow Errored'}</span>
                                 </p>
                             </div>
                             :null
@@ -250,14 +252,20 @@ function FlowParameters({registeredFlow}) {
             if(data.status){
                 console.log(data)
                 setFlowInProgress(false)
-                setFlowResultMsgType(true)
+                setFlowCompletionStatus(true)
                 setFlowResultMsg(data.data)
+                const flowName = trimFlowsForDisplay(registeredFlow.flowName)
+                const completedFlow = { flowName: flowName, flowCompletionStatus: true }
+                dispatch({type: "ADD_COMPLETED_FLOW", payload: { completedFlow }})
             } else {
 
             }
         }).catch(error => {
             setFlowInProgress(false)
-            setFlowResultMsgType(false)
+            setFlowCompletionStatus(false)
+            const flowName = trimFlowsForDisplay(registeredFlow.flowName)
+            const completedFlow = { flowName: flowName, flowCompletionStatus: false }
+            dispatch({type: "ADD_COMPLETED_FLOW", payload: { completedFlow }})
             console.log(error)
         });
     }
