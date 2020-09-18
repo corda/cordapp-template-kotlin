@@ -91,7 +91,6 @@ class Controller(rpc: NodeRPCConnection) {
                     APIResponse.success(proxy.startFlowDynamic(clazz).returnValue.getOrThrow().toString())
                 } else {
                     val result = proxy.startFlowDynamic(clazz, *paramArray).returnValue.getOrThrow().toString()
-                    println("SUCCESS: " + result)
                     APIResponse.success(result)
                 }
            } catch (e: Exception) {
@@ -363,28 +362,3 @@ data class FlowParam(
         var hasParameterizedType: Boolean = false,
         var paramValue: Any? = null
 )
-//class FlowParam private constructor (
-//    val paramName: String,
-//    val paramType: Class<*>,
-//    val flowParams: List<FlowParam>,
-//    val parameterizedType: Class<*>,
-//    val hasParameterizedType: Boolean,
-//    val paramValue: Object) {
-//
-//    data class Builder(
-//            var paramName: String = "",
-//            var paramType: Class<*> =  Any::class.java,
-//            var flowParams: List<FlowParam> = emptyList(),
-//            var parameterizedType: Class<*> = Any::class.java,
-//            var hasParameterizedType: Boolean = false,
-//            var paramValue: Object) {
-//
-//            fun paramName(paramName: String) = apply { this.paramName = paramName }
-//            fun paramType(paramType: Class<*>) = apply { this.paramType = paramType}
-//            fun flowParams(flowParams: List<FlowParam>) = apply { this.flowParams = flowParams }
-//            fun parameterizedType(parameterizedType: Class<*>) = apply { this.parameterizedType = parameterizedType }
-//            fun hasParameterizedType(hasParameterizedType: Boolean) = apply { this.hasParameterizedType = hasParameterizedType }
-//            fun paramValue(paramValue: Object) = apply{ this.paramValue = paramValue }
-//            fun build() = FlowParam(paramName, paramType, flowParams, parameterizedType, hasParameterizedType, paramValue)
-//    }
-//}

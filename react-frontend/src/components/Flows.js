@@ -12,7 +12,6 @@ import Grid from '@material-ui/core/Grid';
 import flowReducer from '../reducers/flowreducer'
 import CompletedFlows from "./CompletedFlows";
 
-
 const useStyles = makeStyles((theme) => ({
     root: {
         flexGrow: 1,
@@ -29,15 +28,23 @@ const useStyles = makeStyles((theme) => ({
     }
 }));
 
-
 export const trimFlowsForDisplay = (text) => {
     let words = text.split(".")
     return words[words.length - 1]
 }
 
 export const CompletedFlowContext = createContext({
-    completedFlows: []
+    completedFlows: [],
 })
+
+
+const completedFlowsLocal = (key) => {
+    if (localStorage.getItem(key) !== null) {
+       return JSON.parse(localStorage.getItem(key))
+    } else {
+        return []
+    }
+}
 
 function Flows() {
     const classes = useStyles();
@@ -63,7 +70,6 @@ function Flows() {
         }).then(({data}) => {
             if (data.status) {
                 setRegisteredFlows(data.data.flowInfoList)
-                // console.log(registeredFlows)
             } else {
 
             }
@@ -116,11 +122,9 @@ function Flows() {
                     </Grid>
                     <Grid item xs={9}>
                         {
-                            state.completedFlows.length === 0 || !localStorage.getItem("flows") ?
-                                <div className={classes.empty}>No flows have been executed</div> :
-
-                                <CompletedFlows flows={state.completedFlows}/>
-
+                            completedFlowsLocal("completedFlows").length === 0 ? <div className={classes.empty}>No flows have been executed</div> :
+                            // completedFlows.length === 0 ? <div className={classes.empty}>No flows have been executed</div> :
+                                <CompletedFlows flows={completedFlowsLocal("completedFlows")}/>
                         }
                     </Grid>
                 </Grid>

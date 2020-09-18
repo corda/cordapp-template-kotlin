@@ -25,14 +25,6 @@ function App() {
         <Sidebar currentPage={currentPage} setCurrentPage={setCurrentPage} />
         <div style={{marginLeft: 120, paddingTop: 70}}>
             <div className="content-pane">
-                {/*{*/}
-                {/*    this.props.spinner?*/}
-                {/*        <div className="spinner">*/}
-                {/*            <div>*/}
-                {/*                <img style={{width: 100}} src="spinner.svg" alt="Spinner"></img>*/}
-                {/*            </div>*/}
-                {/*        </div>:null*/}
-                {/*}*/}
                 {
                     currentPage === 0 ? <Dashboard/>:
                     currentPage === 1 ? <Flows/>:
@@ -41,17 +33,6 @@ function App() {
                 }
             </div>
         </div>
-        {/*<div className="flex flex">*/}
-        {/*    <div className="w-30">*/}
-        {/*        <Network/>*/}
-        {/*    </div>*/}
-        {/*    <div className="w-30">*/}
-        {/*        <Flows/>*/}
-        {/*    </div>*/}
-        {/*    <div className="w-30">*/}
-        {/*        <Cordapps/>*/}
-        {/*    </div>*/}
-        {/*</div>*/}
     </div>
   );
 }

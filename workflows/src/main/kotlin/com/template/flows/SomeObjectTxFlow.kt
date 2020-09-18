@@ -19,18 +19,21 @@ import net.corda.examples.yo.flows.YoFlow
 import net.corda.examples.yo.states.YoState
 import java.util.*
 
+@CordaSerializable
+data class TestObject(val amount: Int, val string: String, val bool: Boolean)
+
 @InitiatingFlow
 @StartableByRPC
-class SomeObjectTxFlow(private val counterparties: List<Party>, private val amount: Int, private val string: String) : FlowLogic<Unit>() {
+class SomeObjectTxFlow(private val counterparties: List<Party>, private val testObj: TestObject) : FlowLogic<Unit>() {
     override val progressTracker = ProgressTracker()
 
     @Suspendable
     override fun call(){
         counterparties.forEach { counterParty ->
-            val someObject = SomeObject(counterparties, amount, string, true)
+            val someObject = SomeObject(counterparties, testObj.amount, testObj.string, testObj.bool)
             val counterpartySession = initiateFlow(counterParty)
             val notary = serviceHub.networkMapCache.notaryIdentities.single() // METHOD 1
-            val utx = TransactionBuilder(notary = notary).withItems(someObject)
+            val utx = TransactionBuilder(notary = notary).addOutputState(someObject)
             val stx = serviceHub.signInitialTransaction(utx)
             stx.verify(serviceHub)
             subFlow(FinalityFlow(stx, listOf(counterpartySession)))

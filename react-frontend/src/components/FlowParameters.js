@@ -4,7 +4,22 @@ import http from "../services/http";
 import urls, {NODE_ID} from "../services/urls";
 import '../styling/FlowParameters.css';
 import { useState, useEffect } from 'react';
-import {CompletedFlowContext, trimFlowsForDisplay} from "./Flows";
+import { CompletedFlowContext, trimFlowsForDisplay} from "./Flows";
+import createPersistedState from 'use-persisted-state';
+import { transformPartyName } from "./Network"
+
+// function transformPartyName(party) {
+//     switch(party) {
+//         case 'O=PartyA, L=London, C=UK':
+//             return 'Party A 🇬🇧';
+//         case 'O=PartyB, L=New York, C=US':
+//             return 'Party B 🇦🇺';
+//         case 'O=PartyC, L=Sydney, C=AU':
+//             return 'Party C 🇺🇸';
+//         default:
+//             return 'foo';
+//     }
+// }
 
 function FlowParameters({registeredFlow}) {
     const [activeConstructor, setActiveConstructor] = useState("")
@@ -15,6 +30,11 @@ function FlowParameters({registeredFlow}) {
     const [flowCompletionStatus, setFlowCompletionStatus] = useState(false)
     const [isFlowInProgress, setFlowInProgress] = useState(false)
     const { dispatch } = useContext(CompletedFlowContext)
+    const localFlows = JSON.parse(localStorage.getItem('userData')) || {};
+    // const [completedFlows, setCompletedFlows] = useState(localFlows)
+
+    const useCompletedFlowState = createPersistedState('completedFlows');
+    const [completedFlows, setCompletedFlows] = useCompletedFlowState([]);
 
     function handleFlowConstructorSelection(event) {
         setActiveConstructor([event.target.value])
@@ -79,7 +99,7 @@ function FlowParameters({registeredFlow}) {
 
                                                     getParties().map((party, index) => {
                                                         return(
-                                                            <MenuItem key={index} value={party + ''}>{party}</MenuItem>
+                                                            <MenuItem key={index} value={party + ''}>{transformPartyName(party)}</MenuItem>
                                                         );
                                                     })
                                                 }
@@ -126,7 +146,7 @@ function FlowParameters({registeredFlow}) {
                                     {
                                         getParties().map((party, index) => {
                                             return(
-                                                <MenuItem key={index} value={party}>{party}</MenuItem>
+                                                <MenuItem key={index} value={party}>{transformPartyName(party)}</MenuItem>
                                             );
                                         })
                                     }
@@ -254,19 +274,24 @@ function FlowParameters({registeredFlow}) {
                 setFlowInProgress(false)
                 setFlowCompletionStatus(true)
                 setFlowResultMsg(data.data)
-                const flowName = trimFlowsForDisplay(registeredFlow.flowName)
-                const completedFlow = { flowName: flowName, flowCompletionStatus: true }
-                dispatch({type: "ADD_COMPLETED_FLOW", payload: { completedFlow }})
+                let flowName = trimFlowsForDisplay(registeredFlow.flowName)
+                let newFlow = { flowName: flowName, flowCompletionStatus: true }
+                setCompletedFlows([...completedFlows, newFlow])
+                const jsonString = JSON.stringify(completedFlows)
+                localStorage.setItem("completedFlows", jsonString);
+                // dispatch({type: "ADD_COMPLETED_FLOW", payload: { completedFlow }})
             } else {
-
+                // dispatch({type: "ADD_COMPLETED_FLOW", payload: { completedFlow }})
             }
         }).catch(error => {
+            console.log("FLOW FAILED!!!!")
             setFlowInProgress(false)
             setFlowCompletionStatus(false)
-            const flowName = trimFlowsForDisplay(registeredFlow.flowName)
-            const completedFlow = { flowName: flowName, flowCompletionStatus: false }
-            dispatch({type: "ADD_COMPLETED_FLOW", payload: { completedFlow }})
-            console.log(error)
+            let flowName = trimFlowsForDisplay(registeredFlow.flowName)
+            let newFlow = { flowName: flowName, flowCompletionStatus: true }
+            setCompletedFlows([...completedFlows, newFlow])
+            const jsonString = JSON.stringify(completedFlows)
+            localStorage.setItem("completedFlows", jsonString);
         });
     }
 

@@ -6,6 +6,18 @@ import '../styling/Button.scss';
 import { NODE_ID } from "../services/urls";
 import { SHOW_NETWORK_PARTICIPANTS, HIDE_NETWORK_PARTICIPANTS} from "../services/buttons";
 
+export const transformPartyName = (party) => {
+    switch(party) {
+        case 'O=PartyA, L=London, C=UK':
+            return 'Party A 🇬🇧';
+        case 'O=PartyB, L=New York, C=US':
+            return 'Party B 🇦🇺';
+        case 'O=PartyC, L=Sydney, C=AU':
+            return 'Party C 🇺🇸';
+        default:
+            return 'foo';
+    }
+}
 
 function Network() {
     const [parties, setParties] = useState([])
@@ -63,7 +75,7 @@ function Network() {
                                 <a href={() => getUrlForParty((party))}
                                    type="button"
                                    onClick={() =>  openApplicationWindow(party) }
-                                   className="bg-transparent bn f4 white grow">{party}</a>
+                                   className="bg-transparent bn f4 white grow">{transformPartyName(party)}</a>
                             </td>
                         </tr>
                     })}
