@@ -9,7 +9,7 @@ import { SHOW_CORDAPPS, HIDE_CORDAPPS } from "../services/buttons";
 
 function Cordapps() {
     const [cordapps, setCordapps] = useState([])
-    const [buttonText, setButtonText] = useState("Cordapps")
+    const [buttonText, setButtonText] = useState(SHOW_CORDAPPS)
     const [shouldDisplayTable, setDisplayTable] = useState(false)
     const changeText = (text) => {
         setButtonText(text)
@@ -36,7 +36,7 @@ function Cordapps() {
                className="btn btn-2"
                onClick={ () => { listCordapps(); changeText( getButtonText() )}}>{buttonText}</a>
             { shouldDisplayTable &&
-                <div className="Cordapps">
+                <div className="cordapps">
                 <table className="pa4">
                     <tbody>
                     {cordapps.map((cordapp, index) => {

@@ -1,4 +1,4 @@
-.cordapps {
+.net-params {
     overflow: scroll;
     height: auto;
     max-height: 400px;
@@ -9,7 +9,7 @@
     width: 75%;
 }
 
-.cordapp-wrapper{
+.params-wrapper{
     width: 100%;
     display: inline-block;
 }

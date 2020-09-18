@@ -5,6 +5,7 @@ import net.corda.core.contracts.UniqueIdentifier
 import net.corda.core.cordapp.CordappInfo
 import net.corda.core.crypto.SecureHash
 import net.corda.core.flows.FlowLogic
+import net.corda.core.node.NetworkParameters
 import net.corda.core.utilities.OpaqueBytes
 import net.corda.core.utilities.getOrThrow
 import org.slf4j.LoggerFactory
@@ -73,6 +74,15 @@ class Controller(rpc: NodeRPCConnection) {
         }
     }
 
+    @GetMapping(value = [ "network-parameters" ], produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun getNetworkParameters() : APIResponse<NetworkParameters> {
+        return try {
+            APIResponse.success(proxy.networkParameters)
+        } catch (e: Exception) {
+            logger.error(e.message)
+            APIResponse.error("Error while getting network parameters")
+        }
+    }
 
     @PostMapping(value = ["/start-flow/"])
     fun startFlow(@RequestBody flowInfo: FlowInfo): APIResponse<String> {

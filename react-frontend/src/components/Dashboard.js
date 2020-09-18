@@ -24,9 +24,9 @@ function Dashboard() {
                 <Grid item xs>
                     <NetworkParticipants/>
                 </Grid>
-                {/*<Grid item xs>*/}
-                {/*    <NetworkInfo/>*/}
-                {/*</Grid>*/}
+                <Grid item xs>
+                    <NetworkInfo/>
+                </Grid>
                 <Grid item xs>
                     <Cordapps/>
                 </Grid>
