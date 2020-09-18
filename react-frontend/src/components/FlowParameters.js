@@ -8,19 +8,6 @@ import { CompletedFlowContext, trimFlowsForDisplay} from "./Flows";
 import createPersistedState from 'use-persisted-state';
 import { transformPartyName } from "./Network"
 
-// function transformPartyName(party) {
-//     switch(party) {
-//         case 'O=PartyA, L=London, C=UK':
-//             return 'Party A 🇬🇧';
-//         case 'O=PartyB, L=New York, C=US':
-//             return 'Party B 🇦🇺';
-//         case 'O=PartyC, L=Sydney, C=AU':
-//             return 'Party C 🇺🇸';
-//         default:
-//             return 'foo';
-//     }
-// }
-
 function FlowParameters({registeredFlow}) {
     const [activeConstructor, setActiveConstructor] = useState("")
     const [flowParams, setFlowParams] = useState([])
@@ -29,10 +16,6 @@ function FlowParameters({registeredFlow}) {
     const [flowResultMsg, setFlowResultMsg] = useState("")
     const [flowCompletionStatus, setFlowCompletionStatus] = useState(false)
     const [isFlowInProgress, setFlowInProgress] = useState(false)
-    const { dispatch } = useContext(CompletedFlowContext)
-    const localFlows = JSON.parse(localStorage.getItem('userData')) || {};
-    // const [completedFlows, setCompletedFlows] = useState(localFlows)
-
     const useCompletedFlowState = createPersistedState('completedFlows');
     const [completedFlows, setCompletedFlows] = useCompletedFlowState([]);
 
@@ -61,7 +44,7 @@ function FlowParameters({registeredFlow}) {
                     innerForm?
                         <div className="inner-form" style={{padding: deep? "10px 0px 0px 0px":  "10px 0"}} key={key}>
                             {
-                                // delIdx>=0?<div className="inner-form-close" onClick={()=> updateCmplxListParam(param, false, delIdx)}>X</div>:null
+                                delIdx>=0?<div className="inner-form-close" onClick={()=> updateCmplxListParam(param, false, delIdx)}>X</div>:null
                             }
                             <div style={{padding: deep? 0:  "0 10px"}}>
                                 <div style={{textTransform:"capitalize"}}><strong>{title}</strong></div>
@@ -156,7 +139,7 @@ function FlowParameters({registeredFlow}) {
                             {
                                 paramList[param.paramName]?
                                     paramList[param.paramName].map((value, idx) => {
-                                        return (<div key={idx} className="list-selection">{value}<span onClick={()=>updateListParam(param, "", false, idx)}>X</span></div>)
+                                        return (<div key={idx} className="list-selection">{transformPartyName(value)}<span onClick={()=>updateListParam(param, "", false, idx)}>X</span></div>)
                                     })
                                     :null
                             }
@@ -314,31 +297,31 @@ function FlowParameters({registeredFlow}) {
         }
     }
 
-    // function updateCmplxListParam(param, flag, idx){
-    //     if(flag){
-    //         let obj = JSON.parse(JSON.stringify(param.paramValue[0]));
-    //         param.paramValue.push(obj);
-    //         let keyVal = [];
-    //         if(!(paramList[param.paramName] === undefined || paramList[param.paramName] === null)){
-    //             keyVal[param.paramName] = paramList[param.paramName];
-    //         }else{
-    //             keyVal[param.paramName] = [];
-    //         }
-    //         if(keyVal[param.paramName].length === 0){
-    //             obj.key = 0;
-    //         }else{
-    //             obj.key = keyVal[param.paramName][keyVal[param.paramName].length -1].key + 1;
-    //         }
-    //         keyVal[param.paramName].push(obj);
-    //         setParamList(keyVal)
-    //     }else{
-    //         param.paramValue.splice(idx+1, 1);
-    //         paramList[param.paramName].splice(idx, 1);
-    //         let keyVal = [];
-    //         keyVal[param.paramName] = this.state.paramList[param.paramName];
-    //         setParamList(keyVal)
-    //     }
-    // }
+    function updateCmplxListParam(param, flag, idx){
+        if(flag){
+            let obj = JSON.parse(JSON.stringify(param.paramValue[0]));
+            param.paramValue.push(obj);
+            let keyVal = [];
+            if(!(paramList[param.paramName] === undefined || paramList[param.paramName] === null)){
+                keyVal[param.paramName] = paramList[param.paramName];
+            }else{
+                keyVal[param.paramName] = [];
+            }
+            if(keyVal[param.paramName].length === 0){
+                obj.key = 0;
+            }else{
+                obj.key = keyVal[param.paramName][keyVal[param.paramName].length -1].key + 1;
+            }
+            keyVal[param.paramName].push(obj);
+            setParamList(keyVal)
+        }else{
+            param.paramValue.splice(idx+1, 1);
+            paramList[param.paramName].splice(idx, 1);
+            let keyVal = [];
+            keyVal[param.paramName] = this.state.paramList[param.paramName];
+            setParamList(keyVal)
+        }
+    }
 
     function getHelperText(paramType){
         switch(paramType){

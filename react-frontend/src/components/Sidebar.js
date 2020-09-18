@@ -25,17 +25,3 @@ function Sidebar({currentPage, setCurrentPage}) {
 }
 
 export default Sidebar
-
-// const mapStateToProps = state => {
-//     return {
-//         currentPage: state.common.currentPage
-//     }
-// }
-//
-// const mapDispatchToProps = dispatch => {
-//     return {
-//         changeScreen: (page) => dispatch({type: ActionType.CHANGE_SCREEN, page: page}),
-//     }
-// }
-
-// export default connect(mapStateToProps, mapDispatchToProps)(sideMenu);

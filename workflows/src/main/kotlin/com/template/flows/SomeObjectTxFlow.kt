@@ -1,15 +1,13 @@
 package com.template.flows
 
 import co.paralleluniverse.fibers.Suspendable
-import net.corda.core.contracts.Command
-import net.corda.core.contracts.LinearState
-import net.corda.core.contracts.StateAndContract
-import net.corda.core.contracts.UniqueIdentifier
+import net.corda.core.contracts.*
 import net.corda.core.crypto.newSecureRandom
 import net.corda.core.flows.*
 import net.corda.core.identity.AbstractParty
 import net.corda.core.identity.Party
 import net.corda.core.serialization.CordaSerializable
+import net.corda.core.transactions.LedgerTransaction
 import net.corda.core.transactions.SignedTransaction
 import net.corda.core.transactions.TransactionBuilder
 import net.corda.core.utilities.ProgressTracker
@@ -33,7 +31,7 @@ class SomeObjectTxFlow(private val counterparties: List<Party>, private val test
             val someObject = SomeObject(counterparties, testObj.amount, testObj.string, testObj.bool)
             val counterpartySession = initiateFlow(counterParty)
             val notary = serviceHub.networkMapCache.notaryIdentities.single() // METHOD 1
-            val utx = TransactionBuilder(notary = notary).addOutputState(someObject)
+            val utx = TransactionBuilder(notary = notary).addOutputState(someObject, MyContract.contractId)
             val stx = serviceHub.signInitialTransaction(utx)
             stx.verify(serviceHub)
             subFlow(FinalityFlow(stx, listOf(counterpartySession)))
@@ -56,3 +54,14 @@ data class SomeObject(val parties: List<Party>, val integer: Int, val str: Strin
     override val participants: List<AbstractParty>
         get() = parties
 }
+
+
+class MyContract: Contract {
+    companion object {
+        val contractId = this::class.java.enclosingClass.canonicalName
+    }
+    override fun verify(tx: LedgerTransaction) {
+        TODO("Not yet implemented")
+    }
+}
+//    public static final String ID = "com.template.ContractB";
