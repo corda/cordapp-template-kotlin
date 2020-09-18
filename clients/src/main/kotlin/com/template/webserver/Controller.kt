@@ -6,6 +6,7 @@ import net.corda.core.cordapp.CordappInfo
 import net.corda.core.crypto.SecureHash
 import net.corda.core.flows.FlowLogic
 import net.corda.core.node.NetworkParameters
+import net.corda.core.node.NodeDiagnosticInfo
 import net.corda.core.utilities.OpaqueBytes
 import net.corda.core.utilities.getOrThrow
 import org.slf4j.LoggerFactory
@@ -52,9 +53,9 @@ class Controller(rpc: NodeRPCConnection) {
 
 
     @GetMapping(value = [ "cordapps" ], produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun getCordapps() : APIResponse<List<CordappInfo>> {
+    fun getCordapps() : APIResponse<NodeDiagnosticInfo> {
         return try {
-            APIResponse.success(proxy.nodeDiagnosticInfo().cordapps)
+            APIResponse.success(proxy.nodeDiagnosticInfo())
         } catch (e: Exception) {
             logger.error(e.message)
             APIResponse.error("Error while getting cordapps")

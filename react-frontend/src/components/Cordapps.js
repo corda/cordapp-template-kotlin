@@ -8,6 +8,7 @@ import { SHOW_CORDAPPS, HIDE_CORDAPPS } from "../services/buttons";
 
 
 function Cordapps() {
+    const [nodeDiagnostics, setNodeDiagnostics] = useState([])
     const [cordapps, setCordapps] = useState([])
     const [buttonText, setButtonText] = useState(SHOW_CORDAPPS)
     const [shouldDisplayTable, setDisplayTable] = useState(false)
@@ -23,7 +24,8 @@ function Cordapps() {
             .then(r => {
                 if(r.status === 200 && r.data.status === true){
                     console.log("flows:" + r.data.data)
-                    setCordapps(r.data.data)
+                    setCordapps(r.data.data.cordapps)
+                    setNodeDiagnostics(r.data.data)
                 } else {
                 }
             });
@@ -37,6 +39,7 @@ function Cordapps() {
                onClick={ () => { listCordapps(); changeText( getButtonText() )}}>{buttonText}</a>
             { shouldDisplayTable &&
                 <div className="cordapps">
+                <div><span>Corda Version: </span> {nodeDiagnostics.version}</div>
                 <table className="pa4">
                     <tbody>
                     {cordapps.map((cordapp, index) => {

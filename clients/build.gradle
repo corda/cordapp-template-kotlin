@@ -15,10 +15,8 @@ dependencies {
     // CorDapp dependencies.
     compile project(":contracts")
     compile project(":workflows")
-//    compile "net.corda:corda-jackson:$corda_release_version"
-//    compile "net.corda:corda-rpc:$corda_release_version"
-//    compile "net.corda:corda:$corda_release_version"
-//    testCompile "net.corda:corda-node-driver:$corda_release_version"
+    compile "net.corda:corda-jackson:$corda_release_version"
+    compile "net.corda:corda-rpc:$corda_release_version"
 
     compile("org.springframework.boot:spring-boot-starter-websocket:$spring_boot_version") {
         exclude group: "org.springframework.boot", module: "spring-boot-starter-logging"
