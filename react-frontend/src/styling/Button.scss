@@ -25,7 +25,7 @@ $white: #fff;
 }
 
 a {
-    color: $white;
+    //color: $white;
     line-height: 1.4;
     padding: .25em;
     text-decoration: none;
@@ -37,7 +37,7 @@ a {
 
 
 .btn {
-      color: #E1332D;
+      color: $red;
       cursor: pointer;
       font-size:16px;
       font-weight: 400;
@@ -89,39 +89,6 @@ a {
 }
 
 .btn-2:hover:before {
-    bottom: auto;
-    top: 0;
-    width: 70%;
-}
-
-.btn-3:hover,
-.btn-3:active {
-    letter-spacing: 5px;
-}
-
-.btn-3:after,
-.btn-3:before {
-    backface-visibility: hidden;
-    border: 1px solid rgba(#fff, 0);
-    bottom: 0px;
-    content: " ";
-    display: block;
-    margin: 0 auto;
-    position: relative;
-    transition: all 560ms ease-in-out;
-    width: 0;
-}
-
-.btn-3:hover:after,
-.btn-3:hover:before {
-    //content:"Clear History";
-    backface-visibility: hidden;
-    border-color: #fff;
-    transition: width 700ms ease-in-out;
-    width: 70%;
-}
-
-.btn-3:hover:before {
     bottom: auto;
     top: 0;
     width: 70%;

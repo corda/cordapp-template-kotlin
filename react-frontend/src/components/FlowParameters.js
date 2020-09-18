@@ -6,7 +6,7 @@ import '../styling/FlowParameters.css';
 import { useState, useEffect } from 'react';
 import { CompletedFlowContext, trimFlowsForDisplay} from "./Flows";
 import createPersistedState from 'use-persisted-state';
-import { transformPartyName } from "./Network"
+import { transformPartyName } from "./NetworkParticipants"
 
 function FlowParameters({registeredFlow}) {
     const [activeConstructor, setActiveConstructor] = useState("")

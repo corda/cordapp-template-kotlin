@@ -16,6 +16,7 @@
     "react-dom": "^16.13.1",
     "react-onclickoutside": "^6.9.0",
     "react-scripts": "3.4.3",
+    "react-typing-effect": "^2.0.3",
     "use-persisted-state": "^0.3.0"
   },
   "scripts": {

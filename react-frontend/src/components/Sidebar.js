@@ -2,6 +2,7 @@ import React from 'react';
 import '../styling/Button.scss';
 import '../styling/Sidebar.css';
 
+
 function Sidebar({currentPage, setCurrentPage}) {
 
     function changePage(i) {

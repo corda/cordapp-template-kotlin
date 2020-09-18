@@ -1,0 +1,9 @@
+.network-wrapper {
+    width: 95%;
+    display: inline-block;
+    border-bottom: white;
+    justify-items: center;
+    justify-content: center;
+    padding-top: 0;
+    padding-left: 65px;
+}

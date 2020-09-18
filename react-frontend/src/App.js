@@ -3,7 +3,7 @@ import './App.css'
 import { NODE_ID } from "./services/urls"
 import Header from "./components/Header"
 import Dashboard from "./components/Dashboard";
-import Network from "./components/Network"
+import Network from "./components/NetworkParticipants"
 import Flows from "./components/Flows"
 import Vault from "./components/Vault";
 import Cordapps from "./components/Cordapps";

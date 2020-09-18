@@ -50,10 +50,11 @@ function Flows() {
     const classes = useStyles();
     const [buttonText, setButtonText] = useState(SHOW_FLOWS)
     const [shouldDisplayTable, setDisplayTable] = useState(false)
-    const {isShowing, flowData, toggle, setModalData} = useModal()
     const [registeredFlows, setRegisteredFlows] = useState([])
+    const {isShowing, flowData, toggle, setModalData} = useModal()
     const initialFlows = useContext(CompletedFlowContext)
     const [state, dispatch] = useReducer(flowReducer, initialFlows)
+    const [refresh, setRefresh] = useState(false)
 
     const changeText = (text) => {
         setButtonText(text)
@@ -124,7 +125,7 @@ function Flows() {
                         {
                             completedFlowsLocal("completedFlows").length === 0 ? <div className={classes.empty}>No flows have been executed</div> :
                             // completedFlows.length === 0 ? <div className={classes.empty}>No flows have been executed</div> :
-                                <CompletedFlows flows={completedFlowsLocal("completedFlows")}/>
+                                <CompletedFlows flows={completedFlowsLocal("completedFlows")} setRefresh={setRefresh}/>
                         }
                     </Grid>
                 </Grid>

@@ -3,13 +3,14 @@ import React from 'react';
 import urls from "../services/urls";
 import http from "../services/http";
 import '../styling/Button.scss';
+import '../styling/NetworkParticipants.css';
 import { NODE_ID } from "../services/urls";
 import { SHOW_NETWORK_PARTICIPANTS, HIDE_NETWORK_PARTICIPANTS} from "../services/buttons";
 
 export const transformPartyName = (party) => {
     switch(party) {
-        case 'O=PartyA, L=London, C=UK':
-            return 'Party A 🇬🇧';
+        case 'O=PartyA, L=Paris, C=FR':
+            return 'Party A 🇫🇷';
         case 'O=PartyB, L=New York, C=US':
             return 'Party B 🇦🇺';
         case 'O=PartyC, L=Sydney, C=AU':
@@ -19,7 +20,7 @@ export const transformPartyName = (party) => {
     }
 }
 
-function Network() {
+function NetworkParticipants() {
     const [parties, setParties] = useState([])
     const [buttonText, setButtonText] = useState("Network Participants")
     const [shouldDisplayTable, setDisplayTable] = useState(false)
@@ -67,7 +68,7 @@ function Network() {
                className="btn btn-2"
                onClick={getParties}>{buttonText}</a>
             { shouldDisplayTable &&
-                <table className="pa4 tl">
+                <table className="pa1 tl network-wrapper">
                     <tbody>
                     {parties.map((party, index) => {
                         return <tr>
@@ -84,4 +85,4 @@ function Network() {
         </div>
     );
 }
-export default Network;
+export default NetworkParticipants;

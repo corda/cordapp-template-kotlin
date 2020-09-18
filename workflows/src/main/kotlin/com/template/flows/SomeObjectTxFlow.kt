@@ -22,6 +22,22 @@ data class TestObject(val amount: Int, val string: String, val bool: Boolean)
 
 @InitiatingFlow
 @StartableByRPC
+class TestFlow1(private val counterParty: Party):FlowLogic<String>() {
+    override fun call(): String {
+        return "TEST FLOW 1"
+    }
+}
+
+@InitiatingFlow
+@StartableByRPC
+class TestFlow2(private val counterParty: Party):FlowLogic<String>() {
+    override fun call(): String {
+        return "TEST FLOW 2"
+    }
+}
+
+@InitiatingFlow
+@StartableByRPC
 class SomeObjectTxFlow(private val counterparties: List<Party>, private val testObj: TestObject) : FlowLogic<Unit>() {
     override val progressTracker = ProgressTracker()
 

@@ -1,5 +1,6 @@
 import React from 'react';
-import Network from "./Network";
+import NetworkParticipants from "./NetworkParticipants";
+import NetworkInfo from "./NetworkInfo";
 import Cordapps from "./Cordapps";
 import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -19,11 +20,14 @@ function Dashboard() {
             <Grid container  direction="row"
                   justify="center"
                   alignItems="stretch"
-                  spacing={1}>
-                <Grid item xs={6}>
-                    <Network/>
+                  spacing={3}>
+                <Grid item xs>
+                    <NetworkParticipants/>
                 </Grid>
-                <Grid item xs={6}>
+                {/*<Grid item xs>*/}
+                {/*    <NetworkInfo/>*/}
+                {/*</Grid>*/}
+                <Grid item xs>
                     <Cordapps/>
                 </Grid>
             </Grid>
