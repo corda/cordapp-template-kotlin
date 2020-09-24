@@ -1,4 +1,5 @@
 apply plugin: 'org.springframework.boot'
+apply plugin: 'net.corda.plugins.cordapp'
 
 sourceSets {
     main {
@@ -10,7 +11,7 @@ sourceSets {
 
 dependencies {
     // Corda dependencies.
-    compile "$corda_release_group:corda-rpc:$corda_release_version"
+    cordaCompile group: corda_release_group, name: 'corda-rpc', version: corda_release_version, classifier: jdk_classifier
 
     // CorDapp dependencies.
     compile project(":contracts")

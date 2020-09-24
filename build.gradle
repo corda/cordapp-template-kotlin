@@ -11,13 +11,20 @@ buildscript { //properties that you need to build the project
         corda_gradle_plugins_version = constants.getProperty("gradlePluginsVersion")
         kotlin_version = constants.getProperty("kotlinVersion")
         junit_version = constants.getProperty("junitVersion")
-        quasar_version = constants.getProperty("quasarVersion")
         log4j_version = constants.getProperty("log4jVersion")
         slf4j_version = constants.getProperty("slf4jVersion")
         corda_platform_version = constants.getProperty("platformVersion").toInteger()
         //springboot
         spring_boot_version = '2.0.2.RELEASE'
         spring_boot_gradle_plugin_version = '2.0.2.RELEASE'
+    }
+
+    if (JavaVersion.current().isJava8()) {
+        ext.quasar_version = constants.getProperty("quasarVersion")
+        ext.jdk_classifier = constants.getProperty("jdkClassifier")
+    } else {
+        ext.quasar_version = constants.getProperty("quasarVersion11")
+        ext.jdk_classifier = constants.getProperty("jdkClassifier11")
     }
 
     repositories {
@@ -80,7 +87,7 @@ sourceSets {
 dependencies {
     // Corda dependencies.
     cordaCompile "$corda_core_release_group:corda-core:$corda_core_release_version"
-    cordaRuntime "$corda_release_group:corda-node-api:$corda_release_version"
+    cordaRuntime group: corda_release_group, name: 'corda-node-api', version: corda_release_version, classifier: jdk_classifier
     cordaRuntime "$corda_release_group:corda:$corda_release_version"
 
     // CorDapp dependencies.
@@ -109,6 +116,9 @@ task ganache {
 
 //Task to deploy the nodes in order to bootstrap a network
 task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
+
+    // log4j2 does not create top level logs directory on JDK11
+    project.file('logs').mkdirs()
 
     /* This property will load the CorDapps to each of the node by default, including the Notary. You can find them
      * in the cordapps folder of the node at build/nodes/Notary/cordapps. However, the notary doesn't really understand
