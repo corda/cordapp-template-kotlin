@@ -8,15 +8,23 @@ import { NODE_ID } from "../services/urls";
 import { SHOW_NETWORK_PARTICIPANTS, HIDE_NETWORK_PARTICIPANTS} from "../services/buttons";
 
 export const transformPartyName = (party) => {
-    switch(party) {
-        case 'O=PartyA, L=Paris, C=FR':
-            return 'Party A 🇫🇷';
-        case 'O=PartyB, L=New York, C=US':
-            return 'Party B 🇦🇺';
-        case 'O=PartyC, L=Sydney, C=AU':
-            return 'Party C 🇺🇸';
+    const partyName = party.split('O=')[1].split(',')[0];
+    const countryCode = party.split('C=')[1]
+    return partyName + getFlag(countryCode)
+}
+
+function getFlag(countryCode) {
+    switch(countryCode) {
+        case 'GB':
+            return ' 🇬🇧';
+        case 'AU':
+            return ' 🇦🇺';
+        case 'US':
+            return ' 🇺🇸';
+        case 'FR':
+            return ' 🇫🇷';
         default:
-            return 'foo';
+            return '';
     }
 }
 

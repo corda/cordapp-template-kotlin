@@ -9,7 +9,6 @@ import Modal from "./Modal"
 import useModal from "../hooks/useModal";
 import {makeStyles} from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import flowReducer from '../reducers/flowreducer'
 import CompletedFlows from "./CompletedFlows";
 
 const useStyles = makeStyles((theme) => ({
@@ -33,11 +32,6 @@ export const trimFlowsForDisplay = (text) => {
     return words[words.length - 1]
 }
 
-export const CompletedFlowContext = createContext({
-    completedFlows: [],
-})
-
-
 const completedFlowsLocal = (key) => {
     if (localStorage.getItem(key) !== null) {
        return JSON.parse(localStorage.getItem(key))
@@ -52,8 +46,6 @@ function Flows() {
     const [shouldDisplayTable, setDisplayTable] = useState(false)
     const [registeredFlows, setRegisteredFlows] = useState([])
     const {isShowing, flowData, toggle, setModalData} = useModal()
-    const initialFlows = useContext(CompletedFlowContext)
-    const [state, dispatch] = useReducer(flowReducer, initialFlows)
     const [refresh, setRefresh] = useState(false)
 
     const changeText = (text) => {
@@ -81,7 +73,6 @@ function Flows() {
 
     return (
         <div className={classes.root}>
-            <CompletedFlowContext.Provider value={{state, dispatch}}>
                 <Grid
                     container
                     direction="row"
@@ -124,12 +115,10 @@ function Flows() {
                     <Grid item xs={9}>
                         {
                             completedFlowsLocal("completedFlows").length === 0 ? <div className={classes.empty}>No flows have been executed</div> :
-                            // completedFlows.length === 0 ? <div className={classes.empty}>No flows have been executed</div> :
                                 <CompletedFlows flows={completedFlowsLocal("completedFlows")} setRefresh={setRefresh}/>
                         }
                     </Grid>
                 </Grid>
-            </CompletedFlowContext.Provider>
         </div>
     );
 }

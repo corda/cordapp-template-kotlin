@@ -1,4 +1,4 @@
-import React, {useContext} from "react";
+import React from "react";
 import { FormControl, InputLabel, MenuItem, FormHelperText, TextField, Select, Button, Grid} from "@material-ui/core";
 import http from "../services/http";
 import urls, {NODE_ID} from "../services/urls";
@@ -8,12 +8,12 @@ import { trimFlowsForDisplay} from "./Flows";
 import createPersistedState from 'use-persisted-state';
 import { transformPartyName } from "./NetworkParticipants"
 
+// Clean this mess up
 function FlowParameters({registeredFlow}) {
     const [activeConstructor, setActiveConstructor] = useState("")
     const [flowParams, setFlowParams] = useState([])
     const [paramList, setParamList] = useState([registeredFlow.flowParams])
     const [parties, setParties] = useState([])
-    const [flowResultMsg, setFlowResultMsg] = useState("")
     const [flowCompletionStatus, setFlowCompletionStatus] = useState(false)
     const [isFlowInProgress, setFlowInProgress] = useState(false)
     const useCompletedFlowState = createPersistedState('completedFlows');
@@ -250,13 +250,15 @@ function FlowParameters({registeredFlow}) {
             flowParams: flowParams
         }
 
+        console.log("flowInfo")
+        console.log(urls.start_flow)
+
         http.post(urls.start_flow, flowInfo)
             .then(({data}) => {
             if(data.status){
                 console.log(data)
                 setFlowInProgress(false)
                 setFlowCompletionStatus(true)
-                setFlowResultMsg(data.data)
                 let flowName = trimFlowsForDisplay(registeredFlow.flowName)
                 let newFlow = { flowName: flowName, flowCompletionStatus: true }
                 setCompletedFlows([...completedFlows, newFlow])
