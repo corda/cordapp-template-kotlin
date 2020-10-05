@@ -1,37 +1,52 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import '../styling/Vault.css';
-import urls from "../services/urls";
+import urls, {NODE_ID} from "../services/urls";
 import { Grid, TablePagination } from '@material-ui/core';
+import http from "../services/http";
+import {trimFlowsForDisplay} from "./Flows";
+
+const PAGE_SIZE = 5
 
 function Vault() {
-    const [states, setStates] = useState([])
-    const [statesMetaData, setStatesMetaData] = useState([])
-    const [totalStatesAvailable, setTotalStatesAvailable] = useState(0)
-    // const [stateTypes, setStateTypes] = useState("")
+    const [ stateData, setStateData ] = useState({
+        state: [],
+        stateMetadata: [],
+        totalStatesAvailable: 0,
+    })
+    const [pageSpec, setPageSpec] = useState({
+        pageNumber: 0,
+        pageSize: PAGE_SIZE
+    })
 
-    // val states: List<StateAndRef<T>>,
-    // val statesMetadata: List<StateMetadata>,
-    // val totalStatesAvailable: Long,
-    // val stateTypes: StateStatus,
-    // val otherResults: List<Any>)
+    useEffect(() => {
+        getVaultStates(pageSpec)
+    }, [pageSpec]);
 
-    const webSocket = new WebSocket(urls.websocket);
-    console.log("websocket: " + urls.websocket)
-    webSocket.onopen = () => console.log('opened')
-    webSocket.onerror = () => console.log('error')
-    webSocket.onmessage = function(data) {
-        console.log(data.data);
-        let parsedData = JSON.parse(data.data);
-        console.log(parsedData.eventName)
-        if(parsedData.eventName === "VAULT_UPDATE") {
-            setStates(parsedData.vault.states)
-            setStatesMetaData(parsedData.vault.statesMetadata)
-            setTotalStatesAvailable(parsedData.vault.totalStatesAvailable)
-        }
-        else {
-            console.log("something other than a vault update event came from the WS ")
-        }
-    };
+    function getVaultStates(pageSpec) {
+        http.post(urls.get_vault_states, pageSpec)
+            .then(({data}) => {
+                if(data.status){
+                    let responseData = data.data
+                    setStateData({
+                        states: responseData.states,
+                        stateMetadata: responseData.statesMetadata,
+                        totalStatesAvailable: responseData.totalStatesAvailable
+                    })
+                } else {
+                    console.log(data.status)
+                }
+            }).catch(error => {
+                console.log("Something went terribly wrong")
+                console.error(error)
+        });
+    }
+
+    const handleChangePage = (event, newPage) => {
+       setPageSpec({
+             ...pageSpec,
+            pageNumber: newPage
+       })
+    }
 
     function renderJson(jsonObj, lvl) {
         return(
@@ -56,7 +71,6 @@ function Vault() {
     }
 
     return (
-
         <React.Fragment>
             <div style={{padding: "20px 20px 10px"}}>
                 <div className="page-title">
@@ -64,41 +78,40 @@ function Vault() {
                 </div>
             </div>
             <Grid container spacing={0}>
-                <Grid item xs={3}>
-                    <div> Filter went here</div>
+                <Grid item xs={1}>
                 </Grid>
                 <Grid item xs={9}>
                     {
-                        states?
-                            states.map((state, idx) => {
+                        stateData.states?
+                            stateData.states.map((state, idx) => {
                                 return (
                                     <div className="state-wrapper">
                                         <div className="state-title">
-                                            <div style={{display:"inline=block"}}>{statesMetaData?statesMetaData[idx].contractStateClassName:null}</div>
+                                            <div style={{display:"inline=block"}}>{stateData.stateMetadata ? stateData.stateMetadata[idx].contractStateClassName:null}</div>
                                             <div className="tx">StateRef: {state.ref.txhash}({state.ref.index})</div>
                                         </div>
                                         <Grid container spacing={0} style={{padding:10}}>
-                                            <Grid item xs={9}>
+                                            <Grid item xs={7}>
                                                 <div className="state-content">
                                                     {renderJson(state.state.data, 0)}
                                                 </div>
                                             </Grid>
-                                            <Grid item xs={3}>
+                                            <Grid item xs={5}>
                                                 {
-                                                    statesMetaData?
+                                                    stateData.stateMetadata?
                                                         <React.Fragment>
                                                             <div className="bar">
-                                                                <div className={statesMetaData[idx].relevancyStatus==='RELEVANT'?'blue':'grey'}>{statesMetaData[idx].relevancyStatus}</div>
-                                                                <div className={statesMetaData[idx].status==='CONSUMED'?'red':'green'}>{statesMetaData[idx].status}</div>
+                                                                <div className={stateData.stateMetadata[idx].relevancyStatus==='RELEVANT'?'blue':'grey'}>{stateData.stateMetadata[idx].relevancyStatus}</div>
+                                                                <div className={stateData.stateMetadata[idx].status==='CONSUMED'?'red':'green'}>{stateData.stateMetadata[idx].status}</div>
                                                             </div>
                                                             <div className="meta-container">
                                                                 <div><span><strong>Contract: &nbsp;</strong></span> {state.state.contract}</div>
-                                                                <div><span><strong>Recorded Time: &nbsp;</strong></span> {statesMetaData[idx].recordedTime}</div>
-                                                                {statesMetaData[idx].consumedTime?
-                                                                    <div><span><strong>ConsumedTime: &nbsp;</strong></span> {statesMetaData[idx].consumedTime}</div>
+                                                                <div><span><strong>Recorded Time: &nbsp;</strong></span> {stateData.stateMetadata[idx].recordedTime}</div>
+                                                                {stateData.stateMetadata[idx].consumedTime?
+                                                                    <div><span><strong>ConsumedTime: &nbsp;</strong></span> {stateData.stateMetadata[idx].consumedTime}</div>
                                                                     :null
                                                                 }
-                                                                <div><span><strong>Notary: &nbsp;</strong></span> {statesMetaData[idx].notary}</div>
+                                                                <div><span><strong>Notary: &nbsp;</strong></span> {stateData.stateMetadata[idx].notary}</div>
                                                             </div>
                                                         </React.Fragment>
                                                         :null
@@ -111,22 +124,21 @@ function Vault() {
 
                     }
                     {
-                        !states || states.length === 0?
+                        !stateData.states || stateData.states.length === 0?
                             <div className="empty">No States Recorded in The Vault</div>:null
                     }
                     {
-                        <TablePagination style= {{padding: "0 10px", marginTop: -15}}
+                        <TablePagination style= {{padding: "0 10px", marginTop: -15, color: "white"}}
                                          rowsPerPageOptions={[]}
                                          component="div"
-                                         count={totalStatesAvailable}
-                                         // rowsPerPage={this.state.filter.pageSize}
-                                         // page={this.state.filter.offset}
-                                         // onChangePage={this.handleChangePage}
+                                         count={stateData.totalStatesAvailable}
+                                         rowsPerPage={pageSpec.pageSize}
+                                         page={pageSpec.pageNumber}
+                                         onChangePage={handleChangePage}
                         />
                     }
                 </Grid>
             </Grid>
-
         </React.Fragment>
     );
 }

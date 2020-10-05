@@ -25,6 +25,16 @@ import java.time.LocalDateTime
 import java.time.ZoneId
 import java.util.*
 import java.util.function.Consumer
+import net.corda.core.contracts.ContractState
+
+import net.corda.core.node.services.Vault
+import net.corda.core.node.services.vault.PageSpecification
+import net.corda.core.node.services.vault.QueryCriteria
+
+import org.springframework.web.bind.annotation.PostMapping
+
+
+
 
 /**
  * Define your API endpoints here.
@@ -50,7 +60,6 @@ class Controller(rpc: NodeRPCConnection) {
             APIResponse.error("Error while getting parties")
         }
     }
-
 
     @GetMapping(value = [ "cordapps" ], produces = [MediaType.APPLICATION_JSON_VALUE])
     fun getCordapps() : APIResponse<NodeDiagnosticInfo> {
@@ -82,6 +91,17 @@ class Controller(rpc: NodeRPCConnection) {
         } catch (e: Exception) {
             logger.error(e.message)
             APIResponse.error("Error while getting network parameters")
+        }
+    }
+
+    @PostMapping(value = [ "vault-states" ], produces = [MediaType.APPLICATION_JSON_VALUE])
+    open fun getVaultStates(@RequestBody pageSpecification: PageSpecification): APIResponse<Vault.Page<ContractState>?>? {
+        val pageSpec = PageSpecification(pageSpecification.pageNumber + 1, pageSpecification.pageSize)
+        return try {
+            APIResponse.success(proxy.vaultQueryByWithPagingSpec(ContractState::class.java, QueryCriteria.VaultQueryCriteria(Vault.StateStatus.ALL), pageSpec))
+        } catch (e: Exception) {
+            logger.error(e.message)
+            APIResponse.error("Error while getting vault states")
         }
     }
 

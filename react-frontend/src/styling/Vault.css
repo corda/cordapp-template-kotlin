@@ -1,38 +1,30 @@
-.filter-container {
-    width: 100%;
-    display: inline-block;
-    font-size: 14px;
-    position: relative;
+.vault-wrapper {
+    overflow: scroll;
+    height: auto;
+    max-height: 800px;
+    border-top: 1px solid white;
+    border-bottom: 1px solid white;
+    width: 90%;
 }
 
-.filter-title{
-    padding: 5px 10px;
-    background: #DF0B1B;
-    color: #FFFFFF;
-    font-weight: bold;
-}
-
-.filter-group{
-    margin-bottom: 10px;
-    border: 1px solid #DF0B1B;
-    background: #FAFAFA;
-    margin: 0 20px 10px 20px;
-}
 
 .state-title{
-    background: #EEEEEE;
+    background: #DF0B1B;
+    color: #F1F1F1;
     border-bottom: 1px solid #CCCCCC;
     padding: 10px 20px;
     display: flex;
     justify-content: space-between;
+    font-size: 20px;
 }
 
 .state-content{
+    color: #F1F1F1;
     margin-right: 10px;
     padding: 0 10px;
     border-right: 1px solid #CCCCCC;
     height: 100%;
-    font-size: 14px;
+    font-size: 16px;
 }
 
 .state-wrapper{
@@ -45,7 +37,8 @@
 }
 
 .meta-container{
-    font-size: 12px;
+    color: #F1F1F1;
+    font-size: 16px;
     display: flex;
     justify-content: center;
     height: calc(100% - 15px);
@@ -66,7 +59,8 @@ span.MuiTypography-root.MuiFormControlLabel-label {
 }
 
 .tx {
-    font-size: 12px;
+    font-size: 16px;
+    font-weight: bold;
     display: inline-block;
 }
 
@@ -86,27 +80,36 @@ span.MuiTypography-root.MuiFormControlLabel-label {
 }
 
 .green {
-    background: lime;
+    color: white;
+    font-weight: bold;
+    background: #00cc66;
     border: 1px solid limegreen;
 }
 
 .red{
+    color: white;
+    font-weight: bold;
     background: orangered;
     color: white;
     border: 1px solid mediumvioletred;
 }
 
 .blue{
+    font-weight: bold;
+    color: white;
     background: lightskyblue;
     border: 1px solid cadetblue;
 }
 
 .grey{
-    background: lightgrey;
+    color: white;
+    font-weight: bold;
+    background: darkgray;
     border: 1px solid darkgrey;
 }
 
 .empty{
+    color: #F1F1F1;
     height: 300px;
     display: flex;
     align-items: center;

@@ -262,19 +262,11 @@ function FlowParameters({registeredFlow}) {
                 setCompletedFlows([...completedFlows, newFlow])
                 const jsonString = JSON.stringify(completedFlows)
                 localStorage.setItem("completedFlows", jsonString);
-                // dispatch({type: "ADD_COMPLETED_FLOW", payload: { completedFlow }})
             } else {
-                // dispatch({type: "ADD_COMPLETED_FLOW", payload: { completedFlow }})
             }
         }).catch(error => {
-            console.log("FLOW FAILED!!!!")
-            setFlowInProgress(false)
-            setFlowCompletionStatus(false)
-            let flowName = trimFlowsForDisplay(registeredFlow.flowName)
-            let newFlow = { flowName: flowName, flowCompletionStatus: true }
-            setCompletedFlows([...completedFlows, newFlow])
-            const jsonString = JSON.stringify(completedFlows)
-            localStorage.setItem("completedFlows", jsonString);
+            console.log("Something went terribly wrong")
+            console.error(error)
         });
     }
 

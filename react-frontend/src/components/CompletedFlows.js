@@ -41,7 +41,7 @@ function CompletedFlows({flows, setRefresh}) {
                             return (
                                 <tr key={index}>
                                     <td>{flowName}</td>
-                                    <td style={{color: flowCompletionStatus? 'green': 'red' }}>{flowCompletionStatus ? "Success" : "Failed"}</td>
+                                    <td style={{color: flowCompletionStatus? 'green': 'red', fontWeight: "bold"}}>{flowCompletionStatus ? "Success" : "Failed"}</td>
                                 </tr>
                             )
                         })

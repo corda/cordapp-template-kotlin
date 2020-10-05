@@ -8,6 +8,7 @@ export default {
     get_cordapps: `${NODE_HOST}/cordapps/`,
     start_flow: `${NODE_HOST}/start-flow/`,
     get_network_params: `${NODE_HOST}/network-parameters/`,
+    get_vault_states: `${NODE_HOST}/vault-states/`,
 
     websocket: `ws://${NODE}/vault-events`,
 
