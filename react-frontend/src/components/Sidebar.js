@@ -5,9 +5,6 @@ import '../styling/Sidebar.css';
 
 function Sidebar({currentPage, setCurrentPage}) {
 
-    function changePage(i) {
-        setCurrentPage(i)
-    }
     return (
         <div className="Sidebar">
             <ul>

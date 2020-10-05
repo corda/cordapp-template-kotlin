@@ -3,8 +3,8 @@ import { FormControl, InputLabel, MenuItem, FormHelperText, TextField, Select, B
 import http from "../services/http";
 import urls, {NODE_ID} from "../services/urls";
 import '../styling/FlowParameters.css';
-import { useState, useEffect } from 'react';
-import { CompletedFlowContext, trimFlowsForDisplay} from "./Flows";
+import { useState } from 'react';
+import { trimFlowsForDisplay} from "./Flows";
 import createPersistedState from 'use-persisted-state';
 import { transformPartyName } from "./NetworkParticipants"
 

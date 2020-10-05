@@ -4,7 +4,6 @@ import urls from "../services/urls";
 import http from "../services/http";
 import '../styling/Button.scss';
 import '../styling/NetworkInfo.css';
-import { NODE_ID } from "../services/urls";
 import { SHOW_NETWORK_INFO, HIDE_NETWORK_INFO} from "../services/buttons";
 
 function NetworkInfo() {

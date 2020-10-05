@@ -317,7 +317,6 @@ class Controller(rpc: NodeRPCConnection) {
     private fun loadCordappsToClasspath(nodeName: String): List<File> {
         // TODO This will break if you change REACT_APP_USER_ID in package.json to something other than the node names in deployNodes task
         val cordappPath = Paths.get("").toAbsolutePath().parent.toString().plus("/build/nodes/${nodeName}/cordapps")
-        logger.info("CONTROLLER PATH:  $cordappPath")
         val jarFiles = filterJarFiles(cordappPath)
         addJarFilesToClassPath(jarFiles)
         return jarFiles
