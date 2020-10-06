@@ -37,7 +37,6 @@ modal-inner {
 }
 
 .modal-header {
-    color: white;
     display: flex;
     justify-content: flex-end;
 }

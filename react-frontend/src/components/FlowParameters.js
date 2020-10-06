@@ -32,7 +32,7 @@ function FlowParameters({registeredFlow, toggleModal}) {
 
     function renderParamForm(innerForm, paramList, title, deep, delIdx, param, key) {
         return (
-            <React.Fragment>
+            <React.Fragment key={key}>
                 {
                     innerForm ?
                         <div className="inner-form" style={{padding: deep ? "10px 0px 0px 0px" : "10px 0"}} key={key}>
@@ -74,9 +74,10 @@ function FlowParameters({registeredFlow, toggleModal}) {
                                     }}>
                                         <FormControl fullWidth>
                                             <InputLabel>{param.paramName}</InputLabel>
-                                            <Select onChange={e => {
-                                                param.paramValue = e.target.value
-                                            }} autoWidth defaultValue={''}>
+                                            <Select
+                                                onChange={e => {
+                                                    param.paramValue = e.target.value
+                                                }} autoWidth defaultValue={''}>
                                                 {
 
                                                     getParties().map((party, index) => {
@@ -239,9 +240,10 @@ function FlowParameters({registeredFlow, toggleModal}) {
                             <div style={{paddingLeft: 10}}>
                                 <InputLabel id="flow-cons-select-label" style={{paddingLeft: 10}}>Select A Constructor
                                     Type</InputLabel>
-                                <Select labelId="flow-cons-select-label"
-                                        onChange={event => handleFlowConstructorSelection(event)}
-                                        value={activeConstructor} fullWidth>
+                                <Select
+                                    labelId="flow-cons-select-label"
+                                    onChange={event => handleFlowConstructorSelection(event)}
+                                    value={activeConstructor} fullWidth>
                                     {
                                         Object.keys(registeredFlow.flowParamsMap).map((constructor, index) => {
                                             return (
@@ -276,8 +278,8 @@ function FlowParameters({registeredFlow, toggleModal}) {
                         showFlowResult ?
                             flowCompletionStatus ?
                                 <GreenButton style={{float: "right", marginTop: 10}}>Flow Successful</GreenButton> :
-                                    <RedButton style={{float: "right", marginTop: 10}}>Flow Failed</RedButton> :
-                                        null
+                                <RedButton style={{float: "right", marginTop: 10}}>Flow Failed</RedButton> :
+                            null
                     }
                 </div>
             </div>
@@ -319,9 +321,9 @@ function FlowParameters({registeredFlow, toggleModal}) {
                     addFlowToHistory(true)
                 }
             }).catch(error => {
-                addFlowToHistory(false)
-                console.log("Error running flow: " + flowInfo.flowName)
-                console.error(error)
+            addFlowToHistory(false)
+            console.log("Error running flow: " + flowInfo.flowName)
+            console.error(error)
         });
     }
 

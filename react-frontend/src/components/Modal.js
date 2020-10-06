@@ -1,10 +1,9 @@
-import React from 'react';
+import React, {useState} from 'react';
 import ReactDOM from 'react-dom';
 import '../styling/Modal.css';
 import InnerModal from "./InnerModal";
 
 function Modal ({ registeredFlow, isShowing, toggle }) {
-
     return isShowing ? ReactDOM.createPortal(
         <React.Fragment>
             <div className="modal-overlay avenir"/>
