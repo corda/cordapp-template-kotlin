@@ -1,4 +1,6 @@
+
 .net-params {
+    max-width: 600px;
     overflow: scroll;
     height: auto;
     max-height: 600px;
@@ -14,11 +16,11 @@
     display: inline-block;
 }
 
-.appInfo{
+.param-info{
     padding: 10px;
     color: #CCCCCC;
 }
 
-.appInfo > div > span {
+.param-info > div > span {
     color: #DF0B1B;
 }

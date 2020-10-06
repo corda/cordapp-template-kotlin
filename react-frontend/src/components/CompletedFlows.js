@@ -1,18 +1,6 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 
 import '../styling/CompletedFlows.css'
-
-const testFlows =
-    [
-        {"flowName":"YoFlow","flowCompletionStatus":true},
-        {"flowName":"TestFlow","flowCompletionStatus":false},
-        {"flowName":"IssueFlow","flowCompletionStatus":true},
-        {"flowName":"YoFlow","flowCompletionStatus":true},
-        {"flowName":"YoFlow","flowCompletionStatus":true},
-        {"flowName":"IssueFlow","flowCompletionStatus":true},
-        {"flowName":"IssueFlow","flowCompletionStatus":false},
-        {"flowName":"IssueFlow","flowCompletionStatus":true}
-    ]
 
 function CompletedFlows({flows, setRefresh}) {
     function clearHistory() {
@@ -36,12 +24,12 @@ function CompletedFlows({flows, setRefresh}) {
                 </div>
                 <div className="tbl-content">
                     <table cellPadding="0" cellSpacing="0" border="0" className="completed-flows">
-                        {flows.map((flow, index) => {
+                        {flows.splice(0).reverse().map((flow, index) => {
                             const { flowName, flowCompletionStatus} = flow
                             return (
                                 <tr key={index}>
                                     <td>{flowName}</td>
-                                    <td style={{color: flowCompletionStatus? 'green': 'red', fontWeight: "bold"}}>{flowCompletionStatus ? "Success" : "Failed"}</td>
+                                    <td style={{color: flowCompletionStatus? 'green': 'red'}}>{flowCompletionStatus ? "Success" : "Failed"}</td>
                                 </tr>
                             )
                         })

@@ -1,4 +1,4 @@
-import {useState, createContext, useReducer, useContext} from 'react';
+import {useState, createContext, useReducer, useContext, useEffect} from 'react';
 import React from 'react';
 import urls from "../services/urls";
 import http from "../services/http";
@@ -34,7 +34,7 @@ export const trimFlowsForDisplay = (text) => {
 
 const completedFlowsLocal = (key) => {
     if (localStorage.getItem(key) !== null) {
-       return JSON.parse(localStorage.getItem(key))
+        return JSON.parse(localStorage.getItem(key))
     } else {
         return []
     }
@@ -73,52 +73,56 @@ function Flows() {
 
     return (
         <div className={classes.root}>
-                <Grid
-                    container
-                    direction="row"
-                    justify="center"
-                    alignItems="stretch"
-                    spacing={3}>
+            <Grid
+                container
+                direction="row"
+                justify="center"
+                alignItems="stretch"
+                spacing={3}>
 
-                    <Grid item xs={3}>
-                        <a type="button"
-                           className="btn btn-2"
-                           onClick={() => {listFlows();changeText(getButtonText())}}>{buttonText}
-                        </a>
+                <Grid item xs={3}>
+                    <a type="button"
+                       className="btn btn-2"
+                       onClick={() => {
+                           listFlows();
+                           changeText(getButtonText())
+                       }}>{buttonText}
+                    </a>
 
-                        {shouldDisplayTable &&
+                    {shouldDisplayTable &&
 
-                        <table className="pa1">
-                            <tbody>
-                            {registeredFlows.map((flow, index) => {
-                                return <tr key={index}>
-                                    <td className="pv2 tl">
-                                        <a type="button" onClick={() => {
-                                            toggle();
-                                            setModalData(flow)
-                                        }}
-                                           className="bg-transparent bn f4 white grow">{trimFlowsForDisplay(flow.flowName)}</a>
-                                    </td>
-                                </tr>
-                            })}
-                            </tbody>
-                        </table>
-                        }
-                        <div>
-                        </div>
-                        <Modal
-                            registeredFlow={flowData}
-                            isShowing={isShowing}
-                            toggle={toggle}>
-                        </Modal>
-                    </Grid>
-                    <Grid item xs={9}>
-                        {
-                            completedFlowsLocal("completedFlows").length === 0 ? <div className={classes.empty}>No flows have been executed</div> :
-                                <CompletedFlows flows={completedFlowsLocal("completedFlows")} setRefresh={setRefresh}/>
-                        }
-                    </Grid>
+                    <table className="pa1">
+                        <tbody>
+                        {registeredFlows.map((flow, index) => {
+                            return <tr key={index}>
+                                <td className="pv2 tl">
+                                    <a type="button" onClick={() => {
+                                        toggle();
+                                        setModalData(flow)
+                                    }}
+                                       className="bg-transparent bn f4 white grow">{trimFlowsForDisplay(flow.flowName)}</a>
+                                </td>
+                            </tr>
+                        })}
+                        </tbody>
+                    </table>
+                    }
+                    <div>
+                    </div>
+                    <Modal
+                        registeredFlow={flowData}
+                        isShowing={isShowing}
+                        toggle={toggle}>
+                    </Modal>
                 </Grid>
+                <Grid item xs={9}>
+                    {
+                        completedFlowsLocal("completedFlows").length === 0 ?
+                            <div className={classes.empty}>No flows have been executed</div> :
+                            <CompletedFlows flows={completedFlowsLocal("completedFlows")} setRefresh={setRefresh}/>
+                    }
+                </Grid>
+            </Grid>
         </div>
     );
 }

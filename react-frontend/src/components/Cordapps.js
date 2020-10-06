@@ -1,10 +1,10 @@
-import { useState } from 'react';
+import {useState} from 'react';
 import React from 'react';
 import urls from "../services/urls";
 import http from "../services/http";
 import '../styling/Button.scss';
 import '../styling/Cordapps.css';
-import { SHOW_CORDAPPS, HIDE_CORDAPPS } from "../services/buttons";
+import {SHOW_CORDAPPS, HIDE_CORDAPPS} from "../services/buttons";
 
 
 function Cordapps() {
@@ -22,7 +22,7 @@ function Cordapps() {
         console.log("Getting flows");
         http.get(urls.get_cordapps)
             .then(r => {
-                if(r.status === 200 && r.data.status === true){
+                if (r.status === 200 && r.data.status === true) {
                     console.log("flows:" + r.data.data)
                     setCordapps(r.data.data.cordapps)
                     setNodeDiagnostics(r.data.data)
@@ -36,16 +36,23 @@ function Cordapps() {
             {/*eslint-disable-next-line*/}
             <a type="button"
                className="btn btn-2"
-               onClick={ () => { listCordapps(); changeText( getButtonText() )}}>{buttonText}</a>
-            { shouldDisplayTable &&
-                <div className="cordapps">
-                <div><span>Corda Version: </span> {nodeDiagnostics.version}</div>
+               onClick={() => {
+                   listCordapps();
+                   changeText(getButtonText())
+               }}>{buttonText}</a>
+            {shouldDisplayTable &&
+            <div className="cordapps">
+
+                <div style={{color: "white", paddingTop: "20px"}}><span className="b">Corda Version: </span> {nodeDiagnostics.version}</div>
                 <table className="pa4">
                     <tbody>
                     {cordapps.map((cordapp, index) => {
                         return <tr>
                             <div key={index} className="cordapp-wrapper">
-                                <div className="appInfo" style={{marginRight: index%2===0?5:0, marginLeft: index%2===0?0:5}}>
+                                <div className="app-info" style={{
+                                    marginRight: index % 2 === 0 ? 5 : 0,
+                                    marginLeft: index % 2 === 0 ? 0 : 5
+                                }}>
                                     <div className="b">{cordapp.shortName}</div>
                                     <div><span>Version: </span> {cordapp.version}</div>
                                     <div><span>Type: </span> {cordapp.type}</div>
@@ -60,9 +67,10 @@ function Cordapps() {
                     })}
                     </tbody>
                 </table>
-                </div>
+            </div>
             }
         </div>
     );
 }
+
 export default Cordapps;

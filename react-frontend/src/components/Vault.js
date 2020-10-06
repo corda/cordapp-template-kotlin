@@ -3,7 +3,6 @@ import '../styling/Vault.css';
 import urls, {NODE_ID} from "../services/urls";
 import { Grid, TablePagination } from '@material-ui/core';
 import http from "../services/http";
-import {trimFlowsForDisplay} from "./Flows";
 
 const PAGE_SIZE = 5
 

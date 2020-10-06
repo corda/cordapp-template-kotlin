@@ -9,7 +9,7 @@ function InnerModal({registeredFlow, toggle}) {
         <div className="modal">
             <div className="modal-header" />
             <h3>{trimFlowsForDisplay(registeredFlow.flowName)}</h3>
-            <FlowParameters registeredFlow={registeredFlow}/>
+            <FlowParameters registeredFlow={registeredFlow} toggleModal={toggle}/>
         </div>
     );
 }

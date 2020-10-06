@@ -1,20 +1,21 @@
-import { useState } from 'react';
+import {useState} from 'react';
 import React from 'react';
 import urls from "../services/urls";
 import http from "../services/http";
 import '../styling/Button.scss';
 import '../styling/NetworkParticipants.css';
-import { NODE_ID } from "../services/urls";
-import { SHOW_NETWORK_PARTICIPANTS, HIDE_NETWORK_PARTICIPANTS} from "../services/buttons";
+import {NODE_ID} from "../services/urls";
+import {SHOW_NETWORK_PARTICIPANTS, HIDE_NETWORK_PARTICIPANTS} from "../services/buttons";
 
-export const transformPartyName = (party) => {
+export const getPartyNameAndFlag = (party) => {
     const partyName = party.split('O=')[1].split(',')[0];
     const countryCode = party.split('C=')[1]
     return partyName + getFlag(countryCode)
 }
 
 function getFlag(countryCode) {
-    switch(countryCode) {
+    //TODO add the rest
+    switch (countryCode) {
         case 'GB':
             return ' 🇬🇧';
         case 'AU':
@@ -48,9 +49,9 @@ function NetworkParticipants() {
         console.log("Getting parties");
         http.get(urls.get_parties)
             .then(r => {
-                if(r.status === 200 && r.data.status === true){
-                const filteredParties = r.data.data.filter ( party => !party.includes(NODE_ID) && !party.includes("Notary"))
-                console.log("parties:" + filteredParties)
+                if (r.status === 200 && r.data.status === true) {
+                    const filteredParties = r.data.data.filter(party => !party.includes(NODE_ID) && !party.includes("Notary"))
+                    console.log("parties:" + filteredParties)
                     setParties(filteredParties)
                 } else {
                 }
@@ -62,7 +63,7 @@ function NetworkParticipants() {
         // Switch doesn't work for some reason
         if (party.includes('PartyA')) {
             return urls.partyA_url
-        } else if (party.includes('PartyB')){
+        } else if (party.includes('PartyB')) {
             return urls.partyB_url
         } else if (party.includes('PartyC')) {
             return urls.partyC_url
@@ -75,22 +76,23 @@ function NetworkParticipants() {
             <a type="button"
                className="btn btn-2"
                onClick={getParties}>{buttonText}</a>
-            { shouldDisplayTable &&
-                <table className="pa1 tl network-wrapper">
-                    <tbody>
-                    {parties.map((party, index) => {
-                        return <tr>
-                            <td className="pv2" key={index}>
-                                <a href={() => getUrlForParty((party))}
-                                   type="button"
-                                   onClick={() =>  openApplicationWindow(party) }
-                                   className="bg-transparent bn f4 white grow">{transformPartyName(party)}</a>
-                            </td>
-                        </tr>
-                    })}
-                    </tbody>
-                </table>}
+            {shouldDisplayTable &&
+            <table className="pa1 tl network-wrapper">
+                <tbody>
+                {parties.map((party, index) => {
+                    return <tr>
+                        <td className="pv2" key={index}>
+                            <a href={() => getUrlForParty((party))}
+                               type="button"
+                               onClick={() => openApplicationWindow(party)}
+                               className="bg-transparent bn f4 white grow">{getPartyNameAndFlag(party)}</a>
+                        </td>
+                    </tr>
+                })}
+                </tbody>
+            </table>}
         </div>
     );
 }
+
 export default NetworkParticipants;

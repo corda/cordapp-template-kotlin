@@ -169,3 +169,11 @@ label.MuiFormLabel-root.MuiInputLabel-root.MuiInputLabel-formControl.MuiInputLab
     cursor: pointer;
     border: 1px solid #CCC;
 }
+
+.green {
+    background-color: forestgreen;
+}
+
+.red {
+    background-color: firebrick;
+}
