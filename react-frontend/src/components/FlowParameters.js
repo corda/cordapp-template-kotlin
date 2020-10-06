@@ -12,7 +12,7 @@ import {
 } from "@material-ui/core";
 import {lightGreen, pink} from "@material-ui/core/colors";
 import http from "../services/http";
-import urls, {NODE_ID} from "../services/urls";
+import urls, {COMPLETED_FLOWS, NODE_ID} from "../services/urls";
 import '../styling/FlowParameters.css';
 import {trimFlowsForDisplay} from "./Flows";
 import createPersistedState from 'use-persisted-state';
@@ -20,14 +20,17 @@ import {getPartyNameAndFlag} from "./NetworkParticipants"
 
 
 function FlowParameters({registeredFlow, toggleModal}) {
-    const [activeConstructor, setActiveConstructor] = useState("")
-    const [flowParams, setFlowParams] = useState([])
-    const [paramList, setParamList] = useState([registeredFlow.flowParams])
-    const [parties, setParties] = useState([])
-    const [flowCompletionStatus, setFlowCompletionStatus] = useState(false)
-    const [isFlowInProgress, setFlowInProgress] = useState(false)
-    const useCompletedFlowState = createPersistedState('completedFlows')
+    const [ flowData, setFlowData ] = useState({
+        activeConstructor: "",
+        parties: [],
+        flowParams: [],
+        paramList: [registeredFlow.flowParams]
+    })
+    const useCompletedFlowState = createPersistedState(COMPLETED_FLOWS)
     const [completedFlows, setCompletedFlows] = useCompletedFlowState([])
+
+    const [isFlowSuccessful, setFlowSuccessful] = useState(false)
+    const [isFlowInProgress, setFlowInProgress] = useState(false)
     const [showFlowResult, setShowFlowResult] = useState(false)
 
     function renderParamForm(innerForm, paramList, title, deep, delIdx, param, key) {
@@ -48,7 +51,7 @@ function FlowParameters({registeredFlow, toggleModal}) {
                             </div>
                         </div>
                         :
-                        flowParams.map((param, index) => renderInnerForm(param, index, false))
+                        flowData.flowParams.map((param, index) => renderInnerForm(param, index, false))
                 }
             </React.Fragment>
         );
@@ -158,8 +161,8 @@ function FlowParameters({registeredFlow, toggleModal}) {
                                 <FormHelperText>Select Parties</FormHelperText>
                             </FormControl>
                             {
-                                paramList[param.paramName] ?
-                                    paramList[param.paramName].map((value, idx) => {
+                                flowData.paramList[param.paramName] ?
+                                    flowData.paramList[param.paramName].map((value, idx) => {
                                         return (
                                             <div key={idx} className="list-selection">{getPartyNameAndFlag(value)}<span
                                                 onClick={() => updateListParam(param, "", false, idx)}>X</span></div>)
@@ -176,8 +179,8 @@ function FlowParameters({registeredFlow, toggleModal}) {
                                            helperText={getHelperText(param.paramType)} fullWidth/>
                             </div>
                             {
-                                paramList[param.paramName] ?
-                                    paramList[param.paramName].map((value, idx) => {
+                                flowData.paramList[param.paramName] ?
+                                    flowData.paramList[param.paramName].map((value, idx) => {
                                         return (<div key={idx} className="list-selection">{value}<span
                                             onClick={() => updateListParam(param, "", false, idx)}>X</span></div>)
                                     })
@@ -195,8 +198,8 @@ function FlowParameters({registeredFlow, toggleModal}) {
                                                label={param.paramName} InputLabelProps={{shrink: true}} fullWidth/>
                                 </div>
                                 {
-                                    paramList[param.paramName] ?
-                                        paramList[param.paramName].map((value, idx) => {
+                                    flowData.paramList[param.paramName] ?
+                                        flowData.paramList[param.paramName].map((value, idx) => {
                                             return (<div key={idx} className="list-selection">{value}<span
                                                 onClick={() => updateListParam(param, "", false, idx)}>X</span></div>)
                                         })
@@ -217,8 +220,8 @@ function FlowParameters({registeredFlow, toggleModal}) {
                                                    fullWidth/>
                                     </div>
                                     {
-                                        paramList[param.paramName] ?
-                                            paramList[param.paramName].map((value, idx) => {
+                                        flowData.paramList[param.paramName] ?
+                                            flowData.paramList[param.paramName].map((value, idx) => {
                                                 return (<div key={idx} className="list-selection">{value}<span
                                                     onClick={() => updateListParam(param, "", false, idx)}>X</span>
                                                 </div>)
@@ -243,7 +246,7 @@ function FlowParameters({registeredFlow, toggleModal}) {
                                 <Select
                                     labelId="flow-cons-select-label"
                                     onChange={event => handleFlowConstructorSelection(event)}
-                                    value={activeConstructor} fullWidth>
+                                    value={flowData.activeConstructor} fullWidth>
                                     {
                                         Object.keys(registeredFlow.flowParamsMap).map((constructor, index) => {
                                             return (
@@ -263,7 +266,7 @@ function FlowParameters({registeredFlow, toggleModal}) {
                 }
                 <div style={{width: "100%", float: "left", marginTop: 10, scroll: "auto"}}>
                     {
-                        activeConstructor && !showFlowResult ?
+                        flowData.activeConstructor && !showFlowResult ?
                             <Button
                                 style={{float: "right", marginTop: 10}}
                                 onClick={() => startFlow()}
@@ -276,7 +279,7 @@ function FlowParameters({registeredFlow, toggleModal}) {
                     }
                     {
                         showFlowResult ?
-                            flowCompletionStatus ?
+                            isFlowSuccessful ?
                                 <GreenButton style={{float: "right", marginTop: 10}}>Flow Successful</GreenButton> :
                                 <RedButton style={{float: "right", marginTop: 10}}>Flow Failed</RedButton> :
                             null
@@ -287,9 +290,15 @@ function FlowParameters({registeredFlow, toggleModal}) {
     )
 
     function handleFlowConstructorSelection(event) {
-        setActiveConstructor([event.target.value])
-        setFlowParams(registeredFlow.flowParamsMap[event.target.value])
-        setParamList(registeredFlow.flowParams)
+        setFlowData({
+            ...flowData,
+            activeConstructor: [event.target.value],
+            flowParams: registeredFlow.flowParamsMap[event.target.value],
+            paramsList: registeredFlow.flowParams
+        })
+        // setActiveConstructor([event.target.value])
+        // setFlowParams(registeredFlow.flowParamsMap[event.target.value])
+        // setParamList(registeredFlow.flowParams)
     }
 
     function getParties() {
@@ -297,13 +306,17 @@ function FlowParameters({registeredFlow, toggleModal}) {
             .then(r => {
                 if (r.status === 200 && r.data.status === true) {
                     const filteredParties = r.data.data.filter(party => !party.includes(NODE_ID) && !party.includes("Notary"))
-                    setParties(filteredParties)
+                    setFlowData({
+                        ...flowData,
+                        parties: filteredParties
+                    })
+                    // setParties(filteredParties)
                 }
             }).catch(error => {
             console.log("Error fetching parties")
             console.error(error)
         });
-        return parties
+        return flowData.parties
     }
 
 
@@ -311,7 +324,7 @@ function FlowParameters({registeredFlow, toggleModal}) {
         setFlowInProgress(true)
         let flowInfo = {
             flowName: registeredFlow.flowName,
-            flowParams: flowParams
+            flowParams: flowData.flowParams
         }
 
         http.post(urls.start_flow, flowInfo)
@@ -329,7 +342,7 @@ function FlowParameters({registeredFlow, toggleModal}) {
 
     function addFlowToHistory(completionStatus) {
         setFlowInProgress(false)
-        setFlowCompletionStatus(completionStatus)
+        setFlowSuccessful(completionStatus)
         let flowName = trimFlowsForDisplay(registeredFlow.flowName)
         let newFlow = {
             flowName: flowName,
@@ -346,18 +359,23 @@ function FlowParameters({registeredFlow, toggleModal}) {
         if (flag) {
             if (param.paramValue === undefined || param.paramValue === null)
                 param.paramValue = []
-
             param.paramValue.push(val);
             let keyVal = [];
             keyVal[param.paramName] = param.paramValue;
-            setParamList(keyVal)
+            setFlowData({
+                ...flowData,
+                paramList: keyVal
+            })
+            // setParamList(keyVal)
         } else {
             param.paramValue.splice(idx, 1);
-            paramList[param.paramName].splice(idx, 1)
+            flowData.paramList[param.paramName].splice(idx, 1)
             let keyVal = [];
-            keyVal[param.paramName] = paramList[param.paramName];
-            setParamList(keyVal)
-
+            keyVal[param.paramName] = flowData.paramList[param.paramName];
+            setFlowData({
+                ...flowData,
+                paramList: keyVal
+            })
         }
     }
 
@@ -366,8 +384,8 @@ function FlowParameters({registeredFlow, toggleModal}) {
             let obj = JSON.parse(JSON.stringify(param.paramValue[0]));
             param.paramValue.push(obj);
             let keyVal = [];
-            if (!(paramList[param.paramName] === undefined || paramList[param.paramName] === null)) {
-                keyVal[param.paramName] = paramList[param.paramName];
+            if (!(flowData.paramList[param.paramName] === undefined || flowData.paramList[param.paramName] === null)) {
+                keyVal[param.paramName] = flowData.paramList[param.paramName];
             } else {
                 keyVal[param.paramName] = [];
             }
@@ -377,13 +395,19 @@ function FlowParameters({registeredFlow, toggleModal}) {
                 obj.key = keyVal[param.paramName][keyVal[param.paramName].length - 1].key + 1;
             }
             keyVal[param.paramName].push(obj);
-            setParamList(keyVal)
+            setFlowData({
+                ...flowData,
+                paramList: keyVal
+            })
         } else {
             param.paramValue.splice(idx + 1, 1);
-            paramList[param.paramName].splice(idx, 1);
+            flowData.paramList[param.paramName].splice(idx, 1);
             let keyVal = [];
-            keyVal[param.paramName] = this.state.paramList[param.paramName];
-            setParamList(keyVal)
+            keyVal[param.paramName] = flowData.paramList[param.paramName];
+            setFlowData({
+                ...flowData,
+                paramList: keyVal
+            })
         }
     }
 

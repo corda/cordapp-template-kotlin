@@ -2,6 +2,8 @@ export const NODE_HOST = process.env.REACT_APP_APIHOST.trim();
 export const NODE_ID = process.env.REACT_APP_USER_ID.trim();
 export const NODE = NODE_HOST.slice(7,22)
 
+export const COMPLETED_FLOWS = 'completedFlows'
+
 export default {
     get_parties: `${NODE_HOST}/parties/`,
     get_flows: `${NODE_HOST}/flows/`,

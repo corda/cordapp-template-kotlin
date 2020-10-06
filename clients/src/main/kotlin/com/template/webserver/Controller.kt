@@ -26,6 +26,8 @@ import java.time.ZoneId
 import java.util.*
 import java.util.function.Consumer
 import net.corda.core.contracts.ContractState
+import net.corda.core.messaging.StateMachineInfo
+import net.corda.core.messaging.StateMachineTransactionMapping
 
 import net.corda.core.node.services.Vault
 import net.corda.core.node.services.vault.PageSpecification
@@ -129,7 +131,6 @@ class Controller(rpc: NodeRPCConnection) {
                APIResponse.error("Error while starting flow")
            }
     }
-
 
 
     private fun loadFlowsInfoFromJarFiles(jarFiles: List<File>, registeredFlows: List<String>): List<FlowInfo> {

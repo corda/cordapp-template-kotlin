@@ -1,6 +1,6 @@
-import {useState, createContext, useReducer, useContext, useEffect} from 'react';
+import {useState} from 'react';
 import React from 'react';
-import urls from "../services/urls";
+import urls, {COMPLETED_FLOWS} from "../services/urls";
 import http from "../services/http";
 import '../styling/Button.scss';
 import {SHOW_FLOWS, HIDE_FLOWS} from "../services/buttons";
@@ -119,7 +119,7 @@ function Flows() {
                     {
                         completedFlowsLocal("completedFlows").length === 0 ?
                             <div className={classes.empty}>No flows have been executed</div> :
-                            <CompletedFlows flows={completedFlowsLocal("completedFlows")} setRefresh={setRefresh}/>
+                            <CompletedFlows flows={completedFlowsLocal(COMPLETED_FLOWS)} setRefresh={setRefresh}/>
                     }
                 </Grid>
             </Grid>
