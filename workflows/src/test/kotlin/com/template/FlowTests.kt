@@ -21,7 +21,7 @@ class FlowTests {
     @Before
     fun setup() {
         mockNetwork = MockNetwork(
-                listOf("net.corda.training"),
+                listOf("com.template"),
                 notarySpecs = listOf(MockNetworkNotarySpec(CordaX500Name("Notary","London","GB")))
         )
         a = mockNetwork.createNode(MockNodeParameters())
@@ -36,6 +36,7 @@ class FlowTests {
     fun tearDown() {
 
     }
+
     @Test
     fun `dummy test`() {
 
