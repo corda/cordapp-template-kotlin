@@ -92,21 +92,6 @@ dependencies {
     cordaCompile "org.slf4j:jul-to-slf4j:$slf4j_version"
 }
 
-//Task to build the jar for ganache.
-task ganache {
-    subprojects {
-        if (it.project.name != "clients") {
-            dependsOn jar
-            doLast {
-                copy {
-                    from "${buildDir}/libs"
-                    into "${rootDir}/build/libs"
-                }
-            }
-        }
-    }
-}
-
 //Task to deploy the nodes in order to bootstrap a network
 task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
 
