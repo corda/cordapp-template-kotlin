@@ -1,44 +1,45 @@
 package com.template
 
-import com.template.flows.Responder
-import net.corda.core.identity.CordaX500Name
-import net.corda.testing.core.internal.ContractJarTestUtils.makeTestJar
-import net.corda.testing.node.MockNetwork
-import net.corda.testing.node.MockNetworkNotarySpec
-import net.corda.testing.node.MockNodeParameters
-import net.corda.testing.node.StartedMockNode
+import net.corda.testing.node.*
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
+import com.template.states.TemplateState
+import java.util.concurrent.Future;
+import net.corda.core.node.services.vault.QueryCriteria
+import net.corda.core.transactions.SignedTransaction
+import com.template.flows.Initiator
+import net.corda.core.node.services.Vault.StateStatus
 
 
 class FlowTests {
-
-    lateinit var mockNetwork: MockNetwork
-    lateinit var a: StartedMockNode
-    lateinit var b: StartedMockNode
+    private lateinit var network: MockNetwork
+    private lateinit var a: StartedMockNode
+    private lateinit var b: StartedMockNode
 
     @Before
     fun setup() {
-        mockNetwork = MockNetwork(
-                listOf("com.template"),
-                notarySpecs = listOf(MockNetworkNotarySpec(CordaX500Name("Notary","London","GB")))
-        )
-        a = mockNetwork.createNode(MockNodeParameters())
-        b = mockNetwork.createNode(MockNodeParameters())
-        val startedNodes = arrayListOf(a, b)
-        // For real nodes this happens automatically, but we have to manually register the flow for tests
-        startedNodes.forEach { it.registerInitiatedFlow(Responder::class.java) }
-        mockNetwork.runNetwork()
+        network = MockNetwork(MockNetworkParameters(cordappsForAllNodes = listOf(
+                TestCordapp.findCordapp("com.template.contracts"),
+                TestCordapp.findCordapp("com.template.flows")
+        )))
+        a = network.createPartyNode()
+        b = network.createPartyNode()
+        network.runNetwork()
     }
 
     @After
     fun tearDown() {
-
+        network.stopNodes()
     }
-
     @Test
-    fun `dummy test`() {
+    fun `DummyTest`() {
+        val flow = Initiator(b.info.legalIdentities[0])
+        val future: Future<SignedTransaction> = a.startFlow(flow)
+        network.runNetwork()
 
+        //successful query means the state is stored at node b's vault. Flow went through.
+        val inputCriteria: QueryCriteria = QueryCriteria.VaultQueryCriteria().withStatus(StateStatus.UNCONSUMED)
+        val state = b.services.vaultService.queryBy(TemplateState::class.java, inputCriteria).states[0].state.data
     }
 }
