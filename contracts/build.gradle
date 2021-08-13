@@ -16,4 +16,6 @@ dependencies {
     // Corda dependencies.
     cordaCompile "$corda_core_release_group:corda-core:$corda_core_release_version"
     testCompile "$corda_release_group:corda-node-driver:$corda_release_version"
+    // Account dependencies.
+    cordaCompile "$accounts_release_group:accounts-contracts:$accounts_release_version"
 }
