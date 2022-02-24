@@ -40,7 +40,7 @@ class Initiator(private val receiver: Party) : FlowLogic<SignedTransaction>() {
 
         // Step 1. Get a reference to the notary service on our network and our key pair.
         // Note: ongoing work to support multiple notary identities is still in progress.
-        val notary = serviceHub.networkMapCache.notaryIdentities[0]
+        val notary = serviceHub.networkMapCache.getNotary(CordaX500Name.parse("O=Notary,L=London,C=GB"))
 
         //Compose the State that carries the Hello World message
         val output = TemplateState(msg, sender, receiver)
