@@ -2,6 +2,7 @@ package com.template.flows
 
 import co.paralleluniverse.fibers.Suspendable
 import net.corda.core.flows.*
+import net.corda.core.identity.*
 import net.corda.core.utilities.ProgressTracker
 import net.corda.core.flows.FinalityFlow
 
@@ -40,7 +41,7 @@ class Initiator(private val receiver: Party) : FlowLogic<SignedTransaction>() {
 
         // Step 1. Get a reference to the notary service on our network and our key pair.
         // Note: ongoing work to support multiple notary identities is still in progress.
-        val notary = serviceHub.networkMapCache.getNotary(CordaX500Name.parse("O=Notary,L=London,C=GB"))
+        val notary = serviceHub.networkMapCache.getNotary( CordaX500Name.parse("O=Notary,L=London,C=GB"))
 
         //Compose the State that carries the Hello World message
         val output = TemplateState(msg, sender, receiver)
