@@ -39,7 +39,7 @@ class FlowTests {
         network.runNetwork()
 
         //successful query means the state is stored at node b's vault. Flow went through.
-        val inputCriteria: QueryCriteria = QueryCriteria.VaultQueryCriteria().withStatus(StateStatus.UNCONSUMED)
-        val state = b.services.vaultService.queryBy(TemplateState::class.java, inputCriteria).states[0].state.data
+        // val inputCriteria: QueryCriteria = QueryCriteria.VaultQueryCriteria().withStatus(StateStatus.UNCONSUMED)
+        // val states = b.services.vaultService.queryBy(TemplateState::class.java, inputCriteria).states[0].state.data
     }
 }
