@@ -88,6 +88,7 @@ dependencies {
     cordaCompile "org.apache.logging.log4j:log4j-slf4j-impl:${log4j_version}"
     cordaCompile "org.apache.logging.log4j:log4j-web:${log4j_version}"
     cordaCompile "org.slf4j:jul-to-slf4j:$slf4j_version"
+    cordaDriver "net.corda:corda-shell:4.9"
 }
 
 //Task to deploy the nodes in order to bootstrap a network
