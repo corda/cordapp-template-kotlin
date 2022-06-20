@@ -1,6 +1,7 @@
 package com.template.flows
 
 import co.paralleluniverse.fibers.Suspendable
+import com.template.contracts.AppointmentContract
 import net.corda.core.flows.*
 import net.corda.core.identity.*
 import net.corda.core.utilities.ProgressTracker
@@ -16,11 +17,10 @@ import net.corda.core.flows.FlowSession
 
 import net.corda.core.identity.Party
 
-import com.template.contracts.TemplateContract
+import com.template.states.AppointmentState
 
 import net.corda.core.transactions.TransactionBuilder
 
-import com.template.states.TemplateState
 import net.corda.core.contracts.requireThat
 import net.corda.core.identity.AbstractParty
 
@@ -30,13 +30,14 @@ import net.corda.core.identity.AbstractParty
 // *********
 @InitiatingFlow
 @StartableByRPC
-class Initiator(private val receiver: Party) : FlowLogic<SignedTransaction>() {
+class Initiator(private val receiver: Party, private val command: AppointmentContract.Commands) : FlowLogic<SignedTransaction>() {
     override val progressTracker = ProgressTracker()
 
     @Suspendable
     override fun call(): SignedTransaction {
         //Hello World message
         val msg = "Hello-World"
+
         val sender = ourIdentity
 
         // Step 1. Get a reference to the notary service on our network and our key pair.
@@ -44,11 +45,12 @@ class Initiator(private val receiver: Party) : FlowLogic<SignedTransaction>() {
         val notary = serviceHub.networkMapCache.getNotary( CordaX500Name.parse("O=Notary,L=London,C=GB"))
 
         //Compose the State that carries the Hello World message
-        val output = TemplateState(msg, sender, receiver)
+        //val output = AppointmentState(msg, sender, receiver)
+        val output =  AppointmentState(description =  msg,  patient = sender, doctor =  receiver, participants = listOf(sender, receiver))
 
         // Step 3. Create a new TransactionBuilder object.
         val builder = TransactionBuilder(notary)
-                .addCommand(TemplateContract.Commands.Create(), listOf(sender.owningKey, receiver.owningKey))
+                .addCommand(AppointmentContract.Commands.CreateAppointment(), listOf(sender.owningKey, receiver.owningKey))
                 .addOutputState(output)
 
         // Step 4. Verify and sign it with our KeyPair.
