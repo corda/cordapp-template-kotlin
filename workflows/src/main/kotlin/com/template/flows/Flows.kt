@@ -23,6 +23,7 @@ import net.corda.core.transactions.TransactionBuilder
 
 import net.corda.core.contracts.requireThat
 import net.corda.core.identity.AbstractParty
+import java.time.LocalDateTime
 
 
 // *********
@@ -46,7 +47,7 @@ class Initiator(private val receiver: Party, private val command: AppointmentCon
 
         //Compose the State that carries the Hello World message
         //val output = AppointmentState(msg, sender, receiver)
-        val output =  AppointmentState(description =  msg,  patient = sender, doctor =  receiver, participants = listOf(sender, receiver))
+        val output =  AppointmentState(description =  msg,  sender = sender, receiver =  receiver, date = LocalDateTime.now(), participants = listOf(sender, receiver))
 
         // Step 3. Create a new TransactionBuilder object.
         val builder = TransactionBuilder(notary)
@@ -71,7 +72,7 @@ class Initiator(private val receiver: Party, private val command: AppointmentCon
 }
 
 @InitiatedBy(Initiator::class)
-class Responder(val counterpartySession: FlowSession) : FlowLogic<SignedTransaction>() {
+class asd(val counterpartySession: FlowSession) : FlowLogic<SignedTransaction>() {
     @Suspendable
     override fun call(): SignedTransaction {
         val signTransactionFlow = object : SignTransactionFlow(counterpartySession) {

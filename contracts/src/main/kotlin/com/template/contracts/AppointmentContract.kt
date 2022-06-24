@@ -3,8 +3,10 @@ package com.template.contracts
 import com.template.states.AppointmentState
 import net.corda.core.contracts.CommandData
 import net.corda.core.contracts.Contract
+import net.corda.core.contracts.requireSingleCommand
 import net.corda.core.contracts.requireThat
 import net.corda.core.transactions.LedgerTransaction
+import org.slf4j.LoggerFactory
 
 // ************
 // * Contract *
@@ -20,20 +22,20 @@ class AppointmentContract : Contract {
     override fun verify(tx: LedgerTransaction) {
 
         // Verification logic goes here.
-        val command = tx.getCommand<Commands>(0)
-
-        val output = tx.outputsOfType<AppointmentState>().first()
-
+        val command = tx.commands.requireSingleCommand<Commands>()
 
         when (command.value) {
 
             is Commands.CreateAppointment -> requireThat {
-                print("input state is ${output}")
-                "The description should not be empty.".using(output.description.length > 0)
-            }
-            is Commands.RequestAvailability -> requireThat {
-                print("input state is ${tx.inputStates}")
+                val output = tx.outputsOfType<AppointmentState>().first()
                 "No inputs should be consumed when requesting available dates an appointment.".using(tx.inputStates.isEmpty())
+                "The description should not be empty.".using(output.description.length > 0)
+                "An output state should be generated".using(!tx.outputStates.isEmpty())
+            }
+
+            is Commands.BookAppointment -> requireThat {
+                "Transaction should have input.".using(!tx.inputStates.isEmpty())
+                "An output state should be generated".using(!tx.outputStates.isEmpty())
             }
             else -> {
                 throw IllegalArgumentException("Command is not available.")
@@ -42,8 +44,10 @@ class AppointmentContract : Contract {
     }
 
     // Used to indicate the transaction's intent.
-    interface Commands : CommandData {
-        class CreateAppointment : Commands
-        class RequestAvailability : Commands
+    sealed class Commands : CommandData {
+        class CreateAppointment : Commands()
+        class BookAppointment : Commands()
     }
+
+
 }

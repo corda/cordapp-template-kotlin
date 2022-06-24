@@ -12,14 +12,13 @@ import java.time.LocalDateTime
 // *********
 // * State *
 // *********
+
 @BelongsToContract(AppointmentContract::class)
 @CordaSerializable
-data class AppointmentState(
+data class BookingAppointment(
         val description: String,
         val sender: Party,
         val receiver: Party,
         val date: LocalDateTime,
         override val participants: List<AbstractParty> = listOf(sender, receiver)
 ) : ContractState
-
-
