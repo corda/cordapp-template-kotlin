@@ -12,11 +12,8 @@ import java.util.concurrent.Future;
 import net.corda.core.node.services.vault.QueryCriteria
 import net.corda.core.transactions.SignedTransaction
 import com.template.flows.RequestAvailability
-import net.corda.core.contracts.CommandData
-import net.corda.core.contracts.StateRef
 import net.corda.core.identity.CordaX500Name
 import net.corda.core.node.services.Vault.StateStatus
-import org.junit.runner.Request
 import java.time.LocalDateTime
 
 
@@ -99,12 +96,13 @@ class FlowTests {
 
         print("vault has1 ${states.states}     --")
 
-
         val decideAppointmentAnswerFlow = DecideAppointmentAnswer(a.info.legalIdentities[0], states.states.first().ref, false)
         val future3: Future<SignedTransaction> = b.startFlow(decideAppointmentAnswerFlow)
         network.runNetwork()
 
-        print("The signed transcation2 is ${future3.get()}")
+
+        print("left states are ${QueryCriteria.VaultQueryCriteria().withStatus(StateStatus.UNCONSUMED)}")
+//        print("The signed transcation2 is ${future3.get()}")
     }
 
 

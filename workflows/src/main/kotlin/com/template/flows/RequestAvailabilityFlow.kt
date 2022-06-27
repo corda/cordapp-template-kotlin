@@ -119,15 +119,17 @@ class DecideAppointmentAnswer(val patient: Party, val stateRef: StateRef, val ac
         val inputCriteria = QueryCriteria.VaultQueryCriteria().withStatus(Vault.StateStatus.UNCONSUMED)
         val input = serviceHub.vaultService.queryBy( AppointmentState::class.java, inputCriteria).states.filter { state-> state.ref == stateRef }
 
-
         logger.info("input is ${input}")
 
         val output = BookingAppointment(description= "Appointment booked", sender = ourIdentity , receiver = patient, date = input.first().state.data.date, participants = listOf(ourIdentity, patient))
         val builder = TransactionBuilder(notary)
                 .addInputState(input.first())
                 .addCommand(AppointmentContract.Commands.BookAppointment(), listOf(ourIdentity.owningKey, patient.owningKey))
-                .addOutputState(output)
 
+
+        if(acceptBookingAppointment){
+            builder.addOutputState(output)
+        }
 
         builder.verify(serviceHub)
         val ptx = serviceHub.signInitialTransaction(builder)
@@ -157,8 +159,8 @@ class AppointmentAnswerVerify(val counterpartySession: FlowSession) : FlowLogic<
 
         val signTransactionFlow = object : SignTransactionFlow(counterpartySession) {
             override fun checkTransaction(stx: SignedTransaction) = requireThat {
-                val output = stx.tx.outputs.single().data
-                "This must be an AppointmentState transaction" using (output is BookingAppointment)
+//                val output = stx.tx.outputs.single().data
+//                "This must be an AppointmentState transaction" using (output is BookingAppointment)
             }
         }
         val txId = subFlow(signTransactionFlow).id

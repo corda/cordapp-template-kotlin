@@ -19,6 +19,7 @@ class AppointmentContract : Contract {
 
     // A transaction is valid if the verify() function of the contract of all the transaction's input and output states
     // does not throw an exception.
+
     override fun verify(tx: LedgerTransaction) {
 
         // Verification logic goes here.
@@ -35,7 +36,6 @@ class AppointmentContract : Contract {
 
             is Commands.BookAppointment -> requireThat {
                 "Transaction should have input.".using(!tx.inputStates.isEmpty())
-                "An output state should be generated".using(!tx.outputStates.isEmpty())
             }
             else -> {
                 throw IllegalArgumentException("Command is not available.")
