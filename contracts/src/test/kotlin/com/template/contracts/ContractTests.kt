@@ -10,7 +10,7 @@ import com.template.states.TemplateState
 class ContractTests {
     private val ledgerServices: MockServices = MockServices(listOf("com.template"))
     var alice = TestIdentity(CordaX500Name("Alice", "TestLand", "US"))
-    var bob = TestIdentity(CordaX500Name("Alice", "TestLand", "US"))
+    var bob = TestIdentity(CordaX500Name("Bob", "TestLand", "US"))
 
     @Test
     fun dummytest() {
