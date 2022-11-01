@@ -49,6 +49,10 @@ dependencies {
 
     // CorDapp dependencies.
     cordapp project(":contracts")
+
+    //Account dependencies
+    cordaCompile "$confidential_id_release_group:ci-workflows:$confidential_id_release_version"
+    cordaCompile "$accounts_release_group:accounts-workflows:$accounts_release_version"
 }
 
 task integrationTest(type: Test, dependsOn: []) {
