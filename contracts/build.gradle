@@ -19,4 +19,7 @@ dependencies {
 
     // Token Account dependencies.
     cordaCompile "$accounts_release_group:accounts-contracts:$accounts_release_version"
+
+    // Token SDK dependencies.
+    cordaCompile "$tokens_release_group:tokens-contracts:$tokens_release_version"
 }
