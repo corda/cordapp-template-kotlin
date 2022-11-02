@@ -29,3 +29,6 @@ flow start ShareAccount acctNameToShare: John, party: BranchA
 
 # 6. Sending money from Account Mahmoud to Account John
 flow start SendMoney sender: Mahmoud, receiver: John, amount: 100, currency: USD
+
+# 7. Check Accounts in Vault
+run vaultQuery contractStateType: com.r3.corda.lib.accounts.contracts.states.AccountInfo
