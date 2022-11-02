@@ -1,6 +1,5 @@
 package com.template.contracts
 
-import com.template.states.TemplateState
 import org.junit.Test
 import kotlin.test.assertEquals
 

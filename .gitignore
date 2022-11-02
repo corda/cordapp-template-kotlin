@@ -11,6 +11,7 @@ tags
 
 # General build files
 **/build/*
+/t
 !docs/build/*
 
 lib/dokka.jar
