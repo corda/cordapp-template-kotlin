@@ -8,6 +8,7 @@ import net.corda.core.contracts.ContractState
 import net.corda.core.identity.AbstractParty
 import net.corda.core.identity.AnonymousParty
 
+// State representing a Transfer between accounts in the network
 @BelongsToContract(TransferContract::class)
 class TransferState(
         val amount: Amount<TokenType>,
