@@ -111,7 +111,7 @@ task deployNodes(type: net.corda.plugins.Cordform, dependsOn: ['jar']) {
     }
     node {
         name "O=Notary,L=London,C=GB"
-        notary = [validating : false]
+        notary = [validating : true]
         p2pPort 10002
         rpcSettings {
             address("localhost:10003")

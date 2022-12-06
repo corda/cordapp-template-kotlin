@@ -5,7 +5,7 @@ import net.corda.testing.core.TestIdentity
 import net.corda.testing.node.MockServices
 import net.corda.testing.node.ledger
 import org.junit.Test
-import com.template.states.TemplateState
+import com.template.states.SensitiveState
 
 class ContractTests {
     private val ledgerServices: MockServices = MockServices(listOf("com.template"))
@@ -14,21 +14,21 @@ class ContractTests {
 
     @Test
     fun dummytest() {
-        val state = TemplateState("Hello-World", alice.party, bob.party)
+        val state = SensitiveState("Hello-World", "hash", "msg", alice.party, bob.party)
         ledgerServices.ledger {
             // Should fail bid price is equal to previous highest bid
             transaction {
                 //failing transaction
-                input(TemplateContract.ID, state)
-                output(TemplateContract.ID, state)
-                command(alice.publicKey, TemplateContract.Commands.Create())
+                input(SensitiveFlowContract.ID, state)
+                output(SensitiveFlowContract.ID, state)
+                command(alice.publicKey, SensitiveFlowContract.Commands.Create())
                 fails()
             }
             //pass
             transaction {
                 //passing transaction
-                output(TemplateContract.ID, state)
-                command(alice.publicKey, TemplateContract.Commands.Create())
+                output(SensitiveFlowContract.ID, state)
+                command(alice.publicKey, SensitiveFlowContract.Commands.Create())
                 verifies()
             }
         }
