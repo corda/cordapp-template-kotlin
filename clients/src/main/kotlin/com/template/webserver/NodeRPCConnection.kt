@@ -41,7 +41,7 @@ open class NodeRPCConnection(
     fun initialiseNodeRPCConnection() {
             val rpcAddress = NetworkHostAndPort(host, rpcPort)
             val rpcClient = CordaRPCClient(rpcAddress)
-            val rpcConnection = rpcClient.start(username, password)
+            rpcConnection = rpcClient.start(username, password)
             proxy = rpcConnection.proxy
     }
 
