@@ -43,6 +43,7 @@ allprojects { //Properties that you need to compile your project (The applicatio
         mavenLocal()
         mavenCentral()
         maven { url 'https://download.corda.net/maven/corda-dependencies' }
+        maven { url 'https://download.corda.net/maven/corda-releases' }
         maven { url 'https://jitpack.io' }
     }
 
