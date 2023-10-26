@@ -14,13 +14,16 @@ killAllExistingBuildsForJob(env.JOB_NAME, env.BUILD_NUMBER.toInteger())
 
 pipeline {
     agent {
-        label 'eight-cores'
+        label 'standard'
     }
     options {
         ansiColor('xterm')
         timestamps()
         timeout(3*60) // 3 hours
         buildDiscarder(logRotator(daysToKeepStr: '7', artifactDaysToKeepStr: '7'))
+    }
+    environment {
+        JAVA_HOME = "/usr/lib/jvm/java-17-amazon-corretto"
     }
     stages {
         stage('Build') {
