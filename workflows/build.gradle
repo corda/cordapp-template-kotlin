@@ -49,6 +49,8 @@ dependencies {
 
     // CorDapp dependencies.
     cordapp project(":contracts")
+
+    testRuntimeOnly "org.iq80.snappy:snappy:$snappy_version"
 }
 
 task integrationTest(type: Test, dependsOn: []) {
