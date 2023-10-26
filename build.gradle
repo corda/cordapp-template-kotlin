@@ -1,3 +1,5 @@
+import static org.gradle.api.JavaVersion.VERSION_11
+
 buildscript { //properties that you need to build the project
 
     Properties constants = new Properties()
@@ -14,16 +16,31 @@ buildscript { //properties that you need to build the project
         quasar_version = constants.getProperty("quasarVersion")
         log4j_version = constants.getProperty("log4jVersion")
         slf4j_version = constants.getProperty("slf4jVersion")
+        hibernate_version = constants.getProperty("hibernateVersion")
         corda_platform_version = constants.getProperty("platformVersion").toInteger()
+        snappy_version = constants.getProperty("snappyVersion")
         //springboot
         spring_boot_version = '2.0.2.RELEASE'
         spring_boot_gradle_plugin_version = '2.0.2.RELEASE'
+
+        test_add_opens = ['--add-opens', 'java.base/java.time=ALL-UNNAMED', '--add-opens', 'java.base/java.io=ALL-UNNAMED',
+                          '--add-opens', 'java.base/java.util=ALL-UNNAMED', '--add-opens', 'java.base/java.net=ALL-UNNAMED',
+                          '--add-opens', 'java.base/java.nio=ALL-UNNAMED', '--add-opens', 'java.base/java.lang.invoke=ALL-UNNAMED',
+                          '--add-opens', 'java.base/java.security.cert=ALL-UNNAMED', '--add-opens', 'java.base/java.security=ALL-UNNAMED',
+                          '--add-opens', 'java.base/javax.net.ssl=ALL-UNNAMED', '--add-opens', 'java.base/java.lang=ALL-UNNAMED',
+                          '--add-opens', 'java.base/java.util.concurrent=ALL-UNNAMED', '--add-opens', 'java.sql/java.sql=ALL-UNNAMED',]
+
+        test_add_opens_fx = [  '--add-exports', 'java.base/sun.nio.ch=ALL-UNNAMED',
+                           '--add-exports', 'javafx.base/com.sun.javafx=ALL-UNNAMED',
+                           '--add-exports', 'javafx.base/com.sun.javafx.collections=ALL-UNNAMED']
     }
 
     repositories {
         mavenLocal()
         mavenCentral()
+        maven { url 'https://download.corda.net/maven/corda-dependencies' }
         maven { url 'https://download.corda.net/maven/corda-releases' }
+        maven { url 'https://download.corda.net/maven/corda-dev' }
     }
 
     dependencies {
@@ -49,9 +66,9 @@ allprojects { //Properties that you need to compile your project (The applicatio
 
     tasks.withType(org.jetbrains.kotlin.gradle.tasks.KotlinCompile) {
         kotlinOptions {
-            languageVersion = "1.2"
-            apiVersion = "1.2"
-            jvmTarget = "1.8"
+            languageVersion = "1.8"
+            apiVersion = "1.8"
+            jvmTarget = VERSION_11
             javaParameters = true   // Useful for reflection.
         }
     }
@@ -78,18 +95,24 @@ sourceSets {
 //Module dependencis
 dependencies {
     // Corda dependencies.
-    cordaCompile "$corda_core_release_group:corda-core:$corda_core_release_version"
-    cordaRuntime "$corda_release_group:corda-node-api:$corda_release_version"
-    cordaRuntime "$corda_release_group:corda:$corda_release_version"
+    cordaProvided "$corda_core_release_group:corda-core:$corda_core_release_version"
+    cordaBootstrapper ("$corda_release_group:corda-node-api:$corda_release_version") {
+        exclude group: "ch.qos.logback", module: "logback-classic"
+    }
+    corda "$corda_release_group:corda:$corda_release_version"
 
     // CorDapp dependencies.
     cordapp project(":workflows")
     cordapp project(":contracts")
 
-    cordaCompile "org.apache.logging.log4j:log4j-slf4j-impl:${log4j_version}"
-    cordaCompile "org.apache.logging.log4j:log4j-web:${log4j_version}"
-    cordaCompile "org.slf4j:jul-to-slf4j:$slf4j_version"
-    cordaDriver "net.corda:corda-shell:4.9"
+    cordaProvided "org.apache.logging.log4j:log4j-slf4j-impl:${log4j_version}"
+    cordaProvided "org.apache.logging.log4j:log4j-web:${log4j_version}"
+    cordaProvided "org.slf4j:jul-to-slf4j:$slf4j_version"
+    cordaDriver "net.corda:corda-shell:$corda_release_version"
+}
+
+cordapp {
+    targetPlatformVersion corda_platform_version.toInteger()
 }
 
 //Task to deploy the nodes in order to bootstrap a network
