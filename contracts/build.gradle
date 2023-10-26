@@ -15,5 +15,13 @@ dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
     // Corda dependencies.
     cordaProvided "$corda_core_release_group:corda-core:$corda_core_release_version"
+    cordaProvided "$corda_core_release_group:corda-core-test-utils:$corda_core_release_version"
+    cordaProvided "$corda_core_release_group:corda-test-utils:$corda_core_release_version"
     testImplementation "$corda_release_group:corda-node-driver:$corda_release_version"
+
+    testImplementation "junit:junit:$junit_version"
+}
+
+test {
+    jvmArgs = rootProject.ext.test_add_opens
 }

@@ -1,4 +1,4 @@
-apply plugin: 'org.springframework.boot'
+//apply plugin: 'org.springframework.boot'
 
 sourceSets {
     main {
@@ -10,6 +10,7 @@ sourceSets {
 
 dependencies {
     // Corda dependencies.
+    implementation "$corda_core_release_group:corda-core:$corda_core_release_version"
     implementation "$corda_release_group:corda-rpc:$corda_release_version"
 
     // CorDapp dependencies.
@@ -24,9 +25,9 @@ dependencies {
 }
 
 
-springBoot {
-    mainClassName = "com.template.webserver.ServerKt"
-}
+//springBoot {
+//    mainClassName = "com.template.webserver.ServerKt"
+//}
 
 /* The Client is the communication channel between the external and the node. This task will help you immediately
  * execute your rpc methods in the main method of the client.kt. You can somewhat see this as a quick test of making
