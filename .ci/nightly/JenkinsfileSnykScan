@@ -1,0 +1,6 @@
+@Library('corda-shared-build-pipeline-steps@5.1') _
+
+cordaSnykScanPipeline (
+    snykTokenId: 'r3-snyk-corda5',
+    snykAdditionalCommands: "--all-sub-projects -d"
+)
