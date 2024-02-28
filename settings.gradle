@@ -1,3 +1,36 @@
-include 'workflows'
-include 'contracts'
-include 'clients'
+pluginManagement {
+    // Declare the repositories where plugins are stored.
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+        mavenLocal()
+        maven {
+            url = "$artifactoryContextUrl/corda-os-maven"
+            authentication {
+                basic(BasicAuthentication)
+            }
+            credentials {
+                username = settings.ext.find('cordaArtifactoryUsername') ?: System.getenv('CORDA_ARTIFACTORY_USERNAME')
+                password = settings.ext.find('cordaArtifactoryPassword') ?: System.getenv('CORDA_ARTIFACTORY_PASSWORD')
+            }
+        }
+    }
+
+    //  The plugin dependencies with versions of the plugins congruent with the specified CorDapp plugin version,
+    //  Corda API version, and Kotlin version.
+    plugins {
+        id 'net.corda.plugins.cordapp-cpk2' version cordaPluginsVersion
+        id 'net.corda.plugins.cordapp-cpb2' version cordaPluginsVersion
+        id 'net.corda.cordapp.cordapp-configuration' version cordaApiVersion
+        id 'org.jetbrains.kotlin.jvm' version kotlinVersion
+        id 'org.jetbrains.kotlin.plugin.jpa' version kotlinVersion
+        id 'org.jetbrains.kotlin.plugin.allopen' version kotlinVersion
+        id 'net.corda.gradle.plugin' version cordaGradlePluginVersion
+    }
+}
+
+// Root project name, used in naming the project as a whole and used in naming objects built by the project.
+rootProject.name = 'cordapp-template-kotlin'
+include ':workflows'
+include ':contracts'
+

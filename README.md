@@ -1,142 +1,113 @@
-<p align="center">
-  <img src="https://www.corda.net/wp-content/uploads/2016/11/fg005_corda_b.png" alt="Corda" width="500">
-</p>
+# release-V5 cordapp-template-kotlin
 
-# CorDapp Template - Kotlin
+This template repository provides:
 
-Welcome to the Kotlin CorDapp template. The CorDapp template is a stubbed-out CorDapp that you can use to bootstrap 
-your own CorDapps.
+- A pre-setup Cordapp Project which you can use as a starting point to develop your own prototypes.
 
-**This is the Kotlin version of the CorDapp template. The Java equivalent is 
-[here](https://github.com/corda/cordapp-template-java/).**
+- A base Gradle configuration which brings in the dependencies you need to write and test a Corda 5 Cordapp.
 
-# Pre-Requisites
+- A set of Gradle helper tasks, provided by the [Corda runtime gradle plugin](https://github.com/corda/corda-runtime-os/tree/release/os/5.2/tools/corda-runtime-gradle-plugin#readme), which speed up and simplify the development and deployment process.
 
-See https://docs.corda.net/getting-set-up.html.
+- Debug configuration for debugging a local Corda cluster.
 
-# Usage
+- The MyFirstFlow code which forms the basis of this getting started documentation, this is located in package com.r3.developers.cordapptemplate.flowexample
 
-## Running tests inside IntelliJ
+- A UTXO example in package com.r3.developers.cordapptemplate.utxoexample packages
 
-We recommend editing your IntelliJ preferences so that you use the Gradle runner - this means that the quasar utils
-plugin will make sure that some flags (like ``-javaagent`` - see below) are
-set for you.
+- Ability to configure the Members of the Local Corda Network.
 
-To switch to using the Gradle runner:
+To find out how to use the template, please refer to the *<new section name goes here>* subsection within the *Developing Applications* section in the latest Corda 5 documentation at https://docs.r3.com/
 
-* Navigate to ``Build, Execution, Deployment -> Build Tools -> Gradle -> Runner`` (or search for `runner`)
-  * Windows: this is in "Settings"
-  * MacOS: this is in "Preferences"
-* Set "Delegate IDE build/run actions to gradle" to true
-* Set "Run test using:" to "Gradle Test Runner"
 
-If you would prefer to use the built in IntelliJ JUnit test runner, you can run ``gradlew installQuasar`` which will
-copy your quasar JAR file to the lib directory. You will then need to specify ``-javaagent:lib/quasar.jar``
-and set the run directory to the project root directory for each test.
+## Chat app
+We have built a simple one to one chat app to demo some functionalities of the next gen Corda platform.
 
-## Running the nodes
+In this app you can:
+1. Create a new chat with a counterparty. `CreateNewChatFlow`
+2. List out the chat entries you had. `ListChatsFlow`
+3. Individually query out the history of one chat entry. `GetChatFlowArgs`
+4. Continue chatting within the chat entry with the counterparty. `UpdateChatFlow`
 
-See https://docs.corda.net/tutorial-cordapp.html#running-the-example-cordapp.
+### Prerequisites
+- Corda CLI; version should match that of the Corda combined worker image used
+- Docker
 
-## Interacting with the nodes
+### Setting up
 
-### Shell
+1. We will begin our test deployment with clicking the `startCorda`. This task will load up the combined Corda workers in docker.
+   A successful deployment will allow you to open the REST APIs at: https://localhost:8888/api/v5_2/swagger#. You can test out some of the
+   functions to check connectivity. (GET /cpi function call should return an empty list as for now.)
+2. We will now deploy the cordapp with a click of `vNodeSetup` task. Upon successful deployment of the CPI, the GET /cpi function call should now return the meta data of the cpi you just upload
 
-When started via the command line, each node will display an interactive shell:
 
-    Welcome to the Corda interactive shell.
-    Useful commands include 'help' to see what is available, and 'bye' to shut down the node.
-    
-    Tue Nov 06 11:58:13 GMT 2018>>>
 
-You can use this shell to interact with your node. For example, enter `run networkMapSnapshot` to see a list of 
-the other nodes on the network:
+### Running the chat app
 
-    Tue Nov 06 11:58:13 GMT 2018>>> run networkMapSnapshot
-    [
-      {
-      "addresses" : [ "localhost:10002" ],
-      "legalIdentitiesAndCerts" : [ "O=Notary, L=London, C=GB" ],
-      "platformVersion" : 3,
-      "serial" : 1541505484825
-    },
-      {
-      "addresses" : [ "localhost:10005" ],
-      "legalIdentitiesAndCerts" : [ "O=PartyA, L=London, C=GB" ],
-      "platformVersion" : 3,
-      "serial" : 1541505382560
-    },
-      {
-      "addresses" : [ "localhost:10008" ],
-      "legalIdentitiesAndCerts" : [ "O=PartyB, L=New York, C=US" ],
-      "platformVersion" : 3,
-      "serial" : 1541505384742
+In Corda 5, flows will be triggered via `POST /flow/{holdingidentityshorthash}` and flow result will need to be view at `GET /flow/{holdingidentityshorthash}/{clientrequestid}`
+* holdingidentityshorthash: the id of the network participants, ie Bob, Alice, Charlie. You can view all the short hashes of the network member with another gradle task called `listVNodes`
+* clientrequestid: the id you specify in the flow requestBody when you trigger a flow.
+
+#### Step 1: Create Chat Entry
+Pick a VNode identity to initiate the chat, and get its short hash. (Let's pick Alice. Dont pick Bob because Bob is the person who we will have the chat with).
+
+Go to `POST /flow/{holdingidentityshorthash}`, enter the identity short hash(Alice's hash) and request body:
+```
+{
+    "clientRequestId": "create-1",
+    "flowClassName": "com.r3.developers.cordapptemplate.utxoexample.workflows.CreateNewChatFlow",
+    "requestBody": {
+        "chatName":"Chat with Bob",
+        "otherMember":"CN=Bob, OU=Test Dept, O=R3, L=London, C=GB",
+        "message": "Hello Bob"
+        }
+}
+```
+
+After trigger the create-chat flow, hop to `GET /flow/{holdingidentityshorthash}/{clientrequestid}` and enter the short hash(Alice's hash) and clientrequestid to view the flow result
+
+#### Step 2: List the chat
+In order to continue the chat, we would need the chat ID. This step will bring out all the chat entries this entity (Alice) has.
+Go to `POST /flow/{holdingidentityshorthash}`, enter the identity short hash(Alice's hash) and request body:
+```
+{
+    "clientRequestId": "list-1",
+    "flowClassName": "com.r3.developers.cordapptemplate.utxoexample.workflows.ListChatsFlow",
+    "requestBody": {}
+}
+```
+After trigger the list-chats flow, again, we need to hop to `GET /flow/{holdingidentityshorthash}/{clientrequestid}` and check the result. As the screenshot shows, in the response body,
+we will see a list of chat entries, but it currently only has one entry. And we can see the id of the chat entry. Let's record that id.
+
+
+#### Step 3: Continue the chat with `UpdateChatFlow`
+In this step, we will continue the chat between Alice and Bob.
+Goto `POST /flow/{holdingidentityshorthash}`, enter the identity short hash and request body. Note that here we can have either Alice or Bob's short hash. If you enter Alice's hash,
+this message will be recorded as a message from Alice, vice versa. And the id field is the chat entry id we got from the previous step.
+```
+{
+    "clientRequestId": "update-1",
+    "flowClassName": "com.r3.developers.cordapptemplate.utxoexample.workflows.UpdateChatFlow",
+    "requestBody": {
+        "id":" ** fill in id **",
+        "message": "How are you today?"
+        }
+}
+```
+And as for the result of this flow, go to `GET /flow/{holdingidentityshorthash}/{clientrequestid}` and enter the required fields.
+
+#### Step 4: See the whole chat history of one chat entry
+After a few back and forth of the messaging, you can view entire chat history by calling GetChatFlow.
+
+```
+{
+    "clientRequestId": "get-1",
+    "flowClassName": "com.r3.developers.cordapptemplate.utxoexample.workflows.GetChatFlow",
+    "requestBody": {
+        "id":" ** fill in id **",
+        "numberOfRecords":"4"
     }
-    ]
-    
-    Tue Nov 06 12:30:11 GMT 2018>>> 
+}
+```
+And as for the result, you need to go to the Get API again and enter the short hash and client request ID.
 
-You can find out more about the node shell [here](https://docs.corda.net/shell.html).
-
-### Client
-
-`clients/src/main/kotlin/com/template/Client.kt` defines a simple command-line client that connects to a node via RPC 
-and prints a list of the other nodes on the network.
-
-#### Running the client
-
-##### Via the command line
-
-Run the `runTemplateClient` Gradle task. By default, it connects to the node with RPC address `localhost:10006` with 
-the username `user1` and the password `test`.
-
-##### Via IntelliJ
-
-Run the `Run Template Client` run configuration. By default, it connects to the node with RPC address `localhost:10006` 
-with the username `user1` and the password `test`.
-
-### Webserver
-
-`clients/src/main/kotlin/com/template/webserver/` defines a simple Spring webserver that connects to a node via RPC and 
-allows you to interact with the node over HTTP.
-
-The API endpoints are defined here:
-
-     clients/src/main/kotlin/com/template/webserver/Controller.kt
-
-And a static webpage is defined here:
-
-     clients/src/main/resources/static/
-
-#### Running the webserver
-
-##### Via the command line
-
-Run the `runTemplateServer` Gradle task. By default, it connects to the node with RPC address `localhost:10006` with 
-the username `user1` and the password `test`, and serves the webserver on port `localhost:10050`.
-
-##### Via IntelliJ
-
-Run the `Run Template Server` run configuration. By default, it connects to the node with RPC address `localhost:10006` 
-with the username `user1` and the password `test`, and serves the webserver on port `localhost:10050`.
-
-#### Interacting with the webserver
-
-The static webpage is served on:
-
-    http://localhost:10050
-
-While the sole template endpoint is served on:
-
-    http://localhost:10050/templateendpoint
-    
-# Extending the template
-
-You should extend this template as follows:
-
-* Add your own state and contract definitions under `contracts/src/main/kotlin/`
-* Add your own flow definitions under `workflows/src/main/kotlin/`
-* Extend or replace the client and webserver under `clients/src/main/kotlin/`
-
-For a guided example of how to extend this template, see the Hello, World! tutorial 
-[here](https://docs.corda.net/hello-world-introduction.html).
+Thus, we have concluded a full run through of the chat app. 

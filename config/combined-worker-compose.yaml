@@ -1,0 +1,72 @@
+version: '2'
+services:
+  postgresql:
+    image: postgres:14.10
+    restart: unless-stopped
+    tty: true
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=password
+      - POSTGRES_DB=cordacluster
+    ports:
+      - 5432:5432
+
+  kafka:
+    image: confluentinc/cp-kafka:latest
+    ports:
+      - 9092:9092
+    environment:
+      KAFKA_NODE_ID: 1
+      CLUSTER_ID: ZDFiZmU3ODUyMzRiNGI3NG
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_LISTENERS: PLAINTEXT://0.0.0.0:9092,DOCKER_INTERNAL://0.0.0.0:29092,CONTROLLER://0.0.0.0:9093
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092,DOCKER_INTERNAL://kafka:29092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,DOCKER_INTERNAL:PLAINTEXT,CONTROLLER:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: DOCKER_INTERNAL
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_DEFAULT_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+
+  kafka-create-topics:
+    image: openjdk:17-jdk
+    depends_on:
+      - kafka
+    volumes:
+      - ${CORDA_CLI:-~/.corda/cli}:/opt/corda-cli
+    working_dir: /opt/corda-cli
+    command: [
+      "java",
+      "-jar",
+      "corda-cli.jar",
+      "topic",
+      "-b=kafka:29092",
+      "create",
+      "connect"
+    ]
+
+  corda:
+    image: corda-os-docker.software.r3.com/corda-os-combined-worker-kafka:5.2.0.0-RC02
+    depends_on:
+      - postgresql
+      - kafka
+      - kafka-create-topics
+    environment:
+      JAVA_TOOL_OPTIONS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+    command: [
+      "-mbus.busType=KAFKA",
+      "-mbootstrap.servers=kafka:29092",
+      "-spassphrase=password",
+      "-ssalt=salt",
+      "-ddatabase.user=user",
+      "-ddatabase.pass=password",
+      "-ddatabase.jdbc.url=jdbc:postgresql://postgresql:5432/cordacluster",
+      "-ddatabase.jdbc.directory=/opt/jdbc-driver/"
+    ]
+    ports:
+      - 8888:8888
+      - 7004:7004
+      - 5005:5005

@@ -1,19 +1,88 @@
-apply plugin: 'net.corda.plugins.cordapp'
 
+plugins {
+    // Include the cordapp-cpb plugin. This automatically includes the cordapp-cpk plugin as well.
+    // These extend existing build environment so that CPB and CPK files can be built.
+    // This includes a CorDapp DSL that allows the developer to supply metadata for the CorDapp
+    // required by Corda.
+    id 'net.corda.plugins.cordapp-cpb2'
+    id 'org.jetbrains.kotlin.jvm'
+    id 'maven-publish'
+}
+
+// Declare dependencies for the modules we will use.
+// A cordaProvided declaration is required for anything that we use that the Corda API provides.
+// This is required to allow us to build CorDapp modules as OSGi bundles that CPI and CPB files are built on.
+dependencies {
+
+    cordaProvided 'org.jetbrains.kotlin:kotlin-osgi-bundle'
+
+    // Declare a "platform" so that we use the correct set of dependency versions for the version of the
+    // Corda API specified.
+    cordaProvided platform("net.corda:corda-api:$cordaApiVersion")
+
+    // If using transistive dependencies this will provide most of Corda-API:
+    // cordaProvided 'net.corda:corda-application'
+
+    // Alternatively we can explicitly specify all our Corda-API dependencies:
+    cordaProvided 'net.corda:corda-base'
+    cordaProvided 'net.corda:corda-application'
+    cordaProvided 'net.corda:corda-crypto'
+    cordaProvided 'net.corda:corda-membership'
+    // cordaProvided 'net.corda:corda-persistence'
+    cordaProvided 'net.corda:corda-serialization'
+    cordaProvided 'net.corda:corda-ledger-utxo'
+    cordaProvided 'net.corda:corda-ledger-consensual'
+
+    // CorDapps that use the UTXO ledger must include at least one notary client plugin
+    cordapp "com.r3.corda.notary.plugin.nonvalidating:notary-plugin-non-validating-client:$cordaNotaryPluginsVersion"
+
+    // The CorDapp uses the slf4j logging framework. Corda-API provides this so we need a 'cordaProvided' declaration.
+    cordaProvided 'org.slf4j:slf4j-api'
+
+    // 3rd party libraries
+    // Required
+    testImplementation "org.slf4j:slf4j-simple:$slf4jVersion"
+    testImplementation "org.junit.jupiter:junit-jupiter:$junitVersion"
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
+
+    // Optional but used by example tests.
+    testImplementation "org.mockito:mockito-core:$mockitoVersion"
+    testImplementation "org.mockito.kotlin:mockito-kotlin:$mockitoKotlinVersion"
+    testImplementation "org.hamcrest:hamcrest-library:$hamcrestVersion"
+    testImplementation "com.r3.corda.ledger.utxo:contract-testing:$contractTestingVersion"
+    testImplementation "com.r3.corda.ledger.utxo:contract-testing-kotlin:$contractTestingVersion"
+}
+
+// The CordApp section.
+// This is part of the DSL provided by the corda plugins to define metadata for our CorDapp.
+// Each component of the CorDapp would get its own CorDapp section in the build.gradle file for the component’s
+// subproject.
+// This is required by the corda plugins to build the CorDapp.
 cordapp {
-    targetPlatformVersion corda_platform_version
-    minimumPlatformVersion corda_platform_version
+    // "targetPlatformVersion" and "minimumPlatformVersion" are intended to specify the preferred
+    // and earliest versions of the Corda platform that the CorDapp will run on respectively.
+    // Enforced versioning has not implemented yet so we need to pass in a dummy value for now.
+    // The platform version will correspond to and be roughly equivalent to the Corda API version.
+    targetPlatformVersion = platformVersion.toInteger()
+    minimumPlatformVersion = platformVersion.toInteger()
+
+    // The cordapp section contains either a workflow or contract subsection depending on the type of component.
+    // Declares the type and metadata of the CPK (this CPB has one CPK).
     contract {
-        name "Template Contracts"
-        vendor "Corda Open Source"
-        licence "Apache License, Version 2.0"
+        name contractsModule
         versionId 1
+        licence cordappLicense
+        vendor cordappVendorName
     }
 }
 
-dependencies {
-    compile "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
-    // Corda dependencies.
-    cordaCompile "$corda_core_release_group:corda-core:$corda_core_release_version"
-    testCompile "$corda_release_group:corda-node-driver:$corda_release_version"
+// Use the name of the contract module as the name of the generated CPK and CPB.
+archivesBaseName = cordapp.contract.name.isPresent() ? cordapp.contract.name.get() : contractsModule
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            from components.cordapp
+        }
+    }
 }

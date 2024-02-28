@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="INFO">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} %X - %msg%n"/>
+        </Console>
+
+        <RollingFile name="App"
+                     fileName="logs/corda.log"
+                     filePattern="logs/corda.%d{MM-dd-yyyy}.%i.log"
+                     ignoreExceptions="false">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS} [%t] %-5level %logger{36} %X - %msg%n"/>
+            <Policies>
+                <OnStartupTriggeringPolicy />
+                <TimeBasedTriggeringPolicy />
+                <SizeBasedTriggeringPolicy size="10 MB" />
+            </Policies>
+            <DefaultRolloverStrategy>
+                <Delete basePath="logs/">
+                    <IfFileName glob="logs/corda.*.log">
+                        <IfAny>
+                            <IfAccumulatedFileSize exceeds="500 MB" />
+                            <IfAccumulatedFileCount exceeds="10" />
+                        </IfAny>
+                    </IfFileName>
+                    <IfLastModified age="7d" />
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingFile>
+    </Appenders>
+    <Loggers>
+        <logger name="Console">
+            <AppenderRef ref="Console" level="info"/>
+        </logger>
+
+        <!-- log warn only for these 3rd party libs -->
+        <Logger name="com.zaxxer.hikari" level="warn" />
+        <Logger name="io.javalin.Javalin" level="warn" />
+        <Logger name="org.apache.aries.spifly" level="warn" />
+        <Logger name="org.apache.kafka" level="warn" />
+        <Logger name="org.eclipse.jetty" level="warn" />
+        <Logger name="org.hibernate" level="warn" />
+
+        <!-- default to warn only for OSGi logging -->
+        <Logger name="net.corda.osgi.framework.OSGiFrameworkWrap" level="warn" />
+
+        <root level="debug">
+            <AppenderRef ref="App" level="info"/>
+        </root>
+    </Loggers>
+</Configuration>
