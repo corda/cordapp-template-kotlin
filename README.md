@@ -1,4 +1,4 @@
-# release-V5 cordapp-template-kotlin
+# release-V5.2 cordapp-template-kotlin
 
 This template repository provides:
 
