@@ -53,12 +53,12 @@ class RedeemApplesFlow : ClientStartableFlow {
         val buyer = memberLookup.lookup(buyerName)?.ledgerKeys?.first()
             ?: throw IllegalArgumentException("The buyer does not exist within the network")
 
-        val appleStampStateAndRef = utxoLedgerService.findUnconsumedStatesByType(AppleStamp::class.java)
-            .firstOrNull { stateAndRef -> stateAndRef.state.contractState.id == stampId }
+        val appleStampStateAndRef = utxoLedgerService.findUnconsumedStatesByExactType(AppleStamp::class.java, 100, Instant.now())
+            .results.firstOrNull { stateAndRef -> stateAndRef.state.contractState.id == stampId }
             ?: throw IllegalArgumentException("No apple stamp matching the stamp id $stampId")
 
-        val basketOfApplesStampStateAndRef = utxoLedgerService.findUnconsumedStatesByType(BasketOfApples::class.java)
-            .firstOrNull { basketStateAndRef -> basketStateAndRef.state.contractState.owner ==
+        val basketOfApplesStampStateAndRef = utxoLedgerService.findUnconsumedStatesByExactType(BasketOfApples::class.java, 100, Instant.now())
+            .results.firstOrNull { basketStateAndRef -> basketStateAndRef.state.contractState.owner ==
                     appleStampStateAndRef.state.contractState.issuer }
             ?: throw IllegalArgumentException("There are no eligible baskets of apples")
 
