@@ -16,7 +16,7 @@ This template repository provides:
 
 - Ability to configure the Members of the Local Corda Network.
 
-To find out how to use the template, please refer to the *<new section name goes here>* subsection within the *Developing Applications* section in the latest Corda 5 documentation at https://docs.r3.com/
+To find out how to use the template, please refer to the *CorDapp Template* subsection within the *Developing Applications* section in the latest Corda 5 documentation at https://docs.r3.com/
 
 
 ## Chat app
