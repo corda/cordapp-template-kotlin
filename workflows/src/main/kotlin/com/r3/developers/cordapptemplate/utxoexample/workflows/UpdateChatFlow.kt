@@ -51,7 +51,7 @@ class UpdateChatFlow: ClientStartableFlow {
             // Note, this code brings all unconsumed states back, then filters them.
             // This is an inefficient way to perform this operation when there are a large number of chats.
             // Note, you will get this error if you input an id which has no corresponding ChatState (common error).
-            val stateAndRef = ledgerService.findUnconsumedStatesByType(ChatState::class.java).singleOrNull {
+            val stateAndRef = ledgerService.findUnconsumedStatesByExactType(ChatState::class.java, 100, Instant.now()).results.singleOrNull {
                 it.state.contractState.id == flowArgs.id
             } ?: throw CordaRuntimeException("Multiple or zero Chat states with id ${flowArgs.id} found.")
 
