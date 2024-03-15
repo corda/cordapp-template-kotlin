@@ -46,6 +46,7 @@
 
         <root level="debug">
             <AppenderRef ref="App" level="info"/>
+            <AppenderRef ref="Console" level="${env:CONSOLE_LOG_LEVEL:-info}"/>
         </root>
     </Loggers>
 </Configuration>
