@@ -32,16 +32,10 @@ services:
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
 
   kafka-create-topics:
-    image: openjdk:17-jdk
+    image: corda-os-docker.software.r3.com/corda-os-plugins:5.2.0.0-RC02
     depends_on:
       - kafka
-    volumes:
-      - ${CORDA_CLI:-~/.corda/cli}:/opt/corda-cli
-    working_dir: /opt/corda-cli
     command: [
-      "java",
-      "-jar",
-      "corda-cli.jar",
       "topic",
       "-b=kafka:29092",
       "create",
