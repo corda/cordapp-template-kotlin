@@ -1,7 +1,6 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 import static org.gradle.api.JavaVersion.VERSION_17
-import static org.gradle.jvm.toolchain.JavaLanguageVersion.of
 
 plugins {
     id 'org.jetbrains.kotlin.jvm'
@@ -95,10 +94,6 @@ allprojects {
 
     tasks.withType(Test).configureEach {
         useJUnitPlatform()
-    }
-
-    dependencies {
-
     }
 }
 
