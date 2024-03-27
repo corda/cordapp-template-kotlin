@@ -32,7 +32,7 @@ services:
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
 
   kafka-create-topics:
-    image: corda-os-docker.software.r3.com/corda-os-plugins:5.2.0.0-RC02
+    image: corda-os-docker.software.r3.com/corda-os-plugins:${CORDA_RUNTIME_VERSION}
     depends_on:
       - kafka
     command: [
@@ -43,19 +43,13 @@ services:
     ]
 
   corda:
-    image: corda-os-docker.software.r3.com/corda-os-combined-worker-kafka:5.2.0.0-RC02
+    image: corda-os-docker.software.r3.com/corda-os-combined-worker-kafka:${CORDA_RUNTIME_VERSION}
     depends_on:
       - postgresql
       - kafka
       - kafka-create-topics
-    volumes:
-      - ../config:/config
-      - ../logs:/logs
     environment:
       JAVA_TOOL_OPTIONS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
-      LOG4J_CONFIG_FILE: config/log4j2.xml
-      CONSOLE_LOG_LEVEL: info
-      ENABLE_LOG4J2_DEBUG: false
     command: [
       "-mbus.busType=KAFKA",
       "-mbootstrap.servers=kafka:29092",
