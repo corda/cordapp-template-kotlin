@@ -48,8 +48,14 @@ services:
       - postgresql
       - kafka
       - kafka-create-topics
+    volumes:
+      - ../config:/config
+      - ../logs:/logs
     environment:
       JAVA_TOOL_OPTIONS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=*:5005
+      LOG4J_CONFIG_FILE: config/log4j2.xml
+      CONSOLE_LOG_LEVEL: info
+      ENABLE_LOG4J2_DEBUG: false
     command: [
       "-mbus.busType=KAFKA",
       "-mbootstrap.servers=kafka:29092",
